@@ -1,0 +1,258 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"mov",
+				"moving_average_count"
+			],
+			[
+				"mo",
+				"moving_average_sum"
+			],
+			[
+				"sum",
+				"sum_msg"
+			],
+			[
+				"moving",
+				"moving_average_period"
+			],
+			[
+				"movin",
+				"moving_average_pub_"
+			],
+			[
+				"Tim",
+				"TimerEvent"
+			],
+			[
+				"ti",
+				"timerCallback"
+			],
+			[
+				"su",
+				"sum_pub_"
+			],
+			[
+				"sum_",
+				"sum_msg"
+			],
+			[
+				"num",
+				"numberStreamCallback"
+			],
+			[
+				"SU",
+				"SumAndAverageNode"
+			],
+			[
+				"pr",
+				"private_nh"
+			],
+			[
+				"movi",
+				"moving_average_pub_"
+			],
+			[
+				"nu",
+				"numberStreamCallback"
+			],
+			[
+				"number",
+				"number_stream_sub_"
+			],
+			[
+				"Su",
+				"SumAndAverageNode"
+			],
+			[
+				"tur",
+				"turtlesim2"
+			],
+			[
+				"tu",
+				"turtlesim"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 96.0,
+		"last_filter": "instal",
+		"selected_items":
+		[
+			[
+				"instal",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 139.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '2915d1851351e5ee549c20394736b442' + '8bc59f460fa1548d1514676163dafc88'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)",
+			" import urllib.request,os,hashlib; h = '2915d1851351e5ee549c20394736b442' + '8bc59f460fa1548d1514676163dafc88'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by) "
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/racecar/racecar_team9_ws/src/racecar/racecar/scripts/hokuyo_scan_processor.py",
+		"/home/racecar/racecar_team9_ws/src/racecar/racecar/scripts/ros_node.py",
+		"/home/racecar/racecar_team9_ws/src/racecar/racecar/scripts/logic.py",
+		"/home/racecar/.bashrc",
+		"/home/racecar/github_token",
+		"/etc/hosts",
+		"/home/racecar/racecar-ws/src/racecar/sum_and_average/scripts/sum_and_average_py.py",
+		"/home/racecar/racecar-ws/src/racecar/turtlesim_openloop_control/scripts/turtlesim_openloop_control_node.py",
+		"/home/racecar/math_ws/src/sum_and_average/scripts/sum_and_average_py.py",
+		"/home/racecar/math_ws/src/sum_and_average/CMakeLists.txt",
+		"/home/racecar/math_ws/src/sum_and_average/src/num_and_average_node.cpp",
+		"/home/racecar/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
+		"/home/racecar/.config/sublime-text-3/Packages/Default/Preferences.sublime-settings",
+		"/home/racecar/math_ws/src/sum_and_average/package.xml",
+		"/home/racecar/turtlesim_test.launch"
+	],
+	"find":
+	{
+		"height": 25.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"catkin_package"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 25.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "hokuyo_scan_processor.sublime-project",
+	"replace":
+	{
+		"height": 46.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
