@@ -14,13 +14,13 @@ class WallDetectorNode:
 		rospy.Subscriber("point_cloud", PointCloud, self.point_cloud_callback)
 
 		# Publish a distance to wall and signed angle to turn (radians)
-		self.wall_pub_dist = rospy.Publisher("wall_detector/distance", Float32)
-		self.wall_pub_theta = rospy.Publisher("wall_detector/theta", Float32)
+		self.wall_pub_dist = rospy.Publisher("wall_detector/distance", Float32, queue_size=10)
+		self.wall_pub_theta = rospy.Publisher("wall_detector/theta", Float32, queue_size=10)
 
 	def point_cloud_callback(self, msg):
 		for point in msg.points:
-			self.x.append[point.x]
-			self.y.append[point.y]
+			self.x.append(point.x)
+			self.y.append(point.y)
 
 		wall_msg_dist, wall_msg_theta = self.detect_wall()
 
@@ -35,7 +35,7 @@ class WallDetectorNode:
 		Take point cloud from the published lidar node
 		Publish distance to wall and theta (signed) to turn
 		"""
-
+		origin = [0,0]
 		m, b = np.polyfit(self.x,self.y,1)
 		norm = [-m, 1]
 		distance = abs(np.dot(norm, origin)-b)/np.linalg.norm(norm)
