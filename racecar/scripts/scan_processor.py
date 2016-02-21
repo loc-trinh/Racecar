@@ -4,15 +4,18 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sensor_msgs.msg import LaserScan
 from std_msgs.msg import Float32
+from sensor_msgs.msg import PointCloud
+from geometry_msgs.msg import Point32
 
 class HokuyoScanProcessor:
 	def __init__(self):
 		
 
-		self.hsp_subs=rospy.Subscriber("/scan", LaserScan, self.hsp_callback)
+		self.hsp_subs=rospy.Subscriber("scan", LaserScan, self.hsp_callback)
 
-		self.range_pub=rospy.Publisher("ranges", Float32, queue_size=10)
-		self.point_cloud=rospy.Publisher("point_cloud", Float32,queue_size=10)
+		#self.range_pub=rospy.Publisher("ranges", Float32, queue_size=10)
+		self.point_cloud=rospy.Publisher("point_cloud", PointCloud,queue_size=10)
+		
 		#choose the range you want
 		self.min_angle=-np.pi/2 
 		self.max_angle=np.pi/2
@@ -113,14 +116,28 @@ class HokuyoScanProcessor:
 				my_ranges[i]=ranges[i]
 		filtered_ranges=self.filter(my_ranges)
 		#print filtered_ranges
-		message=((self.min_angle,self.max_angle),filtered_ranges)
-		point_cloud=self.scan_plotter(ranges,filtered_ranges, incr_angle, start_point, angle_min)
+		#message=((self.min_angle,self.max_angle),filtered_ranges)
+		#point_cloud=self.scan_plotter(ranges,filtered_ranges, incr_angle, start_point, angle_min)
+		#self.point_cloud.publish(point_cloud)
+		#print message
+		#self.range_pub.publish(message)
+
+		point_cloud=PointCloud()
+		#setting up point cloud
+		for i in range(len(filtered_ranges)):
+			x,y=self.dist_angle_to_xy_transform(i, filtered_ranges[i], incr_angle, start_point, angle_min)
+			point = Point32();
+			point.x = x;
+			point.y=y;
+			point.z=0.0
+			point_cloud.points.append(point);
+
+
+			
+		point_cloud.header.frame_id = msg.header.frame_id
+		point_cloud.header.stamp=rospy.Time.now()
+
 		self.point_cloud.publish(point_cloud)
-		print message
-		self.range_pub.publish(message)
-
-
-
 
 
 if __name__ == "__main__":
