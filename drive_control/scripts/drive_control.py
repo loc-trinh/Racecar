@@ -35,7 +35,7 @@ class DriveControl:
         msg.header.stamp = rospy.Time.now()
         msg.header.frame_id = "base_link"
         msg.drive.steering_angle = data.data
-        msg.drive.speed = data.data * self.k 
+        msg.drive.speed = self.k 
         self.drive_pub.publish(msg)
 
     def obstacle_callback(self, data):
