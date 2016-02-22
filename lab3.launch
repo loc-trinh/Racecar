@@ -1,0 +1,4 @@
+<launch>
+	<node pkg="racecar" name="scan_processor" type="scan_processor.py" />
+	<node pkg="sensor_processing" name="wall_detector" type="wall_detector.py" />
+</launch>

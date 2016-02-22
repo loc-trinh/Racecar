@@ -18,7 +18,7 @@ import rospy
 from std_msgs.msg import Float32
 from ackermann_msgs.msg import AckermannDriveStamped
 
-class ObstacleDetector:
+class DriveControl:
     def __init__(self):
         self.topic_theta = "wall_detector/theta"
         self.topic_obstacle="obstacle_distance"
@@ -32,13 +32,14 @@ class ObstacleDetector:
 
     def throttle_callback(self, data):
         msg = AckermannDriveStamped()
-        msg.header.stamp=rospy.Time.now()
-        msg.drive.steering_angle= data
-        msg.drive.speed=data.theta * self.k 
-        self.drive_pub.publish(distance)
+        msg.header.stamp = rospy.Time.now()
+        msg.header.frame_id = "base_link"
+        msg.drive.steering_angle = data.data
+        msg.drive.speed = data.data * self.k 
+        self.drive_pub.publish(msg)
 
-    def obstcle_callback(self, data):
-        if data.distance <=2.0:
+    def obstacle_callback(self, data):
+        if data.data <=2.0 and data.data >= 0:
             self.k=0
         else:
             self.k=1
@@ -50,7 +51,7 @@ if __name__ == "__main__":
 
     rospy.init_node("drive_control")
 
-    ObstacleDetector();
+    DriveControl();
 
     # enter the ROS main loop
     rospy.spin()
