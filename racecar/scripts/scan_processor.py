@@ -11,7 +11,7 @@ class HokuyoScanProcessor:
 	def __init__(self):
 		
 
-		self.hsp_subs=rospy.Subscriber("scan", LaserScan, self.hsp_callback)
+		self.hsp_subs=rospy.Subscriber("/racecar/laser/scan", LaserScan, self.hsp_callback)
 
 		#self.range_pub=rospy.Publisher("ranges", Float32, queue_size=10)
 		self.point_cloud=rospy.Publisher("point_cloud", PointCloud,queue_size=10)
