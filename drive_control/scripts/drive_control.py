@@ -23,6 +23,7 @@ class DriveControl:
         self.topic_theta = "wall_detector/theta"
         self.topic_obstacle="obstacle_distance"
         self.topic_output= "drive_control/ackermann_drive"
+        self.max_steering_angle = 0.3
         self.k=1
 
         #Pubs and Subs
@@ -34,7 +35,7 @@ class DriveControl:
         msg = AckermannDriveStamped()
         msg.header.stamp = rospy.Time.now()
         msg.header.frame_id = "base_link"
-        msg.drive.steering_angle = data.data
+        msg.drive.steering_angle = max(min(data.data,self.max_steering_angle), -1*self.maxstering_angle)
         msg.drive.speed = self.k 
         self.drive_pub.publish(msg)
 
