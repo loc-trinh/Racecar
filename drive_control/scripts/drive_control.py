@@ -26,16 +26,16 @@ class ObstacleDetector:
         self.k=1
 
         #Pubs and Subs
-        self.distance_pub = rospy.Publisher(self.topic_output, AckermannDriveStamped, queue_size=10)
-        rospy.Subscriber(self.topic_distance, Float32, self.throttle_callback)
+        self.drive_pub = rospy.Publisher(self.topic_output, AckermannDriveStamped, queue_size=10)
+        rospy.Subscriber(self.topic_theta, Float32, self.throttle_callback)
         rospy.Subscriber(self.topic_obstacle, Float32, self.obstacle_callback)
 
     def throttle_callback(self, data):
         msg = AckermannDriveStamped()
         msg.header.stamp=rospy.Time.now()
-        msg.drive.steering_angle= data.theta
+        msg.drive.steering_angle= data
         msg.drive.speed=data.theta * self.k 
-        self.distance_pub.publish(distance)
+        self.drive_pub.publish(distance)
 
     def obstcle_callback(self, data):
         if data.distance <=2.0:
