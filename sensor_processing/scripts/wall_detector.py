@@ -4,12 +4,15 @@ import numpy as np
 from std_msgs.msg import Float32
 from sensor_msgs.msg import PointCloud
 
+import threading
+
 
 class WallDetectorNode:
 	def __init__(self):
 		self.x = []
 		self.y = []
 
+		self.lock = threading.Lock();
 		# Subscribe to laser data
 		rospy.Subscriber("point_cloud", PointCloud, self.point_cloud_callback)
 
@@ -18,9 +21,12 @@ class WallDetectorNode:
 		self.wall_pub_theta = rospy.Publisher("wall_detector/theta", Float32, queue_size=10)
 
 	def point_cloud_callback(self, msg):
-		for point in msg.points:
-			self.x.append(point.x)
-			self.y.append(point.y)
+		with self.lock:
+			for point in msg.points:
+				#print point
+				if point.x > -3 and point.x < 3 and point.y < -0.3 and point.y > -10:
+					self.x.append(point.x)
+					self.y.append(point.y)
 
 		wall_msg_dist, wall_msg_theta = self.detect_wall()
 
@@ -35,8 +41,15 @@ class WallDetectorNode:
 		Take point cloud from the published lidar node
 		Publish distance to wall and theta (signed) to turn
 		"""
+		with self.lock:
+			if(len(self.x) > 5):
+				m, b = np.polyfit(self.x,self.y,1)
+			else:
+				return 1, 0;
+
+
 		origin = [0,0]
-		m, b = np.polyfit(self.x,self.y,1)
+		
 		norm = [-m, 1]
 		distance = abs(np.dot(norm, origin)-b)/np.linalg.norm(norm)
 		angle = np.math.atan2(np.cross(norm, [0,1]), np.dot(norm, [0,1]))

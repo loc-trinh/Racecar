@@ -13,6 +13,7 @@ import numpy as np
 
 # ROS Includes
 import rospy
+import threading
 
 # ROS messages
 from std_msgs.msg import Float32
@@ -25,6 +26,9 @@ class DriveControl:
         self.topic_output= "drive_control/ackermann_drive"
         self.max_steering_angle = 0.3
         self.k=1
+        self.d0 = 1
+        self.distance = 1
+        self.lock = threading.Lock()
 
         #Pubs and Subs
         self.drive_pub = rospy.Publisher(self.topic_output, AckermannDriveStamped, queue_size=10)
@@ -32,12 +36,29 @@ class DriveControl:
         rospy.Subscriber(self.topic_obstacle, Float32, self.obstacle_callback)
 
     def throttle_callback(self, data):
+        with self.lock:
+            d = self.distance
+
+        k1 = 0.3
+        k2 = 0.4
+
+        theta = data.data
+
         msg = AckermannDriveStamped()
         msg.header.stamp = rospy.Time.now()
         msg.header.frame_id = "base_link"
-        msg.drive.steering_angle = max(min(data.data,self.max_steering_angle), -1*self.maxstering_angle)
+        
+        
+        steering_d = (self.d0 - d)* k1 - theta*k2
+        theta_parallel = max(min(steering_d,self.max_steering_angle), -1*self.max_steering_angle)
+
+        msg.drive.steering_angle = theta_parallel
         msg.drive.speed = self.k 
         self.drive_pub.publish(msg)
+
+    def distance_callback(self, data):
+        with self.lock:
+            self.distance = data.data;
 
     def obstacle_callback(self, data):
         if data.data <=2.0 and data.data >= 0:
