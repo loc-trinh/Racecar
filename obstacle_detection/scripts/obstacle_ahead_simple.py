@@ -51,11 +51,11 @@ class ObstacleDetector:
 
         for point in data.points:
             if abs(point.y) < self.detection_zone and point.x < 10 and point.x > 0.1:
-                filtered_points.append(point);
+                filtered_points.append([point.x, point.y]);
 
         distance = np.mean(filtered_points);
 
-        self.distance_pub.publish(distance)
+        self.distance_pub.publish(distance);
 
 
 if __name__ == "__main__":
