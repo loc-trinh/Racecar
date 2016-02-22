@@ -1,0 +1,12 @@
+<launch>
+	<group ns="racecar">
+		<node pkg="racecar" name="scan_processor" type="scan_processor.py" />
+		<node pkg="sensor_processing" name="wall_detector" type="wall_detector.py" />
+		<node pkg="drive_control" name="drive_control" type="drive_control.py" />
+		<node pkg="drive_control" name="servo_commands" type="servo_commands.py" />
+		<node pkg="obstacle_detection" name="obstacle_detection" type="obstacle_ahead_simple.py" >
+			<param name="topic_pointcloud" value="point_cloud"/>
+			<param name="topic_output" value="obstacle_distance"/>
+		</node>
+	</group>
+</launch>
