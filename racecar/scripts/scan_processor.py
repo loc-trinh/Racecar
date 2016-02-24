@@ -69,6 +69,8 @@ class HokuyoScanProcessor:
 
 		y=dist*np.sin(angle)
 
+
+
 		return x,y
 
 
@@ -96,6 +98,8 @@ class HokuyoScanProcessor:
 
 	def hsp_callback(self, msg):
 		msg_len=len(msg.ranges) 
+
+		start_time = rospy.Time.now();
 
 		incr_angle=msg.angle_increment
 		angle_min=msg.angle_min
@@ -127,8 +131,9 @@ class HokuyoScanProcessor:
 
 		point_cloud=PointCloud()
 		#setting up point cloud
+
 		for i in range(len(filtered_ranges)):
-			x,y=self.dist_angle_to_xy_transform(i, filtered_ranges[i], incr_angle, start_point, angle_min)
+			x,y=self.dist_angle_to_xy_transform(i, filtered_ranges[i], incr_angle, 0, angle_min)
 			point = Point32();
 			point.x = x;
 			point.y=y;
@@ -141,6 +146,7 @@ class HokuyoScanProcessor:
 		point_cloud.header.stamp=rospy.Time.now()
 
 		self.point_cloud.publish(point_cloud)
+		rospy.loginfo("Timer: %f" (rospy.Time.now()-start_time))
 
 
 if __name__ == "__main__":
