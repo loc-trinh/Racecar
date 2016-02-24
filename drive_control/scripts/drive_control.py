@@ -30,6 +30,7 @@ class DriveControl:
         self.d0 = 1
         self.distance = 1
         self.lock = threading.Lock()
+        self.obstacle_lock = threading.Lock();
 
         #Pubs and Subs
         self.drive_pub = rospy.Publisher(self.topic_output, AckermannDriveStamped, queue_size=10)
@@ -41,8 +42,8 @@ class DriveControl:
         with self.lock:
             d = self.distance
 
-        k1 = -1.0
-        k2 = -1.0
+        k1 = 0.2
+        k2 = 1.0
 
         theta = data.data
 
@@ -57,7 +58,10 @@ class DriveControl:
         rospy.loginfo("delta_d = %f, Angle = %f, Steering Output = %f " % (delta_d, theta,theta_parallel));
 
         msg.drive.steering_angle = theta_parallel
-        msg.drive.speed = self.k 
+
+        with self.obstacle_lock:
+            msg.drive.speed = self.k 
+
         self.drive_pub.publish(msg)
 
     def distance_callback(self, data):
@@ -65,10 +69,11 @@ class DriveControl:
             self.distance = data.data;
 
     def obstacle_callback(self, data):
-        if data.data <=2.0 and data.data >= 0:
-            self.k=0
-        else:
-            self.k=1
+        with self.obstacle_lock:
+            if data.data <=2.0 and data.data >= 0:
+                self.k=0
+            else:
+                self.k=0.5
 
 
 if __name__ == "__main__":

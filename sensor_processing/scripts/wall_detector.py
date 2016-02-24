@@ -21,6 +21,9 @@ class WallDetectorNode:
 				x.append(point.x)
 				y.append(point.y)
 
+		if(len(x) < 5):
+			return;
+
 		m, b = np.polyfit(x,y,1)
 
 		origin = [0,0]
