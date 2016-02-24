@@ -57,7 +57,7 @@ class DriveControl:
 
         rospy.loginfo("delta_d = %f, Angle = %f, Steering Output = %f " % (delta_d, theta,theta_parallel));
 
-        msg.drive.steering_angle = theta_parallel
+        msg.drive.steering_angle = -theta_parallel
 
         with self.obstacle_lock:
             msg.drive.speed = self.k 
