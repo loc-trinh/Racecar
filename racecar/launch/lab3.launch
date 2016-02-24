@@ -1,5 +1,22 @@
 <launch>
 	<group ns="racecar">
+		<arg name="racecar_version" default="racecar-v2" />
+		<arg name="run_camera" default="false"/>
+
+		<group ns="vesc">
+		<!-- start electronic speed controller driver -->
+		<include file="$(find racecar)/launch/includes/$(arg racecar_version)/vesc.launch.xml" >
+		  <arg name="racecar_version" value="$(arg racecar_version)" />
+		</include>
+		</group>
+
+		<!-- start imu and laser scanner -->
+		<include file="$(find racecar)/launch/includes/common/sensors.launch.xml" >
+		<arg name="racecar_version" value="$(arg racecar_version)" />
+		</include>
+
+		<!-- static transforms, e.g. base_link to imu -->
+		<include file="$(find racecar)/launch/includes/$(arg racecar_version)/static_transforms.launch.xml" />
 
 		<node pkg="racecar" name="scan_processor" type="scan_processor.py" />
 		
