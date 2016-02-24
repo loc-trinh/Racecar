@@ -1,5 +1,5 @@
 <launch>
-	<group ns="racecar">
+	<group ns="/">
 		
 		<node pkg="racecar" name="scan_processor" type="scan_processor.py" />
 		
