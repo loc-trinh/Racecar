@@ -70,7 +70,7 @@ class DriveControl:
 
     def obstacle_callback(self, data):
         with self.obstacle_lock:
-            if data.data <=2.0 and data.data >= 0:
+            if data.data <=0.5 and data.data >= 0:
                 self.k=0
             else:
                 self.k=0.5

@@ -12,7 +12,7 @@
 		<node pkg="obstacle_detection" name="obstacle_detection" type="obstacle_ahead_simple.py" >
 			<param name="topic_pointcloud" value="point_cloud"/>
 			<param name="topic_output" value="obstacle_distance"/>
-			<param name="detection_zone" value="0.5"/>
+			<param name="detection_zone" value="0.25"/>
 		</node>
 
 	</group>
