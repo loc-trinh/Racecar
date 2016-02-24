@@ -1,9 +1,9 @@
 <launch>
 	<group ns="/">
 		
-		<node pkg="racecar" name="scan_processor" type="scan_processor.py" output="screen"/>
+		<node pkg="racecar" name="scan_processor" type="scan_processor.py" />
 		
-		<node pkg="sensor_processing" name="wall_detector" type="wall_detector.py" output="screen"/>
+		<node pkg="sensor_processing" name="wall_detector" type="wall_detector.py" />
 		
 		<node pkg="drive_control" name="drive_control" type="drive_control.py" output="screen" />
 		
