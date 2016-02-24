@@ -23,6 +23,7 @@ class DriveControl:
     def __init__(self):
         self.topic_theta = "wall_detector/theta"
         self.topic_obstacle="obstacle_distance"
+        self.topic_distance="wall_detector/distance"
         self.topic_output= "drive_control/ackermann_drive"
         self.max_steering_angle = 0.3
         self.k=1
@@ -34,13 +35,14 @@ class DriveControl:
         self.drive_pub = rospy.Publisher(self.topic_output, AckermannDriveStamped, queue_size=10)
         rospy.Subscriber(self.topic_theta, Float32, self.throttle_callback)
         rospy.Subscriber(self.topic_obstacle, Float32, self.obstacle_callback)
+        rospy.Subscriber(self.topic_distance, Float32, self.distance_callback)
 
     def throttle_callback(self, data):
         with self.lock:
             d = self.distance
 
-        k1 = 0.3
-        k2 = 0.4
+        k1 = -1.0
+        k2 = -1.0
 
         theta = data.data
 
@@ -48,9 +50,11 @@ class DriveControl:
         msg.header.stamp = rospy.Time.now()
         msg.header.frame_id = "base_link"
         
-        
-        steering_d = (self.d0 - d)* k1 - theta*k2
+        delta_d = (d - self.d0)
+        steering_d = delta_d* k1 - theta*k2
         theta_parallel = max(min(steering_d,self.max_steering_angle), -1*self.max_steering_angle)
+
+        rospy.loginfo("delta_d = %f, Angle = %f, Steering Output = %f " % (delta_d, theta,theta_parallel));
 
         msg.drive.steering_angle = theta_parallel
         msg.drive.speed = self.k 
