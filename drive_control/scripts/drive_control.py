@@ -24,7 +24,7 @@ class DriveControl:
         self.topic_theta = "wall_detector/theta"
         self.topic_obstacle="obstacle_distance"
         self.topic_distance="wall_detector/distance"
-        self.topic_output= "drive_control/ackermann_drive"
+        self.topic_output= "/vesc/ackermann_cmd_mux/input/teleop"
         self.max_steering_angle = 0.3
         self.k=1
         self.d0 = 1
