@@ -105,7 +105,8 @@ class HokuyoScanProcessor:
 		start_point=int((abs(msg.angle_min)+self.min_angle)/full_range*msg_len)
 		end_point=int((full_range-self.max_angle)/full_range*msg_len) #
 
-		ranges=msg.ranges[start_point:end_point]
+		ranges=msg.ranges
+		'''
 		my_ranges=[0]*len(ranges)
 		for i in range(len(ranges)):
 			if ranges[i]>msg.range_max:
@@ -114,7 +115,9 @@ class HokuyoScanProcessor:
 				my_ranges[i]=msg.range_min
 			else:
 				my_ranges[i]=ranges[i]
-		filtered_ranges=self.filter(my_ranges)
+		'''
+		filtered_ranges=ranges
+		#filtered_ranges=self.filter(my_ranges)
 		#print filtered_ranges
 		#message=((self.min_angle,self.max_angle),filtered_ranges)
 		#point_cloud=self.scan_plotter(ranges,filtered_ranges, incr_angle, start_point, angle_min)
