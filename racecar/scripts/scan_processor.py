@@ -146,7 +146,7 @@ class HokuyoScanProcessor:
 		point_cloud.header.stamp=rospy.Time.now()
 
 		self.point_cloud.publish(point_cloud)
-		rospy.loginfo("Timer: %f" (rospy.Time.now()-start_time))
+		rospy.loginfo("Timer: %f" % (rospy.Time.now()-start_time))
 
 
 if __name__ == "__main__":
