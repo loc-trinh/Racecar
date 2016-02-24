@@ -27,7 +27,7 @@ class DriveControl:
         self.topic_output= "/vesc/ackermann_cmd_mux/input/teleop"
         self.max_steering_angle = 0.3
         self.k=1
-        self.d0 = 1
+        self.d0 = 0.5
         self.distance = 1
         self.lock = threading.Lock()
         self.obstacle_lock = threading.Lock();
@@ -70,7 +70,7 @@ class DriveControl:
 
     def obstacle_callback(self, data):
         with self.obstacle_lock:
-            if data.data <=0.5 and data.data >= 0:
+            if data.data <=1 and data.data >= 0:
                 self.k=0
             else:
                 self.k=0.5
