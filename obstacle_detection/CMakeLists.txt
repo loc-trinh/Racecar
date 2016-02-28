@@ -79,9 +79,9 @@ include_directories(
 # add_dependencies(sum_and_average_node sum_and_average_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(sum_and_average_node
-  ${catkin_LIBRARIES}
-)
+#target_link_libraries(sum_and_average_node
+#  ${catkin_LIBRARIES}
+#)
 
 #############
 ## Install ##
