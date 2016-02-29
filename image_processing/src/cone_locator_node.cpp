@@ -60,7 +60,7 @@ void ConeLocatorNode::depthCallback(const sensor_msgs::ImageConstPtr& msg){
 		depth_image_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::MONO16);
 	}
 	catch (cv_bridge::Exception& e) {
-  		ROS_ERROR("cv_bridge exception: %s", e.what());
+  		ROS_ERROR("cv_bridge exception DEPTH: %s", e.what());
 		return;}
 	return;
 }
