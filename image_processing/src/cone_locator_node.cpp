@@ -59,19 +59,19 @@ private:
 
 ConeLocatorNode::ConeLocatorNode() : it(nh) {
 	bw_image_sub = it.subscribe("bw_image", 1, &ConeLocatorNode::locationCallback, this);
-	depth_image_sub = it.subscribe("/camera/depth/image_rect_color", 1, &ConeLocatorNode::depthCallback, this);
+	// depth_image_sub = it.subscribe("/camera/depth/image_rect_color", 1, &ConeLocatorNode::depthCallback, this);
 	cone_location_pub = nh.advertise<geometry_msgs::Point>("cone_location", 1);
 }
 
-void ConeLocatorNode::depthCallback(const sensor_msgs::ImageConstPtr& msg){
-	try{
-		depth_image_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::MONO8);
-	}
-	catch (cv_bridge::Exception& e) {
-  		ROS_ERROR("cv_bridge exception: %s", e.what());
-		return;}
-	return;
-}
+// void ConeLocatorNode::depthCallback(const sensor_msgs::ImageConstPtr& msg){
+// 	try{
+// 		depth_image_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::MONO8);
+// 	}
+// 	catch (cv_bridge::Exception& e) {
+//   		ROS_ERROR("cv_bridge exception: %s", e.what());
+// 		return;}
+// 	return;
+// }
 
 void ConeLocatorNode::locationCallback(const sensor_msgs::ImageConstPtr& msg){
 	geometry_msgs::Point coords;
