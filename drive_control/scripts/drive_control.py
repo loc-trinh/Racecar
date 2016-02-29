@@ -62,14 +62,14 @@ class DriveControl:
         else:
             self.distanceI= self.distanceI+distance
             dp= self.kp * distance
-            di= self.ki*(distance + self.lastDistance)
-            dd= self.kd*(self.distanceI)
+            di= self.kd*(distance - self.lastDistance)
+            dd= self.ki*(self.distanceI)
             self.lastDistance=distance
             msg.drive.speed= min(self.max_speed, dp+di+dd)
 
             self.thetaI=self.thetaI+theta
             tp= self.kp * theta
-            ti= self.ki* (theta+self.lastTheta)
+            ti= self.ki*(self.thetaI)
             td= self.kd* (theta-self.lastTheta)
             msg.drive.steering_angle= max(min(self.max_steering_angle,tp+ti+td), -1*self.max_steering_angle)
             self.lastTheta=theta
