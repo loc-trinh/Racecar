@@ -10,13 +10,13 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 class RGB_to_black_white_RGB:
 	def __init__(self):
-		self.image_pub=rospy.Publisher("bw_image", Image)
+		self.image_pub=rospy.Publisher("bw_image", Image,queue_size=1)
 		self.bridge = CvBridge()
 		self.image_sub = rospy.Subscriber("/camera/zed/rgb/image_rect_color", Image, self.callback)
 	def callback(self, data):
-		rect,frame = self.bridge.imgmsg_to_cv2(data,"bgr8")
+		frame = self.bridge.imgmsg_to_cv2(data,"bgr8")
 		#convert to HSV
-		hsv = cv2.cvtColor(cv_image, cv2.COLOR_BGR2HSV)
+		hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 		#set the ranges we are interested in
 		low_orange_threshold=np.array([0, 52, 184], dtype=np.uint8)
 		high_orange_threshold=np.array([255,255,255], dtype=np.uint8)
