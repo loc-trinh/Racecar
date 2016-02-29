@@ -100,25 +100,21 @@ void ConeLocatorNode::locationCallback(const sensor_msgs::ImageConstPtr& msg){
 		for(int c = 0; c < C; c+= 5){
 			if ((int)bw_image.at<uchar>(r,c) == WHITE){
 				myfloodFill(bw_image, r, c, area, high_x, low_x, high_y, low_y);
-				if (area > R*C*.1) goto found;
+				if (area > R*C*.2){
+					ROS_INFO("DONE FINDING OBJECT");
+					coords.x = (high_x - low_x) / 2;
+					coords.y = (high_y - low_y) / 2;
+					coords.z = 0;
+					cone_location_pub.publish(coords);
+					return;
+				}
 				else{
 					area = high_x = high_y = 0;
 					low_x, low_y = bw_image.cols;
 				}
 			}}}
-	ROS_INFO("DONE FINDING OBJECT");
-
-
-	coords.x = bw_image.cols / 2;
-	coords.y = bw_image.rows / 2;
-	coords.z = 0;
-	cone_location_pub.publish(coords);
-
-	found:
-	coords.x = (high_x - low_x) / 2;
-	coords.y = (high_y - low_y) / 2;
-	coords.z = 0;
-	cone_location_pub.publish(coords);
+	ROS_INFO("CANNOT FINDING OBJECT");
+	return;
 }
 
 
