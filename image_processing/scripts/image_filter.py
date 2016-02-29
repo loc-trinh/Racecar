@@ -26,9 +26,9 @@ class RGB_to_black_whit_RGB:
 
 		#display all three images
 		cv2.imshow('frame',frame)
-    	#cv2.imshow("mask",mask)
-    	#cv2.imshow('res',res)
-    	cv2.waitKey(3)#
+		#cv2.imshow("mask",mask)
+		#cv2.imshow('res',res)
+		cv2.waitKey(3)#
 		ros_img=self.bridge.cv2_to_imgmsg(cv_image, "bgr8")
 		self.image_pub.publish(ros_img)
 def main(args):
