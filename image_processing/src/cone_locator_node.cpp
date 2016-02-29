@@ -76,7 +76,7 @@ void ConeLocatorNode::depthCallback(const sensor_msgs::ImageConstPtr& msg){
 void ConeLocatorNode::locationCallback(const sensor_msgs::ImageConstPtr& msg){
 	geometry_msgs::Point coords;
 
-	if (!depth_image_ptr) return;
+	//if (!depth_image_ptr) return;
 
 	Mat bw_image;
 	try{
@@ -93,7 +93,7 @@ void ConeLocatorNode::locationCallback(const sensor_msgs::ImageConstPtr& msg){
 	area = high_x = high_y = 0;
 	low_x, low_y = bw_image.cols;
 
-	const int WHITE = 0;
+	const int WHITE = 255;
 
 	for(int r = 0; r < R; r += 5){
 		for(int c = 0; c < C; c+= 5){
@@ -129,7 +129,7 @@ void myfloodFill(Mat& image, int r, int c, int& area, int& high_x, int& low_x, i
 	myPoint pt = {r,c};
 	queue.push(pt);
 
-	const int WHITE = 0, BLACK = 255;
+	const int WHITE = 255, BLACK = 0;
 
 	while (!queue.empty()){
 		myPoint pt = queue.front();
