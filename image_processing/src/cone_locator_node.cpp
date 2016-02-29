@@ -57,7 +57,7 @@ ConeLocatorNode::ConeLocatorNode() : it(nh) {
 
 void ConeLocatorNode::depthCallback(const sensor_msgs::ImageConstPtr& msg){
 	try{
-		depth_image_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::MONO8);
+		depth_image_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::mono8);
 	}
 	catch (cv_bridge::Exception& e) {
   		ROS_ERROR("cv_bridge exception: %s", e.what());
@@ -72,7 +72,7 @@ void ConeLocatorNode::locationCallback(const sensor_msgs::ImageConstPtr& msg){
 	// not sure how to access the depth_image here using the ptr?
 	Mat depth_image;
 	try{
-		depth_image = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::MONO8)->image;
+		depth_image = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::mono8)->image;
 	}
 	catch (cv_bridge::Exception& e) {
   		ROS_ERROR("cv_bridge exception: %s", e.what());
@@ -81,7 +81,7 @@ void ConeLocatorNode::locationCallback(const sensor_msgs::ImageConstPtr& msg){
 
 	Mat bw_image;
 	try{
-		bw_image = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::MONO8)->image;
+		bw_image = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::mono8)->image;
 	}
 	catch (cv_bridge::Exception& e) {
   		ROS_ERROR("cv_bridge exception: %s", e.what());
