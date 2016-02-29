@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <ros/ros.h> // main ROS include
 #include <geometry_msgs/Point.h>
+#include <math.h>
 
 // Interfacing to OpenCV
 #include <image_transport/image_transport.h>
