@@ -59,7 +59,7 @@ private:
 
 ConeLocatorNode::ConeLocatorNode() : it(nh) {
 	bw_image_sub = it.subscribe("bw_image", 1, &ConeLocatorNode::locationCallback, this);
-	depth_image_sub = it.subscribe("depth_image", 1, &ConeLocatorNode::depthCallback, this);
+	depth_image_sub = it.subscribe("/camera/depth/image_rect_color", 1, &ConeLocatorNode::depthCallback, this);
 	cone_location_pub = nh.advertise<geometry_msgs::Point>("cone_location", 1);
 }
 
