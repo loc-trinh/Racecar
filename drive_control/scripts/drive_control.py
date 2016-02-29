@@ -10,70 +10,75 @@
 
 # Python Includes
 import numpy as np
+import math
 
 # ROS Includes
 import rospy
-import threading
 
 # ROS messages
 from std_msgs.msg import Float32
 from ackermann_msgs.msg import AckermannDriveStamped
+from geometry_msgs.msg import Point
 
 class DriveControl:
     def __init__(self):
-        self.topic_theta = "wall_detector/theta"
-        self.topic_obstacle="obstacle_distance"
-        self.topic_distance="wall_detector/distance"
+        self.topic_point="point"
         self.topic_output= "/vesc/ackermann_cmd_mux/input/teleop"
         self.max_steering_angle = 0.3
+        self.max_speed=4
+
         self.k=1
-        self.d0 = 0.5
-        self.distance = 1
-        self.lock = threading.Lock()
-        self.obstacle_lock = threading.Lock();
+        self.kp=0.6*self.k
+        self.ki=2*self.k
+        self.kd=0.125*self.k
+        self.lastDistance=0
+        self.lastTheta=0
+        self.distanceI=0
+        self.thetaI=0
+
 
         #Pubs and Subs
         self.drive_pub = rospy.Publisher(self.topic_output, AckermannDriveStamped, queue_size=10)
-        rospy.Subscriber(self.topic_theta, Float32, self.throttle_callback)
-        rospy.Subscriber(self.topic_obstacle, Float32, self.obstacle_callback)
-        rospy.Subscriber(self.topic_distance, Float32, self.distance_callback)
+        rospy.Subscriber(self.topic_point, Point, self.drive_callback)
 
-    def throttle_callback(self, data):
-        with self.lock:
-            d = self.distance
-
-        k1 = 0.2
-        k2 = 1.0
-
-        theta = data.data
+    def drive_callback(self, data):
+        x= data.x
+        y= data.y
+        distance = math.pow(math.pow(x,2) + math.pow(y,2),  0.5)-0.25 # want to stop slightly in front of the cone
+        theta = math.atan2(y,x)
 
         msg = AckermannDriveStamped()
         msg.header.stamp = rospy.Time.now()
         msg.header.frame_id = "base_link"
-        
-        delta_d = (d - self.d0)
-        steering_d = delta_d* k1 - theta*k2
-        theta_parallel = max(min(steering_d,self.max_steering_angle), -1*self.max_steering_angle)
 
-        rospy.loginfo("delta_d = %f, Angle = %f, Steering Output = %f " % (delta_d, theta,theta_parallel));
+        if abs(theta) > self.max_steering_angle:
+            self.lastDistance=0
+            self.lastTheta=0
+            self.distanceI=0
+            self.thetaI=0
+            msg.drive.speed=-0.5
+            msg.drive.steering_angle=0
 
-        msg.drive.steering_angle = -theta_parallel
+        else:
+            self.distanceI= self.distanceI+distance
+            dp= self.kp * distance
+            di= self.ki*(distance + self.lastDistance)
+            dd= self.kd*(self.distanceI)
+            self.lastDistance=distance
+            msg.drive.speed= min(self.max_speed, dp+di+dd)
 
-        with self.obstacle_lock:
-            msg.drive.speed = self.k 
-
+            self.thetaI=self.thetaI+theta
+            tp= self.kp * theta
+            ti= self.ki* (theta+self.lastTheta)
+            td= self.kd* (theta-self.lastTheta)
+            msg.drive.steering_angle= max(min(self.max_steering_angle,tp+ti+td), -1*self.max_steering_angle)
+            self.lastTheta=theta
+        print (msg.drive.speed, msg.drive.steering_angle)
         self.drive_pub.publish(msg)
 
-    def distance_callback(self, data):
-        with self.lock:
-            self.distance = data.data;
 
-    def obstacle_callback(self, data):
-        with self.obstacle_lock:
-            if data.data <=1 and data.data >= 0:
-                self.k=0
-            else:
-                self.k=0.5
+
+        
 
 
 if __name__ == "__main__":
