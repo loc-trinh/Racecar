@@ -7,7 +7,7 @@ import cv2
 from std_msgs.msg import String 
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
-class RGB_to_black_whit_RGB:
+class RGB_to_black_white_RGB:
 	def __init__(self):
 		self.image_pub=rospy.Publisher("bw_image", Image)
 		self.bridge = CvBridge()
@@ -32,8 +32,8 @@ class RGB_to_black_whit_RGB:
 		ros_img=self.bridge.cv2_to_imgmsg(cv_image, "bgr8")
 		self.image_pub.publish(ros_img)
 def main(args):
-	ic=RGB_to_black_whit_RGB()
-	rospy.init_node('rgb_to_black_whute_rgb')
+	ic=RGB_to_black_white_RGB()
+	rospy.init_node('rgb_to_black_white_rgb')
 	try:
 		rospy.spin()
 	except KeyboardInterrupt:
