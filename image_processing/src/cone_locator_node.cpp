@@ -74,6 +74,7 @@ ConeLocatorNode::ConeLocatorNode() : it(nh) {
 // }
 
 void ConeLocatorNode::locationCallback(const sensor_msgs::ImageConstPtr& msg){
+	ROS_INFO("HERE");
 	geometry_msgs::Point coords;
 
 	//if (!depth_image_ptr) return;
@@ -105,6 +106,7 @@ void ConeLocatorNode::locationCallback(const sensor_msgs::ImageConstPtr& msg){
 					low_x, low_y = bw_image.cols;
 				}
 			}}}
+	ROS_INFO("DONE FINDING OBJECT");
 
 
 	coords.x = bw_image.cols / 2;
