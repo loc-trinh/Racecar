@@ -46,9 +46,6 @@ reads from webcam and publishes it
         image_to_pub=bridge.cv2_to_imgmsg(frame, "rgb8")
         image_pub.publish(image_to_pub)
 ​
-        
-            
-​
 ​
 if __name__ == '__main__':
     try:
