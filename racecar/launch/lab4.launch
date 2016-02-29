@@ -1,0 +1,12 @@
+<launch>
+	<group ns="/">
+		
+		<node pkg="racecar" name="scan_processor" type="scan_processor.py" />
+		
+		<node pkg="image_processing" name="cone_locator_node" type="cone_locator_node.cpp" />
+		
+		<node pkg="drive_control" name="drive_control" type="drive_control.py" output="screen" />
+		
+
+	</group>
+</launch>
