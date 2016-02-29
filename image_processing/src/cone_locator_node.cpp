@@ -105,7 +105,6 @@ void ConeLocatorNode::locationCallback(const sensor_msgs::ImageConstPtr& msg){
 
     cv::Point center;
     Rect r;
-    ROS_INFO("FOUND OBJECT: %f" % maxArea);
     if (maxArea > 1000) {
         r = boundingRect(contours[max_index]);
         coords.x = r.x + (r.width/2);
