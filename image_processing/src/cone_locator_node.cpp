@@ -12,10 +12,6 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-// For flood fill
-#include <set>
-#include <queue>
-
 using namespace std;
 using namespace cv;
 
@@ -31,11 +27,6 @@ Returns the center of mass of the desired object
 Probs not Loc(k):
 http://answers.ros.org/question/28373/race-conditions-in-callbacks/
 */
-void myfloodFill(Mat& image, int r, int c, int& area, int& high_x, int& low_x, int& high_y, int& low_y);
-
-typedef struct Point{
-	int x, y;
-} myPoint;
 
 class ConeLocatorNode { 
 public:
@@ -81,7 +72,7 @@ void ConeLocatorNode::locationCallback(const sensor_msgs::ImageConstPtr& msg){
 	// not sure how to access the depth_image here using the ptr?
 	Mat depth_image;
 	try{
-		depth_image = cv_bridge::toCvCopy(depth_image_ptr, sensor_msgs::image_encodings::MONO8)->image;
+		depth_image = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::MONO8)->image;
 	}
 	catch (cv_bridge::Exception& e) {
   		ROS_ERROR("cv_bridge exception: %s", e.what());
@@ -96,85 +87,44 @@ void ConeLocatorNode::locationCallback(const sensor_msgs::ImageConstPtr& msg){
   		ROS_ERROR("cv_bridge exception: %s", e.what());
 		return;
 	}
+	//find contours from binary image
+    vector< vector<cv::Point> > contours;
+    findContours(bw_image, contours, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE); //find contours
 
-	int R = bw_image.rows, C = bw_image.cols;
-	int area, high_x, low_x, high_y, low_y;
-	area = high_x = high_y = 0;
-	low_x, low_y = bw_image.cols;
+    //find largest contour area
+    double maxArea = -1;
+    int max_index = -1;
+    for(int i = 0; i < contours.size(); i++) {
+        if (contourArea(Mat(contours[i])) > maxArea){
+            maxArea = contourArea(Mat(contours[i]));
+            max_index = i;
+        }
+    }
 
-	const int WHITE = 255;
+    //drawContours(bw_image, contours, max_index, Scalar(255), CV_FILLED);
 
-	for(int r = 0; r < R; r += 5){
-		for(int c = 0; c < C; c+= 5){
-			if ((int)bw_image.at<uchar>(r,c) == WHITE){
-				myfloodFill(bw_image, r, c, area, high_x, low_x, high_y, low_y);
-				if (area > 10){
-					ROS_INFO("DONE FINDING OBJECT");
-					int finalX = (high_x - low_x) / 2;
-					int finalY = (high_y - low_y) / 2;
+    cv::Point center;
+    Rect r;
+    ROS_INFO("FOUND OBJECT: %f" % maxArea);
+    if (maxArea > 1000) {
+        r = boundingRect(contours[max_index]);
+        coords.x = r.x + (r.width/2);
+        coords.y= r.y + (r.height/2);
+        coords.z = 0;
 
-					// extract the depth from the image - I'm guessing these are real world units?
-					// which part of the image is the value we want?
-					Vec3b finalZ = depth_image.at<Vec3b>(finalX, finalY);
+        ROS_INFO("FOUND OBJECT");
+        cone_location_pub.publish(coords);
 
-					// convert to real world coords 
-					// field of view is 110 degrees
-					int pixelToRealDist = 2 * finalZ * tan(55) / C;
-					coords.x = finalX * pixelToRealDist;
-					coords.y = finalY * pixelToRealDist;
-
-					cone_location_pub.publish(coords);
-					return;
-				}
-				else{
-					area = high_x = high_y = 0;
-					low_x, low_y = bw_image.cols;
-				}
-			}}}
-	ROS_INFO("CANNOT FIND OBJECT");
+    }else{
+        ROS_INFO("CANNOT FIND OBJECT");
+        coords.x = -1;
+        coords.y = -1;
+        coords.z = -1;
+        cone_location_pub.publish(coords);
+    }
 	return;
 }
 
-void myfloodFill(Mat& image, int r, int c, int& area, int& high_x, int& low_x, int& high_y, int& low_y) {
-	queue<myPoint> queue;
-	set<int> has_seen;
-
-	myPoint pt = {r,c};
-	queue.push(pt);
-
-	const int WHITE = 255, BLACK = 0;
-
-	while (!queue.empty()){
-		myPoint pt = queue.front();
-		queue.pop();
-		if (has_seen.find(pt.x*10000+pt.y) != has_seen.end()){
-			has_seen.insert(pt.x*10000+pt.y);
-		}else{
-			continue;
-		}
-
-		if (pt.x < 0 || pt.y < 0 || pt.x >= image.rows || pt.y >= image.cols) continue;
-		if ((int)image.at<uchar>(r,c) == BLACK) continue;
-
-		area += 1;
-		if (pt.x < low_x) low_x = pt.x;
-		if (pt.x > high_x) high_x = pt.x;
-		if (pt.y < low_y) low_y = pt.y;
-		if (pt.y > high_y) high_y = pt.y;
-
-		myPoint left = {pt.x-1, pt.y};
-		myPoint right = {pt.x+1, pt.y};
-		myPoint up = {pt.x, pt.y+1};
-		myPoint down = {pt.x, pt.y-1};
-
-
-		queue.push(up);
-		queue.push(down);
-		queue.push(left);
-		queue.push(right);
-		
-	}
-}
 
 int main(int argc, char *argv[]) {
 	ros::init(argc, argv, "cone_locator_node");
