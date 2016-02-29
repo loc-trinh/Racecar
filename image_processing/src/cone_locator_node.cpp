@@ -74,7 +74,6 @@ ConeLocatorNode::ConeLocatorNode() : it(nh) {
 // }
 
 void ConeLocatorNode::locationCallback(const sensor_msgs::ImageConstPtr& msg){
-	ROS_INFO("HERE");
 	geometry_msgs::Point coords;
 
 	//if (!depth_image_ptr) return;
@@ -100,7 +99,7 @@ void ConeLocatorNode::locationCallback(const sensor_msgs::ImageConstPtr& msg){
 		for(int c = 0; c < C; c+= 5){
 			if ((int)bw_image.at<uchar>(r,c) == WHITE){
 				myfloodFill(bw_image, r, c, area, high_x, low_x, high_y, low_y);
-				if (area > R*C*.2){
+				if (area > 10){
 					ROS_INFO("DONE FINDING OBJECT");
 					coords.x = (high_x - low_x) / 2;
 					coords.y = (high_y - low_y) / 2;
@@ -140,6 +139,7 @@ void myfloodFill(Mat& image, int r, int c, int& area, int& high_x, int& low_x, i
 
 		if (pt.x < 0 || pt.y < 0 || pt.x >= image.rows || pt.y >= image.cols) continue;
 		if ((int)image.at<uchar>(r,c) == BLACK) continue;
+
 		area += 1;
 		if (pt.x < low_x) low_x = pt.x;
 		if (pt.x > high_x) high_x = pt.x;
