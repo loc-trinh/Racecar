@@ -110,17 +110,18 @@ void ConeLocatorNode::locationCallback(const sensor_msgs::ImageConstPtr& msg){
 				myfloodFill(bw_image, r, c, area, high_x, low_x, high_y, low_y);
 				if (area > 10){
 					ROS_INFO("DONE FINDING OBJECT");
-					finalX = (high_x - low_x) / 2;
-					finalY = (high_y - low_y) / 2;
+					int finalX = (high_x - low_x) / 2;
+					int finalY = (high_y - low_y) / 2;
 
 					// extract the depth from the image - I'm guessing these are real world units?
-					finalZ = depth_image.at<Vec3b>(finalX, finalY);
+					// which part of the image is the value we want?
+					Vec3b finalZ = depth_image.at<Vec3b>(finalX, finalY);
 
 					// convert to real world coords 
 					// field of view is 110 degrees
-					pixelToRealDist = 2 * finalZ * tan(55) / C;
-					coords.x = finalX * pixelToRealDist
-					coords.y = finalY * pixelToRealDist
+					int pixelToRealDist = 2 * finalZ * tan(55) / C;
+					coords.x = finalX * pixelToRealDist;
+					coords.y = finalY * pixelToRealDist;
 
 					cone_location_pub.publish(coords);
 					return;
