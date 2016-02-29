@@ -11,8 +11,9 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-//For flood fill
-
+// For flood fill
+#include <set>
+#include <queue>
 
 using namespace std;
 using namespace cv;
@@ -30,6 +31,10 @@ Probs not Loc(k):
 http://answers.ros.org/question/28373/race-conditions-in-callbacks/
 */
 void myfloodFill(Mat& image, int r, int c, int& area, int& high_x, int& low_x, int& high_y, int& low_y);
+
+typedef struct Point{
+	int x, y;
+} myPoint;
 
 class ConeLocatorNode { 
 public:
@@ -118,20 +123,43 @@ void ConeLocatorNode::locationCallback(const sensor_msgs::ImageConstPtr& msg){
 
 // Not sure if we need a replace here if it's going to be pure white
 void myfloodFill(Mat& image, int r, int c, int& area, int& high_x, int& low_x, int& high_y, int& low_y) {
+	queue<myPoint> queue;
+	set<int> has_seen;
+
+	myPoint pt = {r,c};
+	queue.push(pt);
+
 	const int WHITE = 0, BLACK = 255;
-	if (r < 0 || c < 0 || r >= image.rows || c >= image.cols) return;
-	if ((int)image.at<uchar>(r,c) == BLACK) return;
 
-	area += 1;
-	if (r < low_x) low_x = r;
-	if (r > high_x) high_x = r;
-	if (c < low_y) low_y = c;
-	if (c > high_y) high_y = c;
+	while (!queue.empty()){
+		myPoint pt = queue.front();
+		queue.pop();
+		if (has_seen.find(pt.x*10000+pt.y) != has_seen.end()){
+			has_seen.insert(pt.x*10000+pt.y);
+		}else{
+			continue;
+		}
 
-	myfloodFill(image, r+1, c, area, high_x, low_x, high_y, low_y);
-	myfloodFill(image, r-1, c, area, high_x, low_x, high_y, low_y);
-	myfloodFill(image, r, c+1, area, high_x, low_x, high_y, low_y);
-	myfloodFill(image, r, c-1, area, high_x, low_x, high_y, low_y);
+		if (pt.x < 0 || pt.y < 0 || pt.x >= image.rows || pt.y >= image.cols) continue;
+		if ((int)image.at<uchar>(r,c) == BLACK) continue;
+		area += 1;
+		if (pt.x < low_x) low_x = pt.x;
+		if (pt.x > high_x) high_x = pt.x;
+		if (pt.y < low_y) low_y = pt.y;
+		if (pt.y > high_y) high_y = pt.y;
+
+		myPoint left = {pt.x-1, pt.y};
+		myPoint right = {pt.x+1, pt.y};
+		myPoint up = {pt.x, pt.y+1};
+		myPoint down = {pt.x, pt.y-1};
+
+
+		queue.push(up);
+		queue.push(down);
+		queue.push(left);
+		queue.push(right);
+		
+	}
 }
 
 int main(int argc, char *argv[]) {
