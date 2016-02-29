@@ -59,24 +59,33 @@ private:
 
 ConeLocatorNode::ConeLocatorNode() : it(nh) {
 	bw_image_sub = it.subscribe("bw_image", 1, &ConeLocatorNode::locationCallback, this);
-	// depth_image_sub = it.subscribe("/camera/depth/image_rect_color", 1, &ConeLocatorNode::depthCallback, this);
+	depth_image_sub = it.subscribe("/camera/zed/depth/image_rect_color", 1, &ConeLocatorNode::depthCallback, this);
 	cone_location_pub = nh.advertise<geometry_msgs::Point>("cone_location", 1);
 }
 
-// void ConeLocatorNode::depthCallback(const sensor_msgs::ImageConstPtr& msg){
-// 	try{
-// 		depth_image_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::MONO8);
-// 	}
-// 	catch (cv_bridge::Exception& e) {
-//   		ROS_ERROR("cv_bridge exception: %s", e.what());
-// 		return;}
-// 	return;
-// }
+void ConeLocatorNode::depthCallback(const sensor_msgs::ImageConstPtr& msg){
+	try{
+		depth_image_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::MONO8);
+	}
+	catch (cv_bridge::Exception& e) {
+  		ROS_ERROR("cv_bridge exception: %s", e.what());
+		return;}
+	return;
+}
 
 void ConeLocatorNode::locationCallback(const sensor_msgs::ImageConstPtr& msg){
 	geometry_msgs::Point coords;
 
-	//if (!depth_image_ptr) return;
+	// if (!depth_image_ptr) return;
+	// not sure how to access the depth_image here using the ptr?
+	Mat depth_image;
+	try{
+		depth_image = cv_bridge::toCvCopy(depth_image_ptr, sensor_msgs::image_encodings::MONO8)->image;
+	}
+	catch (cv_bridge::Exception& e) {
+  		ROS_ERROR("cv_bridge exception: %s", e.what());
+		return;
+	}
 
 	Mat bw_image;
 	try{
@@ -86,7 +95,6 @@ void ConeLocatorNode::locationCallback(const sensor_msgs::ImageConstPtr& msg){
   		ROS_ERROR("cv_bridge exception: %s", e.what());
 		return;
 	}
-
 
 	int R = bw_image.rows, C = bw_image.cols;
 	int area, high_x, low_x, high_y, low_y;
@@ -101,9 +109,18 @@ void ConeLocatorNode::locationCallback(const sensor_msgs::ImageConstPtr& msg){
 				myfloodFill(bw_image, r, c, area, high_x, low_x, high_y, low_y);
 				if (area > 10){
 					ROS_INFO("DONE FINDING OBJECT");
-					coords.x = (high_x - low_x) / 2;
-					coords.y = (high_y - low_y) / 2;
-					coords.z = 0;
+					finalX = (high_x - low_x) / 2;
+					finalY = (high_y - low_y) / 2;
+
+					// extract the depth from the image - I'm guessing these are real world units?
+					finalZ = depth_image.at<Vec3b>(finalX, finalY);
+
+					// convert to real world coords 
+					// field of view is 110 degrees
+					pixelToRealDist = 2 * finalZ * tan(55) / C;
+					coords.x = finalX * pixelToRealDist
+					coords.y = finalY * pixelToRealDist
+
 					cone_location_pub.publish(coords);
 					return;
 				}
@@ -112,13 +129,10 @@ void ConeLocatorNode::locationCallback(const sensor_msgs::ImageConstPtr& msg){
 					low_x, low_y = bw_image.cols;
 				}
 			}}}
-	ROS_INFO("CANNOT FINDING OBJECT");
+	ROS_INFO("CANNOT FIND OBJECT");
 	return;
 }
 
-
-
-// Not sure if we need a replace here if it's going to be pure white
 void myfloodFill(Mat& image, int r, int c, int& area, int& high_x, int& low_x, int& high_y, int& low_y) {
 	queue<myPoint> queue;
 	set<int> has_seen;
