@@ -43,7 +43,7 @@ class PathPlanner:
                     self.side=self.side * -1
                     self.seen.append(cone.position.x)
         if (robot.position.x >= self.path[self.nextPoint][0]):
-            nextPoint+=1
+            self.nextPoint+=1
         if (self.nextPoint==len(self.path)):
             driveTo.x=robot.position.x
             driveTo.y=robot.position.y
