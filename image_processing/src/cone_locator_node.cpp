@@ -1,7 +1,6 @@
 #include <stdio.h>
-#include <ros/ros.h> // main ROS include
-#include <geometry_msgs/Point.h>
-#include <math.h>
+#include <ros/ros.h>
+#include <sensor_msgs/Float32.h>
 
 // Interfacing to OpenCV
 #include <image_transport/image_transport.h>
@@ -68,8 +67,6 @@ void ConeLocatorNode::depthCallback(const sensor_msgs::ImageConstPtr& msg){
 void ConeLocatorNode::locationCallback(const sensor_msgs::ImageConstPtr& msg){
 	geometry_msgs::Point coords;
 
-	// if (!depth_image_ptr) return;
-	// not sure how to access the depth_image here using the ptr?
 	Mat bw_image;
 	try{
 		bw_image = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::MONO8)->image;
