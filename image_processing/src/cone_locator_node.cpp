@@ -52,7 +52,7 @@ private:
 ConeLocatorNode::ConeLocatorNode() : it(nh) {
 	bw_image_sub = it.subscribe("bw_image", 1, &ConeLocatorNode::locationCallback, this);
 	depth_image_sub = it.subscribe("/camera/zed/depth/image_rect_color", 1, &ConeLocatorNode::depthCallback, this);
-	cone_location_pub = nh.advertise<geometry_msgs::Point>("cone_location", 1);
+	cone_location_pub = nh.advertise<std_msgs::Float32>("cone_location", 1);
 }
 
 void ConeLocatorNode::depthCallback(const sensor_msgs::ImageConstPtr& msg){
@@ -98,12 +98,13 @@ void ConeLocatorNode::locationCallback(const sensor_msgs::ImageConstPtr& msg){
     Rect r;
     if (maxArea > 1000) {
         r = boundingRect(contours[max_index]);
-        coords.x = r.x + (r.width/2);
-        coords.y= r.y + (r.height/2);
-        coords.z = 0;
+
+        // Find the length of the x, approximate as a portion of the fov arc
+    	int arc = (r.x + (r.width/2)) / r.width;
+    	angle = arc * 110;
 
         ROS_INFO("FOUND OBJECT");
-        cone_location_pub.publish(coords);
+        cone_location_pub.publish(angle);
 
     }else{
         ROS_INFO("CANNOT FIND OBJECT");
