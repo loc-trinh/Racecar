@@ -13,7 +13,7 @@ Installation:
 Usage:
 ----------------
 Installation will add the following bash scripts to your environment:
-
+```
 cdws - cd to the racecar source folder of the catkin workspace
 sshcar - ssh to the racecar
 rosenv - print out ros environment variables
@@ -23,3 +23,4 @@ gpull - pull current branch from racecar repository root directory
 gmb $1 - make branch where branch name is first arguement. Branch is pushed to origin and upstream is set.
 roslocal - set ros environments for local/simulator usage
 rosremote - set ros environment for roscore on physical racecar
+```
