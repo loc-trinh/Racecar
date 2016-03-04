@@ -36,7 +36,6 @@ class DriveControl:
         self.distanceI=0
         self.thetaI=0
 
-
         #Pubs and Subs
         self.drive_pub = rospy.Publisher(self.topic_output, AckermannDriveStamped, queue_size=10)
         rospy.Subscriber(self.topic_point, Point, self.drive_callback)
@@ -44,7 +43,7 @@ class DriveControl:
     def drive_callback(self, data):
         x= data.x
         y= data.y
-        distance = math.pow(math.pow(x,2) + math.pow(y,2),  0.5)-0.25 # want to stop slightly in front of the cone
+        distance = math.pow(math.pow(x,2) + math.pow(y,2),  0.5)
         theta = math.atan2(y,x)
 
         msg = AckermannDriveStamped()

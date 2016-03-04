@@ -12,6 +12,7 @@ import math
 
 # ROS Includes
 import rospy
+import tf
 
 # ROS messages
 from geometry_msgs.msg import PoseArray
@@ -45,12 +46,19 @@ class PathPlanner:
         if (robot.position.x >= self.path[self.nextPoint][0]):
             self.nextPoint+=1
         if (self.nextPoint==len(self.path)):
-            driveTo.x=robot.position.x
-            driveTo.y=robot.position.y
+            driveTo.x=0
+            driveTo.y=0
             #done, do not move
         else:
-            driveTo.x=self.path[self.nextPoint][0]
-            driveTo.y=self.path[self.nextPoint][1]
+            x=self.path[self.nextPoint][0] - robot.position.x
+            y=self.path[self.nextPoint][1] - robot.position.y
+            phi = math.atan2(y,x)
+            (r, p, yaw) = tf.transformations.euler_from_quaternion([robot.orientation.x, robot.orientation.y,robot.orientation.z, robot.orientation.w])
+            theta=phi-yaw
+            distance= math.pow(math.pow(x,2)+math.pow(y,2),0.5)
+            driveTo.x= math.cos(theta)*distance
+            driveTo.y= math.sin(theta)*distance
+
             ## currently still in world frame, may need to rotate to 
         self.drive_pub.publish(driveTo)
         print self.path

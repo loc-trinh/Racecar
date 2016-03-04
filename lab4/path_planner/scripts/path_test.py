@@ -13,7 +13,7 @@ msg=PoseArray()
 
 robot = Pose()
 robot.position.x=0
-robot.position.y=0
+robot.position.y=1
 
 cone1= Pose()
 cone1.position.x=2
