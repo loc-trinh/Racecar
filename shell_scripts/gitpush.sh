@@ -9,4 +9,4 @@ echo "committing..."
 echo $(git add --all)
 echo $(git commit -a -m "$1")
 echo "pushing..."
-echo git push origin $branch
+echo $(git push origin $branch)
