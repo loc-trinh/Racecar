@@ -7,9 +7,9 @@
 -->
 
 <launch>
+  <arg name="racecar_version" default="racecar-v2" />
   <group ns="vesc">
-  	<arg name="racecar_version" default="racecar-v2" />
-
+  	
     <!-- default (zero) ackermann command -->
     <node name="zero_ackermann_cmd" pkg="rostopic" type="rostopic" args="pub -r 4 ackermann_cmd_mux/input/default ackermann_msgs/AckermannDriveStamped '{header: auto, drive: {steering_angle: 0.0, speed: 0.0} }'" />
     
