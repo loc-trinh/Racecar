@@ -31,4 +31,8 @@ cmr - catkin_make from correct directory (release build)
 cmc - catkin_make from correct directory (rebuild)
 
 --REMOTE COMMANDS--
+rmake - remote catkin_make on racecar
+rpull - remote git pull
+rlaunch $1 $2 - remote launch a launch file $1=package $2=launch file
+gpp $1 - "git push pull" Push locally then pull on remote $1 = commit msg
 ```
