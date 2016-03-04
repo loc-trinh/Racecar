@@ -34,7 +34,7 @@ class RGB_to_black_white_RGB:
 		self.image_pub.publish(ros_img)
 def main(args):
 	ic=RGB_to_black_white_RGB()
-	rospy.init_node('rgb_to_black_white_rgb')
+	rospy.init_node('image_filter')
 	try:
 		rospy.spin()
 	except KeyboardInterrupt:
