@@ -1,7 +1,8 @@
 #!/bin/bash
 
 git pull
-branch=$(git branch)
+branch=$(git name-rev --name-only HEAD)
 git add --all
-git commit -am "$1"
-git push origin $branch
+echo $(pwd)
+echo git commit -am \"$1\"
+echo git push origin $branch

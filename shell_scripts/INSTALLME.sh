@@ -19,19 +19,29 @@ alias cdws="cd $ABSOLUTE_PATH/../"
 alias rosenv="env | grep ROS"
 alias gs="git status"
 gitpush() {
-    CURRDIR="$(pwd)"
+    CURRDIR="\$(pwd)"
     cdws
-    gitpush.sh
-    cd CURRDIR
+    gitpush.sh "\$1"
+    cd \$CURRDIR
 }
 gitpull() {
-    CURRDIR="$(pwd)"
+    CURRDIR="\$(pwd)"
     cdws
     git pull
-    cd CURRDIR
+    cd \$CURRDIR
+}
+gitmakebranch() {
+    CURRDIR="\$(pwd)"
+    cdws
+    git pull
+    git checkout -b \$1
+    git push -u origin \$1
+    git branch --set-upstream-to=origin/\$1 \$1
+    cd \$CURRDIR
 }
 alias gpush=gitpush
 alias gpull=gitpull
+alias gmb=gitmakebranch
 alias roslocal=". rosenv.sh 0"
 alias rosremote=". rosenv.sh 1"
 
