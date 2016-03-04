@@ -1,0 +1,4 @@
+gpush $1
+sshpass -p 'racecar@mit' ssh racecar@192.168.100.63<< EOF
+gpull
+EOF
