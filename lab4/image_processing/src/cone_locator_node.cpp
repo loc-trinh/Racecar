@@ -76,11 +76,10 @@ void ConeLocatorNode::locationCallback(const sensor_msgs::ImageConstPtr& msg){
     Rect r;
     if (maxArea > 1000) {
         r = boundingRect(contours[max_index]);
-
-        // Find the length of the x, approximate as a portion of the fov arc
-    	float arc = (r.x - ((float)r.width/2))/(float)r.width ;
-        cout << arc << endl;
-    	float angle = arc;
+        center.x = r.x + (r.width/2);
+        
+        float width = bw_image.cols;
+    	float angle = (center.x - width/2)/width * .959931;
     	std_msgs::Float32 angle_msg;
     	angle_msg.data = angle;
 
