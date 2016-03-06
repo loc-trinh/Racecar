@@ -8,6 +8,7 @@ from geometry_msgs.msg import Point
 from std_msgs.msg import Float32
 from std_msgs.msg import Float64
 
+import tf
 class ConeDetector:
 	def __init__(self):
 		self.cone_sub = rospy.Subscriber("cone_location", Float32, self.phi_callback)
@@ -24,6 +25,10 @@ class ConeDetector:
 		self.phi=-msg.data
 	def laser_callback(self,msg):
 		#ang="resolution:%s"%str(msg.angle_max-msg.angle_min)
+
+		msg.header.stamp = self.listener.getLatestCommonTime("base_link",msg.header.frame_id)
+        msg = self.listener.transformScan("base_link", msg)
+
 		time=rospy.Time.now()
 		if self.phi<np.pi:#check the angle
 			phi_index=int((msg.angle_max+self.phi)/(msg.angle_max-msg.angle_min)*len(msg.ranges))
