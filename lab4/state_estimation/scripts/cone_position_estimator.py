@@ -52,7 +52,7 @@ class ConeEstimator:
         rospy.loginfo("estimator callback")
 
         data.header.stamp = self.listener.getLatestCommonTime(self.map_frame,data.header.frame_id)
-        con_loc = self.listener.transformPose(self.map_frame, data)
+        con_loc = self.listener.transformPoint(self.map_frame, data)
 
         #compare against existing cones
         matched = False
