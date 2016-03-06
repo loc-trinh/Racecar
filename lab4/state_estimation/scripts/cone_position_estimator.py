@@ -57,7 +57,7 @@ class ConeEstimator:
         #compare against existing cones
         matched = False
         for cone in self.cone_array.poses:
-            if sqrt( (con_loc.point.x - cone.position.x)**2 + (con_loc.point.y - cone.position.y)**2 ) < self.kfactor:
+            if math.sqrt( (con_loc.point.x - cone.position.x)**2 + (con_loc.point.y - cone.position.y)**2 ) < self.kfactor:
                 cone.position.x = con_loc.point.x;
                 cone.position.y = con_loc.point.y;
                 break
