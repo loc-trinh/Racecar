@@ -55,6 +55,7 @@ class ConeDetector:
 			self.stampedpoint.header.seq=self.counter
 			self.stampedpoint.header.frame_id="base_link"
 			self.stampedpoint.header.stamp=time
+			rospy.loginfo("point: %s" str(point))
 			self.stampedpoint.point=point
 			self.cd_pub.publish(self.stampedpoint)
 		else:
