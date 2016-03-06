@@ -21,7 +21,7 @@ class ConeEstimator:
     def __init__(self):
         #Default settings
         self.kfactor = 0.2;
-        self.topic_input = "pointcloud";
+        self.topic_input = "cone_position";
         self.topic_output = "cone_array";
         self.base_frame = "base_link"
         self.map_frame = "odom";
