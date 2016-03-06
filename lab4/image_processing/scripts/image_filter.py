@@ -33,8 +33,9 @@ class RGB_to_black_white_RGB:
 		ros_img=self.bridge.cv2_to_imgmsg(mask, "mono8")
 		self.image_pub.publish(ros_img)
 def main(args):
-	ic=RGB_to_black_white_RGB()
 	rospy.init_node('image_filter')
+	ic=RGB_to_black_white_RGB()
+	
 	try:
 		rospy.spin()
 	except KeyboardInterrupt:
