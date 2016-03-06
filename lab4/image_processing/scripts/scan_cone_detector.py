@@ -20,6 +20,8 @@ class ConeDetector:
         self.window=3
         self.stampedpoint=PointStamped()
         self.counter=0
+        self.listener = tf.TransformListener(True, rospy.Duration(10.0))
+        
     def phi_callback(self, msg):
         #print "recieved phi"
         self.phi=-msg.data
