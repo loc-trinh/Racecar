@@ -58,7 +58,15 @@ class ConeEstimator:
         data.header.stamp = self.listener.getLatestCommonTime(self.map_frame,data.header.frame_id)
         con_loc = self.listener.transformPoint(self.map_frame, data)
 
-
+        #Prune list
+        i = 0
+        j = 0
+        removeList = [];
+        for i in range(len(self.cone_array.poses)-1):
+            for j in range(i+1, len(self.cone_array.poses)-1):
+                if math.sqrt( (self.cone_array.poses[i].point.x - self.cone_array.poses[j].position.x)**2 + (self.cone_array.poses[i].point.y - self.cone_array.poses[j].position.y)**2 ) < self.kfactor:
+                    removeList.append(self.cone_array.poses[j]);
+        self.cone_array.poses.remove(removeList);
 
         # Compare against existing cones
         matched = False
@@ -78,6 +86,7 @@ class ConeEstimator:
             cone.position.x = con_loc.point.x;
             cone.position.y = con_loc.point.y;
             self.cone_array.poses.append(cone);
+
 
         ## Publish array. Note: Publishing in odom
         self.cone_array.header.stamp = rospy.Time.now();

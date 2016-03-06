@@ -25,9 +25,9 @@ moveBindings = {
       'a':(0,1),
       's':(0,0),
       'd':(0,-1),
-      'z':(-1,-1),
+      'z':(-1,1),
       'x':(-1,0),
-      'c':(-1,1)
+      'c':(-1,-1)
           }
 
 speedBindings={
@@ -44,8 +44,8 @@ def getKey():
    termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
    return key
 
-speed = .2
-turn = 1
+speed = 0.2
+turn = 0.1
 
 def vels(speed,turn):
    return "currently:\tspeed %s\tturn %s " % (speed,turn)
