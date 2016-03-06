@@ -79,7 +79,7 @@ void ConeLocatorNode::locationCallback(const sensor_msgs::ImageConstPtr& msg){
         center.x = r.x + (r.width/2);
         center.y= r.y + (r.height/2);
         float W = bw_image.cols;
-        float angle = (center.x - W/5)/W *.959931;
+        float angle = (center.x - W/2-20)/W *.959931;
     	std_msgs::Float32 angle_msg;
     	angle_msg.data = angle;
 
