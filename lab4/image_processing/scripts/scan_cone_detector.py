@@ -45,8 +45,8 @@ class ConeDetector:
 			position = start_point+point[0]
 			dist=point[1]
 			angle=msg.angle_increment*position+msg.angle_min
-			x=dist*np.cos(angle)
-			y=dist*np.sin(angle)
+			x=dist*np.sin(angle)
+			y=dist*np.cos(angle)
 			point = Point()
 			point.x=x
 			point.y=y
@@ -56,7 +56,7 @@ class ConeDetector:
 			self.stampedpoint.header.seq=self.counter
 			self.stampedpoint.header.frame_id="base_link"
 			self.stampedpoint.header.stamp=time
-			rospy.loginfo("point: %s" % str(point))
+			#rospy.loginfo("point: %s" % str(point))
 			self.stampedpoint.point=point
 			self.cd_pub.publish(self.stampedpoint)
 		else:
