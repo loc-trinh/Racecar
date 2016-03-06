@@ -54,6 +54,9 @@ class ConeEstimator:
         if data.point.x == 0 and data.point.y == 0:
             print "No Cone"
             return;
+        elif data.point.x > 5 and data.point.y > 5:
+            print "Filtering out far cone"
+            return;
         # Get point and transform into odom frame
         data.header.stamp = self.listener.getLatestCommonTime(self.map_frame,data.header.frame_id)
         con_loc = self.listener.transformPoint(self.map_frame, data)
