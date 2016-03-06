@@ -10,10 +10,10 @@ from std_msgs.msg import Float64
 
 class ConeDetector:
 	def __init__(self):
-		#self.cone_sub = rospy.Subscriber("cone_location", Float32, self.phi_callback)
+		self.cone_sub = rospy.Subscriber("cone_location", Float32, self.phi_callback)
 		self.cd_sub = rospy.Subscriber("scan", LaserScan, self.laser_callback)
 		self.cd_pub = rospy.Publisher("cone_position", PointStamped, queue_size=4)
-		self.phi = 7.0
+		self.phi = 100.0
 		self.phi_start=self.phi
 		self.phi_end = self.phi
 		self.window=3
