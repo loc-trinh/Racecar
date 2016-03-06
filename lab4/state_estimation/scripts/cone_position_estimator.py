@@ -28,7 +28,7 @@ class ConeEstimator:
 
         #Load Settings
         self.kfactor = rospy.get_param('~kfactor', self.kfactor)
-        self.topic_input = rospy.get_param('~topic_pointcloud', self.topic_input)
+        self.topic_input = rospy.get_param('~topic_input', self.topic_input)
         self.topic_output = rospy.get_param('~topic_output', self.topic_output)
         self.base_frame = rospy.get_param('~base_frame', self.base_frame)
         self.map_frame = rospy.get_param('~map_frame', self.map_frame)
@@ -40,6 +40,8 @@ class ConeEstimator:
         #Setup Data Structures
         self.cone_array = PoseArray();
         self.cone_array.header.frame_id = self.map_frame;
+
+        rospy.loginfo("estimator node loaded")
 
 
     def estimator_callback(self, data):
