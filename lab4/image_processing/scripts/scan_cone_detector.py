@@ -20,7 +20,7 @@ class ConeDetector:
 		self.stampedpoint=PointStamped()
 		self.counter=0
 	def phi_callback(self, msg):
-		print "recieved phi"
+		#print "recieved phi"
 		self.phi=msg.data
 	def laser_callback(self,msg):
 		#ang="resolution:%s"%str(msg.angle_max-msg.angle_min)
@@ -35,7 +35,7 @@ class ConeDetector:
 			end_point=int((msg.angle_max+self.phi_end)/(msg.angle_max-msg.angle_min)*len(msg.ranges))
 			#ang="start_point, end_point:%s"%str((start_point,end_point))
 			#print ang
-			rospy.loginfo(ang)
+			#rospy.loginfo(ang)
 			points=[]
 			for i in range(start_point, end_point-5):
 				wind=msg.ranges[i:i+6]
