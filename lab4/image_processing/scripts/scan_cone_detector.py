@@ -34,6 +34,7 @@ class ConeDetector:
 				points.append((i+2,mean))
 			point = min(points,key=lambda item:item[1])
 			position = start_point+point[0]
+			dist=point[1]
 			angle=msg.angle_increment*position+msg.angle_min
 			x=dist*np.cos(angle)
 			y=dist*np.sin(angle)
