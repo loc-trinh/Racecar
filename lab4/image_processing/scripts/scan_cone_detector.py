@@ -21,13 +21,14 @@ class ConeDetector:
         self.stampedpoint=PointStamped()
         self.counter=0
         self.listener = tf.TransformListener(True, rospy.Duration(10.0))
-        
+
     def phi_callback(self, msg):
         #print "recieved phi"
         self.phi=-msg.data
     def laser_callback(self,msg):
         #ang="resolution:%s"%str(msg.angle_max-msg.angle_min)
 
+        print "converting from %s to base_link" % msg.header.frame_id
         msg.header.stamp = self.listener.getLatestCommonTime("base_link",msg.header.frame_id)
         msg = self.listener.transformScan("base_link", msg)
 
