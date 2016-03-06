@@ -51,7 +51,7 @@ class ConeEstimator:
         print "==============="
 
         #Filter out bad points
-        if data.point.x == 0 and data.point.y == 0 
+        if data.point.x == 0 and data.point.y == 0:
             print "No Cone"
             return;
         # Get point and transform into odom frame
