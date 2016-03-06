@@ -20,7 +20,7 @@ class ConeDetector:
 		self.phi=msg.data
 	def laser_callback(self,msg):
 		if self.phi<np.pi:#check the angle
-			phi_index=int((msg.angle_max+self.phi)/(msg.angle_max+msg.angle_min)*len(msg.ranges))
+			phi_index=int((msg.angle_max+self.phi)/(msg.angle_max-msg.angle_min)*len(msg.ranges))
 			points=msg.ranges[phi_index-self.window:phi_index+self.window]
 			distance = np.mean(points)
 			self.phi_start=self.phi-np.pi/(18+9*distance)
