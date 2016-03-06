@@ -15,7 +15,7 @@ import rospy
 import tf
 
 # ROS messages
-from geometry_msgs.msg import PoseArray, Pose, Point
+from geometry_msgs.msg import PoseArray, Pose, PointStamped
 
 class ConeEstimator:
     def __init__(self):
