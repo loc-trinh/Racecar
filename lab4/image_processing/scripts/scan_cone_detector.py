@@ -27,7 +27,8 @@ class ConeDetector:
 			self.phi_end=self.phi+np.pi/(18+3*distance)
 			start_point=int((msg.angle_max+self.phi_start)/(msg.angle_max-msg.angle_min)*len(msg.ranges))
 			end_point=int((msg.angle_max+self.phi_end)/(msg.angle_max-msg.angle_min)*len(msg.ranges))
-			print msg.angle_max-msg.angle_min
+			ang="resolution:%s"%msg.angle_max-msg.angle_min
+			rospy.loginfo(ang)
 			points=[]
 			for i in range(start_point, end_point-5):
 				wind=msg.ranges[i:i+6]
