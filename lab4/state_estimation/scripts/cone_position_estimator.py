@@ -50,7 +50,7 @@ class ConeEstimator:
     def estimator_callback(self, data):
         print "==============="
 
-        #Filter out bad points
+        # Filter out bad points
         if data.point.x == 0 and data.point.y == 0:
             print "No Cone"
             return;
@@ -60,7 +60,7 @@ class ConeEstimator:
 
 
 
-        #compare against existing cones
+        # Compare against existing cones
         matched = False
         print "Ary Length = %f" % len(self.cone_array.poses)
         for cone in self.cone_array.poses:
@@ -71,7 +71,7 @@ class ConeEstimator:
                 matched = True
                 break
 
-        #No match, add to cone list
+        # If no match, add to cone list
         if not matched:
             print "Adding Cone at (%f,%f)!" % (con_loc.point.x, con_loc.point.y)
             cone = Pose();
@@ -79,7 +79,7 @@ class ConeEstimator:
             cone.position.y = con_loc.point.y;
             self.cone_array.poses.append(cone);
 
-        ## currently still in world frame
+        ## Publish array. Note: Publishing in odom
         self.cone_array.header.stamp = rospy.Time.now();
         self.publisher.publish(self.cone_array)
 
