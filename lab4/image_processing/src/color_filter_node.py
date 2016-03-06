@@ -8,7 +8,7 @@ import numpy as np
 from std_msgs.msg import String 
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
-​
+
 def imageFilter():
     """
 reads from webcam and publishes it 
@@ -25,14 +25,14 @@ reads from webcam and publishes it
     while not rospy.is_shutdown():
     # Take each frame
         _, frame = cap.read()
-​
+
     # Convert BGR to HSV
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-​
+
     # define range of blue color in HSV
         lower_orange = np.array([10, 74, 220], dtype=np.uint8)
         upper_orange = np.array([37,120,250], dtype=np.uint8)
-​
+
     # Threshold the HSV image to get only blue colors
         mask = cv2.inRange(hsv, lower_orange, upper_orange)
     #print mask
@@ -45,12 +45,11 @@ reads from webcam and publishes it
         cv2.waitKey(1)
         image_to_pub=bridge.cv2_to_imgmsg(frame, "rgb8")
         image_pub.publish(image_to_pub)
-​
-​
+
+
 if __name__ == '__main__':
     try:
         imageFilter()
     except KeyboardInterrupt:
-​
         print ("Shutting down")
     cv2.destroyAllWindows()
