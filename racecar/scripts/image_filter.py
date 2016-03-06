@@ -29,11 +29,12 @@ class RGB_to_black_whit_RGB:
     	#cv2.imshow("mask",mask)
     	#cv2.imshow('res',res)
     	cv2.waitKey(3)#
-		ros_img=self.bridge.cv2_to_imgmsg(cv_image, "mono")
+		ros_img=self.bridge.cv2_to_imgmsg(cv_image, "mono8")
 		self.image_pub.publish(ros_img)
 def main(args):
-	ic=RGB_to_black_whit_RGB()
-	rospy.init_node('rgb_to_black_whute_rgb')
+	rospy.init_node('rgb_to_black_white_rgb')
+	ic=RGB_to_black_white_RGB()
+	
 	try:
 		rospy.spin()
 	except KeyboardInterrupt:

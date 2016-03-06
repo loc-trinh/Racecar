@@ -51,7 +51,7 @@ class ConeDetector:
 			dist=point[1]
 			angle=msg.angle_increment*position+msg.angle_min
 			x=dist*np.sin(angle)
-			y=-dist*np.cos(angle)
+			y=dist*np.cos(angle)
 			point = Point()
 			point.x=x
 			point.y=y
