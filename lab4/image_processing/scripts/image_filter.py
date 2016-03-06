@@ -18,7 +18,7 @@ class RGB_to_black_white_RGB:
 		#convert to HSV
 		hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 		#set the ranges we are interested in
-		low_orange_threshold=np.array([0, 52, 184], dtype=np.uint8)
+		low_orange_threshold=np.array([0, 107, 184], dtype=np.uint8)
 		high_orange_threshold=np.array([255,255,255], dtype=np.uint8)
 		#threshold the isolate the orange colors
 		mask = cv2.inRange(hsv, low_orange_threshold, high_orange_threshold)
