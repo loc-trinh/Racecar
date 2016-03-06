@@ -8,9 +8,9 @@
 		<!--
 		<node pkg="drive_control" name="drive_control" type="drive_control.py" output="screen" />
 		-->
-		
+		<!--
 		<node pkg ="image_processing" name = "color_filter_node" type="color_filter_node"/>
-		
+		-->
 		<node pkg ="image_processing" name = "scan_cone_detector" type="scan_cone_detector"/>
 		
 	</group>
