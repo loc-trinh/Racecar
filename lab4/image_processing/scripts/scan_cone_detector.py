@@ -28,9 +28,9 @@ class ConeDetector:
     def laser_callback(self,msg):
         #ang="resolution:%s"%str(msg.angle_max-msg.angle_min)
 
-        print "converting from %s to base_link" % msg.header.frame_id
-        msg.header.stamp = self.listener.getLatestCommonTime("base_link",msg.header.frame_id)
-        msg = self.listener.transformScan("base_link", msg)
+        #print "converting from %s to base_link" % msg.header.frame_id
+        #msg.header.stamp = self.listener.getLatestCommonTime("base_link",msg.header.frame_id)
+        #msg = self.listener.transformScan("base_link", msg)
 
         time=rospy.Time.now()
         if self.phi<np.pi:#check the angle
