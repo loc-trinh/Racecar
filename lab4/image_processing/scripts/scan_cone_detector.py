@@ -30,8 +30,8 @@ class ConeDetector:
 			points=[]
 			for i in range(start_point, end_point-5):
 				wind=msg.ranges[i:i+6]
-				mean==np.mean(wind)
-				points.append((i+2,mean))
+				m==np.mean(wind)
+				points.append((i+2,m))
 			point = min(points,key=lambda item:item[1])
 			position = start_point+point[0]
 			angle=msg.incr_angle*position+angle_min
