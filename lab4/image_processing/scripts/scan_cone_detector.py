@@ -23,8 +23,8 @@ class ConeDetector:
 			phi_index=int((msg.angle_max+self.phi)/(msg.angle_max-msg.angle_min)*len(msg.ranges))
 			points=msg.ranges[phi_index-self.window:phi_index+self.window]
 			distance = np.mean(points)
-			self.phi_start=self.phi-np.pi/(18+9*distance)
-			self.phi_end=self.phi+np.pi/(18+9*distance)
+			self.phi_start=self.phi-np.pi/(18+3*distance)
+			self.phi_end=self.phi+np.pi/(18+3*distance)
 			start_point=int((msg.angle_max+self.phi_start)/(msg.angle_max-msg.angle_min)*len(msg.ranges))
 			end_point=int((msg.angle_max+self.phi_end)/(msg.angle_max-msg.angle_min)*len(msg.ranges))
 			points=[]
