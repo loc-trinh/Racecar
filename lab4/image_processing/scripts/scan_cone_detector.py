@@ -29,16 +29,16 @@ class ConeDetector:
         #ang="resolution:%s"%str(msg.angle_max-msg.angle_min)
 
         print "converting from %s to base_link" % msg.header.frame_id
-        msg.header.stamp = self.listener.getLatestCommonTime("/base_link",msg.header.frame_id)
-        msg = self.listener.transformScan("/base_link", msg)
+        msg.header.stamp = self.listener.getLatestCommonTime("base_link",msg.header.frame_id)
+        msg = self.listener.transformScan("base_link", msg)
 
         time=rospy.Time.now()
         if self.phi<np.pi:#check the angle
             phi_index=int((msg.angle_max+self.phi)/(msg.angle_max-msg.angle_min)*len(msg.ranges))
             points=msg.ranges[phi_index-self.window:phi_index+self.window]
             distance = np.mean(points)
-            self.phi_start=self.phi-np.pi/(18+3*distance)
-            self.phi_end=self.phi+np.pi/(18+3*distance)
+            self.phi_start=self.phi-np.pi/(12+3*distance)
+            self.phi_end=self.phi+np.pi/(12+3*distance)
             start_point=int((msg.angle_max+self.phi_start)/(msg.angle_max-msg.angle_min)*len(msg.ranges))
             end_point=int((msg.angle_max+self.phi_end)/(msg.angle_max-msg.angle_min)*len(msg.ranges))
             #ang="start_point, end_point:%s"%str((start_point,end_point))
