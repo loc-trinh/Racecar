@@ -71,7 +71,7 @@ class ConeEstimator:
 
         ## currently still in world frame
         self.cone_array.header.stamp = rospy.Time.now();
-        self.self.publisher.publish(self.cone_array)
+        self.publisher.publish(self.cone_array)
 
 
 
