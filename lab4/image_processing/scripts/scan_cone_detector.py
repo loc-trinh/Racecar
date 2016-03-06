@@ -20,6 +20,7 @@ class ConeDetector:
 		self.stampedpoint=PointStamped()
 		self.counter=0
 	def phi_callback(self, msg):
+		print "recieved phi"
 		self.phi=msg.data
 	def laser_callback(self,msg):
 		#ang="resolution:%s"%str(msg.angle_max-msg.angle_min)
