@@ -61,6 +61,7 @@ class ConeEstimator:
                 print "Cone Match!"
                 cone.position.x = con_loc.point.x;
                 cone.position.y = con_loc.point.y;
+                matched = True
                 break
 
         #No match, add to cone list
