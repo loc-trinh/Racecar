@@ -35,7 +35,7 @@ class ConeEstimator:
 
         #Pubs and Subs
         self.publisher = rospy.Publisher(self.topic_output, PoseArray, queue_size=10)
-        rospy.Subscriber(self.topic_input, Point, self.estimator_callback)
+        rospy.Subscriber(self.topic_input, PointStamped, self.estimator_callback)
 
         #Setup Data Structures
         self.cone_array = PoseArray();
