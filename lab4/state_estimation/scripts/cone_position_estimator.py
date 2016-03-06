@@ -65,8 +65,11 @@ class ConeEstimator:
         for i in range(len(self.cone_array.poses)-1):
             for j in range(i+1, len(self.cone_array.poses)-1):
                 if math.sqrt( (self.cone_array.poses[i].point.x - self.cone_array.poses[j].position.x)**2 + (self.cone_array.poses[i].point.y - self.cone_array.poses[j].position.y)**2 ) < self.kfactor:
+
                     removeList.append(self.cone_array.poses[j]);
-        self.cone_array.poses.remove(removeList);
+
+        self.cone_array.poses = [n for n in self.cone_array.poses if n not in removeList]
+        
 
         # Compare against existing cones
         matched = False
