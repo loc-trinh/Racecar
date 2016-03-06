@@ -49,8 +49,6 @@ class ConeEstimator:
 
     def estimator_callback(self, data):
         # Get point and transform into odom frame
-        rospy.loginfo("estimator callback")
-
         data.header.stamp = self.listener.getLatestCommonTime(self.map_frame,data.header.frame_id)
         con_loc = self.listener.transformPoint(self.map_frame, data)
 
