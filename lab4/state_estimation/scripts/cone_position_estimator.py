@@ -20,7 +20,7 @@ from geometry_msgs.msg import PoseArray, Pose, PointStamped
 class ConeEstimator:
     def __init__(self):
         #Default settings
-        self.kfactor = 0.2;
+        self.kfactor = 0.6;
         self.topic_input = "cone_position";
         self.topic_output = "cone_array";
         self.base_frame = "base_link"
