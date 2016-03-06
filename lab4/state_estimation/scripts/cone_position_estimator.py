@@ -67,7 +67,7 @@ class ConeEstimator:
             cone = Pose();
             cone.position.x = con_loc.point.x;
             cone.position.y = con_loc.point.y;
-            self.cone_array.cones.append(cone);
+            self.cone_array.poses.append(cone);
 
         ## currently still in world frame
         self.cone_array.header.stamp = rospy.Time.now();
