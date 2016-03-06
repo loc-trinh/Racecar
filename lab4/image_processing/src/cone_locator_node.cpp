@@ -76,10 +76,10 @@ void ConeLocatorNode::locationCallback(const sensor_msgs::ImageConstPtr& msg){
     Rect r;
     if (maxArea > 1000) {
         r = boundingRect(contours[max_index]);
-
         center.x = r.x + (r.width/2);
         center.y= r.y + (r.height/2);
-        float angle = (center.x - (float)bw_image.cols/2)/(float)bw_image.cols*.959931;
+        float W = bw_image.cols;
+        float angle = (center.x - W/4)/W *.959931;
     	std_msgs::Float32 angle_msg;
     	angle_msg.data = angle;
 
