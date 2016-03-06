@@ -48,20 +48,24 @@ class ConeEstimator:
 
 
     def estimator_callback(self, data):
+        print "==============="
         # Get point and transform into odom frame
         data.header.stamp = self.listener.getLatestCommonTime(self.map_frame,data.header.frame_id)
         con_loc = self.listener.transformPoint(self.map_frame, data)
 
         #compare against existing cones
         matched = False
+        print "Ary Length = %f" % len(self.cone_array.poses)
         for cone in self.cone_array.poses:
             if math.sqrt( (con_loc.point.x - cone.position.x)**2 + (con_loc.point.y - cone.position.y)**2 ) < self.kfactor:
+                print "Cone Match!"
                 cone.position.x = con_loc.point.x;
                 cone.position.y = con_loc.point.y;
                 break
 
         #No match, add to cone list
         if not matched:
+            print "Adding Cone at (%f,%f)!" % (con_loc.point.x, con_loc.point.y)
             cone = Pose();
             cone.position.x = con_loc.point.x;
             cone.position.y = con_loc.point.y;
