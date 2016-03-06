@@ -41,6 +41,9 @@ class ConeEstimator:
         self.cone_array = PoseArray();
         self.cone_array.header.frame_id = self.map_frame;
 
+        #Setup TF
+        self.listener = tf.TransformListener(True, rospy.Duration(10.0))
+
         rospy.loginfo("estimator node loaded")
 
 
@@ -48,8 +51,8 @@ class ConeEstimator:
         # Get point and transform into odom frame
         rospy.loginfo("estimator callback")
 
-        data.header.stamp = listener.getLatestCommonTime(self.map_frame,data.header.frame_id)
-        con_loc = listener.transformPose(self.map_frame, data)
+        data.header.stamp = self.listener.getLatestCommonTime(self.map_frame,data.header.frame_id)
+        con_loc = self.listener.transformPose(self.map_frame, data)
 
         #compare against existing cones
         matched = False
