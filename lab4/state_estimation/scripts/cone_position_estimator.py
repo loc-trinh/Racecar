@@ -49,9 +49,16 @@ class ConeEstimator:
 
     def estimator_callback(self, data):
         print "==============="
+
+        #Filter out bad points
+        if data.point.x == 0 and data.point.y == 0 
+            print "No Cone"
+            return;
         # Get point and transform into odom frame
         data.header.stamp = self.listener.getLatestCommonTime(self.map_frame,data.header.frame_id)
         con_loc = self.listener.transformPoint(self.map_frame, data)
+
+
 
         #compare against existing cones
         matched = False
