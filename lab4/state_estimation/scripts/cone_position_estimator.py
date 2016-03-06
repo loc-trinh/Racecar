@@ -35,15 +35,17 @@ class ConeEstimator:
 
         #Pubs and Subs
         self.publisher = rospy.Publisher(self.topic_output, PoseArray, queue_size=10)
-        rospy.Subscriber(self.topic_input, Point, self.detector_callback)
+        rospy.Subscriber(self.topic_input, Point, self.estimator_callback)
 
         #Setup Data Structures
         self.cone_array = PoseArray();
         self.cone_array.header.frame_id = self.map_frame;
 
 
-    def detector_callback(self, data):
+    def estimator_callback(self, data):
         # Get point and transform into odom frame
+        rospy.loginfo("estimator callback")
+
         data.header.stamp = listener.getLatestCommonTime(self.map_frame,data.header.frame_id)
         con_loc = listener.transformPose(self.map_frame, data)
 
@@ -62,13 +64,10 @@ class ConeEstimator:
             cone.position.y = con_loc.point.y;
             self.cone_array.cones.append(cone);
 
-        ## currently still in world frame, may need to rotate to 
+        ## currently still in world frame
         self.cone_array.header.stamp = rospy.Time.now();
         self.self.publisher.publish(self.cone_array)
 
-
-
-        
 
 
 if __name__ == "__main__":
