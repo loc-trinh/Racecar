@@ -36,17 +36,17 @@ ImageFilterNode::ImageFilterNode() : it(nh) {
 }
 
 void ImageFilterNode::imageCallback(const sensor_msgs::ImageConstPtr& msg){
-	cv_bridge::CvImagePtr image_pointer;
+	Mat image;
 	try{
-		image_pointer = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::MONO8);
+		image = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::RGB8)->image;
 	}
 	catch (cv_bridge::Exception& e) {
   		ROS_ERROR("cv_bridge exception: %s", e.what());
 		return;
 	}
-    cvtColor(image_pointer->image, image_pointer->image, COLOR_BGR2HSV);
-    inRange(image_pointer->image, cv::Scalar(0, 80, 80), cv::Scalar(22, 255, 255), image_pointer->image);
-    image_pub.publish(image_pointer->toImageMsg());   
+    cvtColor(image, image, COLOR_BGR2HSV);
+    inRange(image, cv::Scalar(0, 80, 80), cv::Scalar(22, 255, 255), image);
+    image_pub.publish(cv_bridge::CvImage(std_msgs::Header(), "mono8", image).toImageMsg());
 }
 
 
