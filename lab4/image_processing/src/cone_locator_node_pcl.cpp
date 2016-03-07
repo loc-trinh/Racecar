@@ -56,7 +56,7 @@ void ConeLocatorNode::pclCallback(const pcl::PointCloud<pcl::PointXYZRGB>::Const
     // pcl::toROSMsg(point_cloud, output); // Convert the point cloud to a ROS message
     // output.header.frame_id = point_cloud_frame_id; // Set the header values of the ROS message
     // output.header.stamp = point_cloud_time;
-    pub_cloud.publish(output);
+    pub_cloud.publish(pcl_processing);
     // point_cloud_data_processing = false;
 
 	return;
