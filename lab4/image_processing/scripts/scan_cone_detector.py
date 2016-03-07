@@ -13,7 +13,7 @@ class ConeDetector:
 
     def __init__(self):
         self.cone_sub = rospy.Subscriber("cone_location", Float32, self.phi_callback)
-        self.window_angles=Publisher("angeles", Float32, queue_size=4)
+        self.scan_window=Publisher("laser_window", LaserScan, queue_size=4)
         self.cd_sub = rospy.Subscriber("scan", LaserScan, self.laser_callback)
         self.cd_pub = rospy.Publisher("cone_position", PointStamped, queue_size=4)
         self.phi = 100.0
@@ -74,7 +74,20 @@ class ConeDetector:
             #rospy.loginfo("point: %s" % str(point))
             self.stampedpoint.point=point
             self.cd_pub.publish(self.stampedpoint)
-            self.window_angles([self.phi_start, self.phi_end])
+            
+            scan=LaserScan()
+            scan.header=msg.header
+            scan.angle_min=self.self.phi_start
+            scan.angle_max=self.phi_end
+            scan.angle_increment=msg.angle_increment
+            scan.time_increment=msg.time_increment
+            time=rospy.Time.now()
+            scan.scan_time=time
+            scan.range_min=msg.range_min
+            scan.range_max=msg.range_max
+            scan.ranges=msg.ranges[start_point:end_point]
+            self.scan_window.publish(scan)
+
         else:
             point=Point()
             point.x=0.0
