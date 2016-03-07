@@ -13,7 +13,7 @@ class ConeDetector:
 
     def __init__(self):
         self.cone_sub = rospy.Subscriber("cone_location", Float32, self.phi_callback)
-        self.scan_window=Publisher("laser_window", LaserScan, queue_size=4)
+        self.scan_window=rospy.Publisher("laser_window", LaserScan, queue_size=4)
         self.cd_sub = rospy.Subscriber("scan", LaserScan, self.laser_callback)
         self.cd_pub = rospy.Publisher("cone_position", PointStamped, queue_size=4)
         self.phi = 100.0
