@@ -49,7 +49,7 @@ void ConeLocatorNode::pclCallback(const pcl::PointCloud<pcl::PointXYZRGB>::Const
 
 	// dummy processing to see raw input
 	pcl_processing = *pcl_input;
-    cone_location_pub.publish(pcl_processing);
+    cone_pcl_pub.publish(pcl_processing);
 
     // Taken from the ZED Wrapper
 	// sensor_msgs::PointCloud output;
