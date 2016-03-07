@@ -32,23 +32,32 @@ private:
 	ros::Publisher cone_pcl;
 
 	// callbacks
-	void pclCallback(const pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr&);
+	void pclCallback(const pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr& pcl_input);
 
 };
 
 ConeLocatorNode::ConeLocatorNode() : it(nh) {
 	// conv to pc from pcl2 should be done on the fly by the subscriber
 	pcl_cloud_sub = it.subscribe("zed/camera/point_cloud/cloud", 1, &ConeLocatorNode::pclCallback, this);
-	cone_pcl_pub = nh.advertise<sensor_msgs::PointCloud2> ("pcl_processing", 1);
+	cone_pcl_pub = nh.advertise<sensor_msgs::PointCloud2> ("output", 1);
 }
 
-void ConeLocatorNode::pclCallback(const sensor_msgs::PointCloud2ConstPtr& pcl_input){
+void ConeLocatorNode::pclCallback(const pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr& pcl_input){
 
-
-pcl::PointCloud<pcl::PointXYZRGB>
+	// <pcl::PointCloud<pcl::PointXYZRGB>
 	sensor_msgs::PointCloud2 pcl_processing;
+
+	// dummy processing to see raw input
 	pcl_processing = *pcl_input;
     cone_location_pub.publish(pcl_processing);
+
+    // Taken from the ZED Wrapper
+	sensor_msgs::PointCloud output;
+    // pcl::toROSMsg(point_cloud, output); // Convert the point cloud to a ROS message
+    // output.header.frame_id = point_cloud_frame_id; // Set the header values of the ROS message
+    // output.header.stamp = point_cloud_time;
+    pub_cloud.publish(output);
+    // point_cloud_data_processing = false;
 
 	return;
 }
