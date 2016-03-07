@@ -45,7 +45,7 @@ void ImageFilterNode::imageCallback(const sensor_msgs::ImageConstPtr& msg){
 		return;
 	}
     cvtColor(image, image, COLOR_BGR2HSV);
-    inRange(image, cv::Scalar(0, 80, 80), cv::Scalar(22, 255, 255), image);
+    inRange(image, cv::Scalar(0, 107, 184), cv::Scalar(255, 255, 255), image);
     image_pub.publish(cv_bridge::CvImage(std_msgs::Header(), "mono8", image).toImageMsg());
 }
 
