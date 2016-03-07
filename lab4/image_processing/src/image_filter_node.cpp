@@ -38,7 +38,7 @@ ImageFilterNode::ImageFilterNode() : it(nh) {
 void ImageFilterNode::imageCallback(const sensor_msgs::ImageConstPtr& msg){
 	cv_bridge::CvImagePtr image_pointer;
 	try{
-		image_pointer = cv_bridge::toCvCopy(msg);
+		image_pointer = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::MONO8);
 	}
 	catch (cv_bridge::Exception& e) {
   		ROS_ERROR("cv_bridge exception: %s", e.what());
