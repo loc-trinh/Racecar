@@ -18,10 +18,10 @@
       <param name="rgb_cam_info_topic"   value="rgb/camera_info" />
       <param name="rgb_frame_id"         value="/zed_optical_frame" />
 
+      <!--
       <param name="point_cloud_topic"     value="point_cloud/cloud" />
       <param name="cloud_frame_id"        value="/zed_optical_frame" />
 
-      <!--
       <param name="left_topic"            value="rgb/image_rect_color" />
       <param name="second_topic"          value="depth/image_rect_color" />
       <param name="left_cam_info_topic"   value="rgb/camera_info" />
