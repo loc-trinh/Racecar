@@ -28,8 +28,8 @@ private:
 	ros::NodeHandle nh;
 
 	// pubs-subs
-	ros::Subscriber pcl_cloud; // pointcloud sub, ZED camera outputs a pcl2
-	ros::Publisher cone_pcl;
+	ros::Subscriber pcl_cloud_sub; // pointcloud sub, ZED camera outputs a pcl2
+	ros::Publisher cone_pcl_pub;
 
 	// callbacks
 	void pclCallback(const pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr& pcl_input);
@@ -52,11 +52,11 @@ void ConeLocatorNode::pclCallback(const pcl::PointCloud<pcl::PointXYZRGB>::Const
     cone_location_pub.publish(pcl_processing);
 
     // Taken from the ZED Wrapper
-	sensor_msgs::PointCloud output;
+	// sensor_msgs::PointCloud output;
     // pcl::toROSMsg(point_cloud, output); // Convert the point cloud to a ROS message
     // output.header.frame_id = point_cloud_frame_id; // Set the header values of the ROS message
     // output.header.stamp = point_cloud_time;
-    pub_cloud.publish(pcl_processing);
+    // pub_cloud.publish(pcl_processing);
     // point_cloud_data_processing = false;
 
 	return;
