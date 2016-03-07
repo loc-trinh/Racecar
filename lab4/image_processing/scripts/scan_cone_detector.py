@@ -79,7 +79,7 @@ class ConeDetector:
             
             scan=LaserScan()
             scan.header=msg.header
-            scan.angle_min=self.self.phi_start
+            scan.angle_min=self.phi_start
             scan.angle_max=self.phi_end
             scan.angle_increment=msg.angle_increment
             scan.time_increment=msg.time_increment
