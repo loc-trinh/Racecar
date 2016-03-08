@@ -14,7 +14,7 @@
 		</node>
 		<node pkg="image_processing" name="cone_locator_node" type="cone_locator_node">
 			<remap from="/bw_image" to="/right/bw_image" />
-		</remap>
+		</node>
 	</group>
 	
 </launch>
