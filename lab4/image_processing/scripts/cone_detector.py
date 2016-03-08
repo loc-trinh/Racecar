@@ -17,7 +17,7 @@ class ConeDetector:
         self.cd_sub = rospy.Subscriber("scan", LaserScan, self.laser_callback)
         self.cd_pub = rospy.Publisher("cone_position", PointStamped, queue_size=4)
 
-        self.phi = 0.0
+        self.phi = 90
         self.phi_start=self.phi
         self.phi_end = self.phi
 
@@ -36,8 +36,8 @@ class ConeDetector:
 
         time=rospy.Time.now()
         if abs(phi) <= 1:
-            phi_start = phi - .1
-            phi_end = phi + .1
+            phi_start = phi - .05
+            phi_end = phi + .05
             start_point=int((msg.angle_max+phi_start)/(msg.angle_max-msg.angle_min)*len(msg.ranges))
             end_point=int((msg.angle_max+phi_end)/(msg.angle_max-msg.angle_min)*len(msg.ranges))
 
