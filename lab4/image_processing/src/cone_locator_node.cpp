@@ -81,7 +81,7 @@ void ConeLocatorNode::locationCallback(const sensor_msgs::ImageConstPtr& msg){
         float W = bw_image.cols;
         float angle = (center.x - W/2)/W *.959931;
     	std_msgs::Float32 angle_msg;
-    	angle_msg.data = angle;
+    	angle_msg.data = -angle;
 
         ROS_INFO("FOUND OBJECT");
         cone_location_pub.publish(angle_msg);

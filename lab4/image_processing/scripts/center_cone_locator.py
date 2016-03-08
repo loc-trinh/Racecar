@@ -25,7 +25,7 @@ class CenterConeLocator:
 
         right = msg.data
         avg_theta_msg = Float32()
-        avg_theta_msg.data = float(right) + float(left) / -2.0
+        avg_theta_msg.data = (float(right) + float(left)) / 2.0
         self.cone_pub.publish(avg_theta_msg)
             
 
