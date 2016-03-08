@@ -47,6 +47,11 @@ class ConeDetector:
             self.scan_window.publish(scan)
 
         else:
+            scan = LaserScan()
+            scan = msg
+            scan.ranges = []
+            self.scan_window.publish(scan)
+            
             point=Point()
             point.x=0.0
             point.y=0.0
