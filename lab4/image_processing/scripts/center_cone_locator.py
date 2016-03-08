@@ -56,7 +56,7 @@ class CenterConeLocator:
         point = Point()
         if self.theta < 1:
             right_x = msg.data
-            point.x = (120*2.8)/abs(left_x-right_x)/2
+            point.x = (120*2.8)/abs(left_x-right_x)/2.3
             point.y = point.x*np.sin(self.theta)
             point.z = 0.0
         else:
