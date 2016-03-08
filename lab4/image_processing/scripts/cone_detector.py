@@ -37,7 +37,7 @@ class ConeDetector:
         time=rospy.Time.now()
         if abs(phi) <= 1:
             phi_start = 0
-            phi_end = 90
+            phi_end = 45
             start_point=int((msg.angle_max+phi_start)/(msg.angle_max-msg.angle_min)*len(msg.ranges))
             end_point=int((msg.angle_max+phi_end)/(msg.angle_max-msg.angle_min)*len(msg.ranges))
 
