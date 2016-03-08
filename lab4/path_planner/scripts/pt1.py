@@ -56,6 +56,7 @@ class DriveControl:
         else:
             msg.drive.speed= 0;
 
+        msg.drive.steering_angle = max(min(self.max_steering_angle,theta), -1*self.max_steering_angle)
 
         #Backup if too close
         if abs(theta) > self.max_steering_angle:
@@ -66,7 +67,7 @@ class DriveControl:
             msg.drive.speed=-0.3
             msg.drive.steering_angle=0
 
-        msg.drive.steering_angle = max(min(self.max_steering_angle,theta), -1*self.max_steering_angle)
+        
 
 
         print (msg.drive.speed, msg.drive.steering_angle)

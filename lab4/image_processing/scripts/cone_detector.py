@@ -61,7 +61,7 @@ class ConeDetector:
 
 
             point_list = np.array(point_list)
-            point_list[point_list > 3] = -1
+            point_list[point_list > 4] = -1
 
             point_list = [i for i in point_list if i != -1]
             point = Point()
