@@ -34,6 +34,7 @@ private:
 	image_transport::ImageTransport it;
 	image_transport::Subscriber bw_image_sub; // bw_image
 	ros::Publisher cone_location_pub;
+    ros::Publisher x_pub;
 
 	// callbacks
 	void locationCallback(const sensor_msgs::ImageConstPtr& msg);
@@ -45,6 +46,7 @@ private:
 ConeLocatorNode::ConeLocatorNode() : it(nh) {
 	bw_image_sub = it.subscribe("bw_image", 1, &ConeLocatorNode::locationCallback, this);
 	cone_location_pub = nh.advertise<std_msgs::Float32>("cone_location", 1);
+    x_pub = nh.advertise<std_msgs::Float32>("x", 1);
 }
 
 void ConeLocatorNode::locationCallback(const sensor_msgs::ImageConstPtr& msg){
@@ -85,6 +87,10 @@ void ConeLocatorNode::locationCallback(const sensor_msgs::ImageConstPtr& msg){
 
         ROS_INFO("FOUND OBJECT");
         cone_location_pub.publish(angle_msg);
+
+        std_msgs::Float32 x_msg;
+        x_msg.data = center.x;
+        x_pub.publish(x_msg);
 
     }else{
         ROS_INFO("CANNOT FIND OBJECT");
