@@ -59,6 +59,8 @@ class CenterConeLocator:
         point.x = (120*2.8)/(left_x-right_x)
         point.y = 0.0
         point.z = 0.0
+
+        time=rospy.Time.now()
         self.counter+=1
         self.stampedpoint.header.seq=self.counter
         self.stampedpoint.header.frame_id="base_link"
