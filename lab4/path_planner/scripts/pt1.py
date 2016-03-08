@@ -50,28 +50,25 @@ class DriveControl:
         msg.header.stamp = rospy.Time.now()
         msg.header.frame_id = "base_link"
 
+        #Compute speed:
+        if x > 0.5:
+            msg.drive.speed= 0.5;
+        else:
+            msg.drive.speed= 0;
+
+
+        #Backup if too close
         if abs(theta) > self.max_steering_angle:
             self.lastDistance=0
             self.lastTheta=0
             self.distanceI=0
             self.thetaI=0
-            msg.drive.speed=-0.5
+            msg.drive.speed=-0.3
             msg.drive.steering_angle=0
 
-        else:
-            self.distanceI= self.distanceI+distance
-            dp= self.kp * distance
-            di= self.kd*(distance - self.lastDistance)
-            dd= self.ki*(self.distanceI)
-            self.lastDistance=distance
-            msg.drive.speed= min(self.max_speed, dp+di+dd)
+        msg.drive.steering_angle = max(min(self.max_steering_angle,theta), -1*self.max_steering_angle)
 
-            self.thetaI=self.thetaI+theta
-            tp= self.kp * theta
-            ti= self.ki*(self.thetaI)
-            td= self.kd* (theta-self.lastTheta)
-            msg.drive.steering_angle= max(min(self.max_steering_angle,tp+ti+td), -1*self.max_steering_angle)
-            self.lastTheta=theta
+
         print (msg.drive.speed, msg.drive.steering_angle)
         self.drive_pub.publish(msg)
 
