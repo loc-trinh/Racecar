@@ -33,14 +33,19 @@ class ConeDetector:
 
         time=rospy.Time.now()
         if abs(phi) <= 1:
+            phi_start = phi - .05
+            phi_end = phi + .05
+
+            start_point=int((msg.angle_max+phi_start)/(msg.angle_max-msg.angle_min)*len(msg.ranges))
+            end_point=int((msg.angle_max+phi_end)/(msg.angle_max-msg.angle_min)*len(msg.ranges))
+
+
             scan = LaserScan()
             scan = msg
-            n = len(msg.ranges)
-            scan.ranges = msg.ranges[:n/2]
-            for i in range(n/2):
-                scan.ranges[i] = (0,0)
+            scan.angle_min=phi_start
+            scan.angle_max=phi_end
+            scan.ranges = msg.ranges[start_point:end_point]
             self.scan_window.publish(scan)
-
         else:
             scan = LaserScan()
             scan = msg
