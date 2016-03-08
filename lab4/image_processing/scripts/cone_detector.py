@@ -35,7 +35,8 @@ class ConeDetector:
         if abs(phi) <= 1:
             scan = LaserScan()
             scan = msg
-            rospy.loginfo("%f, %f" % (msg.angle_min, msg.angle_max))
+            scan.angle_min = 0
+            scan.angle_max = np.pi/4
             self.scan_window.publish(scan)
 
         else:
