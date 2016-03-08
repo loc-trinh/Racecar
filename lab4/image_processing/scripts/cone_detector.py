@@ -52,7 +52,7 @@ class ConeDetector:
             scan.range_min = msg.range_min
             scan.range_max = msg.range_max
             scan.ranges = msg.ranges[start_point:end_point]
-            self.scan_window.publish(scan)
+            self.scan_window.publish(msg)
 
         else:
             point=Point()
