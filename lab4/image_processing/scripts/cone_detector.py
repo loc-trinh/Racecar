@@ -51,7 +51,7 @@ class ConeDetector:
             print max(point_list)
             point_list = np.array(point_list)
             mean = np.mean(point_list)
-            point_list[point_list > mean] = mean
+            point_list[point_list > mean] = mean/2
             point = Point()
             point.x=np.mean(point_list)
             point.y=0.0
