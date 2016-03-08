@@ -45,12 +45,13 @@ class ConeDetector:
             scan.angle_min=phi_start
             scan.angle_max=phi_end
             scan.ranges = msg.ranges[start_point:end_point]
+            point_list = scan.ranges
             self.scan_window.publish(scan)
 
 
             points = []
-            for i in range(start_point, end_point-5):
-                wind = msg.ranges[i:i+6]
+            for i in range(0, len(point_list) - 5):
+                wind = point_list[i:i+6]
                 print wind
                 mean = np.mean(wind)
                 points.append((i+2,mean))
