@@ -2,6 +2,7 @@
 	<group ns="/">
 		<node pkg="image_processing" name="center_cone_locator_node" type="center_cone_locator.py"/>
 		<node pkg="image_processing" name="cone_detector" type="cone_detector.py" output="screen"/>
+		<node pkg="state_estimator" name="cone_position_estimator" type="cone_position_estimator.py"/>
 		<!-- <node pkg="image_processing" name= "scan_cone_detector" type="scan_cone_detector.py"/> -->
 	</group>
 	<group ns="left">
