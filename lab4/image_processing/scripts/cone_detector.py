@@ -51,6 +51,7 @@ class ConeDetector:
             points = []
             for i in range(start_point, end_point-5):
                 wind = msg.ranges[i:i+6]
+                print wind
                 mean = np.mean(wind)
                 points.append((i+2,mean))
             point = min(points,key=lambda item:item[1])
