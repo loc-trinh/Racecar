@@ -56,7 +56,7 @@ class CenterConeLocator:
         right_x = msg.data
 
         point = Point()
-        point.x = (120*2.8)/(left_x-right_x)
+        point.x = (120*2.8)/(left_x-right_x)/2
         point.y = 0.0
         point.z = 0.0
 
