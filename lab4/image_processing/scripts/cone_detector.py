@@ -38,7 +38,7 @@ class ConeDetector:
             n = len(msg.ranges)
             scan.ranges = msg.ranges[:n/2]
             for i in range(n/2):
-                scan.ranges[i] = 0
+                scan.ranges[i] = (0,0)
             self.scan_window.publish(scan)
 
         else:
