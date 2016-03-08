@@ -55,7 +55,7 @@ class CenterConeLocator:
         point.x = (120*2.8)/(right_x - left_x)
         point.y = 0.0
         point.z = 0.0
-        conexy_pub.publish(point)
+        self.conexy_pub.publish(point)
 
 
 
