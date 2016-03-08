@@ -38,8 +38,8 @@ class ConeDetector:
         if abs(phi) < np.pi:
             phi_start = phi - .1
             phi_end = phi + .1
-            start_point=int((msg.angle_max+self.phi_start)/(msg.angle_max-msg.angle_min)*len(msg.ranges))
-            end_point=int((msg.angle_max+self.phi_end)/(msg.angle_max-msg.angle_min)*len(msg.ranges))
+            start_point=int((msg.angle_max+phi_start)/(msg.angle_max-msg.angle_min)*len(msg.ranges))
+            end_point=int((msg.angle_max+phi_end)/(msg.angle_max-msg.angle_min)*len(msg.ranges))
 
             scan = LaserScan()
             scan = msg
