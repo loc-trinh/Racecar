@@ -33,7 +33,10 @@ class ConeDetector:
 
         time=rospy.Time.now()
         if abs(phi) <= 1:
-            phi *= 1.3
+            if phi > 0:
+                phi *= 1.7
+            else:
+                phi *= 1.4
             phi_start = phi - .07
             phi_end = phi + .07
 
