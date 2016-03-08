@@ -78,7 +78,15 @@ class ConeDetector:
             self.cd_pub.publish(self.stampedpoint)
             
             scan=LaserScan()
-            scan = msg
+            scan.header=msg.header
+            scan.angle_min=self.phi_start
+            scan.angle_max=self.phi_end
+            scan.angle_increment=msg.angle_increment
+            scan.time_increment=msg.time_increment
+            time=rospy.Time.now()
+            scan.scan_time=time
+            scan.range_min=msg.range_min
+            scan.range_max=msg.range_max
             scan.ranges=msg.ranges[start_point:end_point]
             self.scan_window.publish(scan)
 
