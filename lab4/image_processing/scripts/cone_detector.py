@@ -43,7 +43,9 @@ class ConeDetector:
 
             scan = LaserScan()
             scan = msg
-            scan.ranges = msg.ranges[len(msg.ranges)/4:2*len(msg.ranges)/4]
+            scan.angle_min = phi_start
+            scan.angle_max = phi_end
+            scan.ranges = msg.ranges[start_point:end_point]
             self.scan_window.publish(scan)
 
         else:
