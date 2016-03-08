@@ -16,7 +16,6 @@ class ConeDetector:
         self.scan_window=rospy.Publisher("laser_window", LaserScan, queue_size=4)
         self.cd_sub = rospy.Subscriber("scan", LaserScan, self.laser_callback)
         self.cd_pub = rospy.Publisher("cone_position", PointStamped, queue_size=4)
-        self.stuff_pub = rospy.Publisher("stuff", Float32, queue_size=4)
 
         self.phi = 90
         self.stampedpoint=PointStamped()
@@ -36,11 +35,7 @@ class ConeDetector:
         if abs(phi) <= 1:
             scan = LaserScan()
             scan = msg
-
-            debug_msg = Float32()
-            debug_msg.data = msg.angle_min
-            self.stuff_pub.publish(debug_msg)
-
+            rospy.ros_info("%d, %d" % (msg.angle_min, msg.angle_max))
             self.scan_window.publish(scan)
 
         else:
