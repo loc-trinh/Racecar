@@ -134,7 +134,6 @@ find_package(OpenCV REQUIRED)
 ## Declare a C++ executable
 add_executable(cone_locator_node src/cone_locator_node.cpp)
 add_executable(image_filter_node src/image_filter_node.cpp)
-add_executable(point_cloud_node src/cone_locator_node_pcl.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
@@ -147,10 +146,6 @@ target_link_libraries(cone_locator_node
   ${OpenCV_LIBRARIES}
 )
 target_link_libraries(image_filter_node
-  ${catkin_LIBRARIES}
-  ${OpenCV_LIBRARIES}
-)
-target_link_libraries(point_cloud_node
   ${catkin_LIBRARIES}
   ${OpenCV_LIBRARIES}
 )
