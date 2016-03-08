@@ -71,6 +71,9 @@ class ConeDetector:
             point.y=point.x*np.sin(phi)
             point.z=0.0
 
+            if not abs(point.y) <= 3 and not abs(point.x) <= 5:
+                return;
+
             self.counter+=1
             self.stampedpoint.header.seq=self.counter
             self.stampedpoint.header.frame_id="base_link"
