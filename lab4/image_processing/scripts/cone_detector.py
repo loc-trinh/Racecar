@@ -53,7 +53,7 @@ class ConeDetector:
             point_list[point_list > 3] = 1
             point = Point()
             point.x=np.mean(point_list)
-            point.y=0.0
+            point.y=-point.x*np.cos(phi_start)
             point.z=0.0
 
             self.counter+=1
