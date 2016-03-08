@@ -48,6 +48,7 @@ class ConeDetector:
             point_list = scan.ranges
             self.scan_window.publish(scan)
 
+            point = Point()
             point.x=np.mean(point_list)
             point.y=0.0
             point.z=0.0
