@@ -48,22 +48,8 @@ class ConeDetector:
             point_list = scan.ranges
             self.scan_window.publish(scan)
 
-
-            points = []
-            for i in range(0, len(point_list) - 5):
-                wind = point_list[i:i+6]
-                print wind
-                mean = np.mean(wind)
-                points.append((i+2,mean))
-            point = min(points,key=lambda item:item[1])
-            position = start_point+point[0]
-            dist=point[1]
-            angle=msg.angle_increment*position+msg.angle_min
-            x=dist*np.sin(angle)
-            y=dist*np.cos(angle)
-            point = Point()
-            point.x=x
-            point.y=y
+            point.x=np.mean(point_list)
+            point.y=0.0
             point.z=0.0
 
             self.counter+=1
