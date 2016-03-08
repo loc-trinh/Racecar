@@ -33,8 +33,9 @@ class ConeDetector:
 
         time=rospy.Time.now()
         if abs(phi) <= 1:
-            phi_start = phi - .05
-            phi_end = phi + .05
+            phi *= 1.1
+            phi_start = phi - .07
+            phi_end = phi + .07
 
             start_point=int((msg.angle_max+phi_start)/(msg.angle_max-msg.angle_min)*len(msg.ranges))
             end_point=int((msg.angle_max+phi_end)/(msg.angle_max-msg.angle_min)*len(msg.ranges))
@@ -48,10 +49,20 @@ class ConeDetector:
             point_list = scan.ranges
             self.scan_window.publish(scan)
 
+            ranges = scan.ranges
+
+            #find min range
+            #extend k nearest of x in ranges for some constant k
+            #if neighbors > 3 return mean([x, [neighbors of x]])
+            #else x = next and repeat
+
+
             point_list = np.array(point_list)
             point_list[point_list > 3] = 1
             point = Point()
             point.x=np.mean(point_list)
+
+
             point.y=point.x*np.sin(phi)
             point.z=0.0
 
