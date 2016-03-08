@@ -43,7 +43,7 @@ class ConeDetector:
 
             scan = LaserScan()
             scan = msg
-            scan.ranges = msg.rages[start_point:end_point]
+            scan.ranges = msg.ranges[start_point:end_point]
             self.scan_window.publish(scan)
 
         else:
