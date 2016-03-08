@@ -48,6 +48,9 @@ class ConeDetector:
             point_list = scan.ranges
             self.scan_window.publish(scan)
 
+            print max(point_list)
+            point_list = np.array(point_list)
+            point_list[point_list > 5] = 2
             point = Point()
             point.x=np.mean(point_list)
             point.y=0.0
