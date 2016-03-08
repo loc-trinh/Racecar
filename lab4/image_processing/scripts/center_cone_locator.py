@@ -57,7 +57,7 @@ class CenterConeLocator:
 
         point = Point()
         point.x = (120*2.8)/(left_x-right_x)/2
-        point.y = 0.0
+        point.y = point.x*np.sin(self.theta)
         point.z = 0.0
 
         time=rospy.Time.now()
