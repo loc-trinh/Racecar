@@ -19,7 +19,7 @@ class CenterConeLocator:
 
         self.left_cone_position = None
         self.left_x = None
-        self.theta = None
+        self.theta = 1000
 
         self.stampedpoint=PointStamped()
         self.counter=0
@@ -50,7 +50,7 @@ class CenterConeLocator:
         with self.lock:
             left_x = self.left_x
 
-        if left_x == None or self.theta == None:
+        if left_x == None:
             return
 
         point = Point()
