@@ -2,6 +2,7 @@
 import rospy
 from std_msgs.msg import Float32
 from geometry_msgs.msg import Point
+from geometry_msgs.msg import PointStamped 
 import numpy as np
 import threading
 
@@ -13,12 +14,15 @@ class CenterConeLocator:
         self.left_x_sub = rospy.Subscriber("left/x", Float32, self.left_x_callback)
         self.right_x_sub = rospy.Subscriber("right/x", Float32, self.right_x_callback)
         self.cone_pub = rospy.Publisher("cone_location", Float32, queue_size=5)
-        self.conexy_pub = rospy.Publisher("cone_xy", Point, queue_size=5)
+        self.conexy_pub = rospy.Publisher("cone_xy", PointStamped, queue_size=5)
         self.lock = threading.Lock()
 
         self.left_cone_position = None
         self.left_x = None
         self.theta = None
+
+        self.stampedpoint=PointStamped()
+        self.counter=0
 
 
     def left_callback(self, msg):
@@ -55,7 +59,12 @@ class CenterConeLocator:
         point.x = (120*2.8)/(left_x-right_x)
         point.y = 0.0
         point.z = 0.0
-        self.conexy_pub.publish(point)
+        self.counter+=1
+        self.stampedpoint.header.seq=self.counter
+        self.stampedpoint.header.frame_id="base_link"
+        self.stampedpoint.header.stamp=time
+        self.stampedpoint.point=point
+        self.cone_xy.publish(self.stampedpoint)
 
 
 
