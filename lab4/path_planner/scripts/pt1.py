@@ -18,7 +18,7 @@ import rospy
 # ROS messages
 from std_msgs.msg import Float32
 from ackermann_msgs.msg import AckermannDriveStamped
-from geometry_msgs.msg import Point
+from geometry_msgs.msg import PointStamped
 
 class DriveControl:
     def __init__(self):
@@ -38,11 +38,11 @@ class DriveControl:
 
         #Pubs and Subs
         self.drive_pub = rospy.Publisher(self.topic_output, AckermannDriveStamped, queue_size=10)
-        rospy.Subscriber(self.topic_point, Point, self.drive_callback)
+        rospy.Subscriber(self.topic_point, PointStamped, self.drive_callback)
 
     def drive_callback(self, data):
-        x= data.x
-        y= data.y
+        x= data.point.x
+        y= data.point.y
         distance = math.pow(math.pow(x,2) + math.pow(y,2),  0.5)
         theta = math.atan2(y,x)
 
