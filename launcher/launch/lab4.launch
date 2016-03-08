@@ -1,17 +1,14 @@
 <launch>
 	<group ns="/">
-		
-		<node pkg="image_processing" name="image_filter_node" type="image_filter_node"/>
-				
-		<node pkg="image_processing" name="cone_locator_node" type="cone_locator_node" />
-		
-		<!--
-		<node pkg="drive_control" name="drive_control" type="drive_control.py" output="screen" />
-		-->
-		<!--
-		<node pkg ="image_processing" name = "color_filter_node" type="color_filter_node"/>
-		-->
-		<node pkg ="image_processing" name = "scan_cone_detector" type="scan_cone_detector.py"/>
-		
+		<!-- <node pkg="image_processing" name= "scan_cone_detector" type="scan_cone_detector.py"/> -->
 	</group>
+	<group ns="left">
+		<node pkg="image_processing" name="image_filter_node" type="image_filter_node"/>
+		<node pkg="image_processing" name="cone_locator_node" type="cone_locator_node" />
+	</group>
+	<group ns="right">
+		<node pkg="image_processing" name="image_filter_node" type="image_filter_node"/>
+		<node pkg="image_processing" name="cone_locator_node" type="cone_locator_node" />
+	</group>
+	
 </launch>
