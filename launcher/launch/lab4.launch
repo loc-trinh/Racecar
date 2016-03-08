@@ -4,13 +4,17 @@
 	</group>
 	<group ns="left">
 		<node pkg="image_processing" name="image_filter_node" type="image_filter_node"/>
-		<node pkg="image_processing" name="cone_locator_node" type="cone_locator_node" />
+		<node pkg="image_processing" name="cone_locator_node" type="cone_locator_node">
+			<remap from="/bw_image" to="/left/bw_image" />
+		</node>
 	</group>
 	<group ns="right">
 		<node pkg="image_processing" name="image_filter_node" type="image_filter_node">
 			<remap from="/camera/zed/rgb/image_rect_color" to="/camera/zed/right/image_rect" />
 		</node>
-		<node pkg="image_processing" name="cone_locator_node" type="cone_locator_node" />
+		<node pkg="image_processing" name="cone_locator_node" type="cone_locator_node">
+			<remap from="/bw_image" to="/right/bw_image" />
+		</remap>
 	</group>
 	
 </launch>
