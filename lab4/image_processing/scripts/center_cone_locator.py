@@ -14,7 +14,7 @@ class CenterConeLocator:
         self.left_x_sub = rospy.Subscriber("left/x", Float32, self.left_x_callback)
         self.right_x_sub = rospy.Subscriber("right/x", Float32, self.right_x_callback)
         self.cone_pub = rospy.Publisher("cone_location", Float32, queue_size=5)
-        self.conexy_pub = rospy.Publisher("cone_xy", PointStamped, queue_size=5)
+        self.cone_xy_pub = rospy.Publisher("cone_xy", PointStamped, queue_size=5)
         self.lock = threading.Lock()
 
         self.left_cone_position = None
@@ -66,7 +66,7 @@ class CenterConeLocator:
         self.stampedpoint.header.frame_id="base_link"
         self.stampedpoint.header.stamp=time
         self.stampedpoint.point=point
-        self.cone_xy.publish(self.stampedpoint)
+        self.cone_xy_pub.publish(self.stampedpoint)
 
 
 
