@@ -58,11 +58,11 @@ class PathPlanner:
         driveTo= Point()
         if 2*len(self.path) != len(cones):
             for cone in cones:
-                if cone.position.x not in self.seen:
+                if math.floor(cone.position.x) not in self.seen:
                     self.path.append((cone.position.x -0.2, cone.position.y + self.side*0.2))
                     self.path.append((cone.position.x +0.2, cone.position.y + self.side*0.2))
                     self.side=self.side * -1
-                    self.seen.append(cone.position.x)
+                    self.seen.append(math.floor(cone.position.x))
         if (robot.point.x >= self.path[self.nextPoint][0]):
             self.nextPoint+=1
         if (self.nextPoint==len(self.path)):
