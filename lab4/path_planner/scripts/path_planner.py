@@ -51,6 +51,8 @@ class PathPlanner:
         self.listener = tf.TransformListener(True, rospy.Duration(10.0))
 
     def publish(self):
+        
+        driveTo= Point()
         for node in self.path:
             print "------"
             x=node[0] - robot.point.x
@@ -82,7 +84,6 @@ class PathPlanner:
         robot = self.listener.transformPoint(self.map_frame, self.stampedpoint)
         poses=data.poses
         cones=poses
-        driveTo= Point()
         self.path=[]
         self.nextPoint=0
         for cone in cones:
