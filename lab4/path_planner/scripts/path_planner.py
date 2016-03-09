@@ -17,6 +17,8 @@ import tf
 # ROS messages
 from geometry_msgs.msg import PoseArray
 from geometry_msgs.msg import Point
+from geometry_msgs.msg import PointStamped 
+
 
 class PathPlanner:
     def __init__(self):
@@ -27,9 +29,13 @@ class PathPlanner:
         self.seen=[]
         self.nextPoint=0
 
+        self.map_frame = "odom"
+
         #Pubs and Subs
         self.drive_pub = rospy.Publisher(self.topic_output, Point, queue_size=10)
         rospy.Subscriber(self.topic_position, PoseArray, self.path_callback)
+
+        self.listener = tf.TransformListener(True, rospy.Duration(10.0))
 
     def path_callback(self, data):
         poses=data.poses
