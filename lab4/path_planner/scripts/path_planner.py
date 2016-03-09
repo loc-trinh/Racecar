@@ -51,7 +51,7 @@ class PathPlanner:
         self.listener = tf.TransformListener(True, rospy.Duration(10.0))
 
     def path_callback(self, data):
-        self.stampedpoint.header.stamp= rospy.Time.now()
+        self.stampedpoint.header.stamp = self.listener.getLatestCommonTime(self.map_frame,data.header.frame_id)
         robot = self.listener.transformPoint(self.map_frame, self.stampedpoint)
         poses=data.poses
         cones=poses
@@ -84,7 +84,7 @@ class PathPlanner:
             point.y=y
             sp.point=point
             sp.header.frame_id=self.map_frame
-            sp.header.stamp= rospy.Time.now()
+            sp.header.stamp = self.listener.getLatestCommonTime(self.base_frame,data.header.frame_id)
 
             driveTo = self.listener.transformPoint(self.base_frame, sp)
 
