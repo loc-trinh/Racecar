@@ -24,10 +24,11 @@ class DriveControl:
     def __init__(self):
         self.topic_point="drive_to_xy"
         self.topic_output= "/vesc/ackermann_cmd_mux/input/nav"
-        self.max_steering_angle = 0.3
+        self.max_steering_angle = 0.2
         self.max_speed=.5
 
-        self.k=.1
+        self.k=0.8
+        self.k_steer = 0.1
         self.kp=0.6*self.k
         self.ki=0
         self.kd=0
@@ -65,7 +66,7 @@ class DriveControl:
             msg.drive.speed= max(0.1,min(self.max_speed, dp+di+dd))
 
             self.thetaI=self.thetaI+theta
-            tp= self.kp * theta
+            tp= self.k_steer * theta
             ti= self.ki*(self.thetaI)
             td= self.kd* (theta-self.lastTheta)
             msg.drive.steering_angle= max(min(self.max_steering_angle,theta), -1*self.max_steering_angle)
