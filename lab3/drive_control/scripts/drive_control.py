@@ -29,8 +29,8 @@ class DriveControl:
 
         self.k=.1
         self.kp=0.6*self.k
-        self.ki=2*self.k
-        self.kd=0.125*self.k
+        self.ki=0
+        self.kd=0
         self.lastDistance=0
         self.lastTheta=0
         self.distanceI=0
