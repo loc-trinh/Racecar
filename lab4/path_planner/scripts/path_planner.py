@@ -64,14 +64,10 @@ class PathPlanner:
                     self.side=-1
                 self.path.append((cone.position.x -0.4, cone.position.y + self.side*0.5))
                 self.path.append((cone.position.x +0.4, cone.position.y + self.side*0.5))
-        if (self.nextPoint==len(self.path)):
-            driveTo.x=0
-            driveTo.y=0
-            #done, do not move
-        else:
+        for node in self.path:
             print "------"
-            x=self.path[self.nextPoint][0] - robot.point.x
-            y=self.path[self.nextPoint][1] - robot.point.y
+            x=node[0] - robot.point.x
+            y=node[1] - robot.point.y
             
             sp = PointStamped()
             point = Point()
@@ -82,7 +78,10 @@ class PathPlanner:
             sp.header.stamp = self.listener.getLatestCommonTime(self.base_frame,data.header.frame_id)
 
             driveTo = self.listener.transformPoint(self.base_frame, sp).point
-            print driveTo
+            if driveTo.x>0:
+
+                print driveTo
+                break
 
             ## currently still in world frame, may need to rotate to 
         self.drive_pub.publish(driveTo)
