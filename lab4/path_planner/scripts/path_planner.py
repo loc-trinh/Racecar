@@ -43,6 +43,8 @@ class PathPlanner:
         self.stampedpoint.header.frame_id=self.base_frame
         self.stampedpoint.point=point
 
+        self.robot=self.stampedpoint
+
 
         #Pubs and Subs
         self.drive_pub = rospy.Publisher(self.topic_output, Point, queue_size=10)
@@ -51,12 +53,12 @@ class PathPlanner:
         self.listener = tf.TransformListener(True, rospy.Duration(10.0))
 
     def publish(self):
-        
+
         driveTo= Point()
         for node in self.path:
             print "------"
-            x=node[0] - robot.point.x
-            y=node[1] - robot.point.y
+            x=node[0] - self.robot.point.x
+            y=node[1] - self.robot.point.y
             
             sp = PointStamped()
             point = Point()
@@ -81,7 +83,7 @@ class PathPlanner:
 
     def path_callback(self, data):
         self.stampedpoint.header.stamp = self.listener.getLatestCommonTime(self.map_frame,data.header.frame_id)
-        robot = self.listener.transformPoint(self.map_frame, self.stampedpoint)
+        self.robot = self.listener.transformPoint(self.map_frame, self.stampedpoint)
         poses=data.poses
         cones=poses
         self.path=[]
