@@ -41,7 +41,6 @@ class PathPlanner:
         point.z=0.0
         self.stampedpoint=PointStamped()
         self.stampedpoint.header.frame_id=self.base_frame
-        self.stampedpoint.header.stamp= rospy.Time.now()
         self.stampedpoint.point=point
 
 
@@ -52,6 +51,7 @@ class PathPlanner:
         self.listener = tf.TransformListener(True, rospy.Duration(10.0))
 
     def path_callback(self, data):
+        self.stampedpoint.header.stamp= rospy.Time.now()
         robot = self.listener.transformPoint(self.map_frame, self.stampedpoint)
         poses=data.poses
         cones=poses
