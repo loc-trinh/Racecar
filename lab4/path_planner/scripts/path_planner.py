@@ -84,13 +84,13 @@ class PathPlanner:
     def path_callback(self, data):
         self.stampedpoint.header.stamp = self.listener.getLatestCommonTime(self.map_frame,data.header.frame_id)
         self.robot = self.listener.transformPoint(self.map_frame, self.stampedpoint)
-        cones=data
+        cone=data
 
         data.header.stamp = self.listener.getLatestCommonTime(self.map_frame,data.header.frame_id)
         con_loc = self.listener.transformPoint(self.map_frame, data)
 
         self.path=[]
-        if cone.position.x > 0.5:
+        if cone.point.x > 0.5:
             self.path=[(cone_loc.point.x-0.5,cone_loc.point.y)]
         else:
             if len(self.path)==1:
