@@ -50,19 +50,7 @@ class PathPlanner:
 
         self.listener = tf.TransformListener(True, rospy.Duration(10.0))
 
-    def path_callback(self, data):
-        self.stampedpoint.header.stamp = self.listener.getLatestCommonTime(self.map_frame,data.header.frame_id)
-        robot = self.listener.transformPoint(self.map_frame, self.stampedpoint)
-        poses=data.poses
-        cones=poses
-        driveTo= Point()
-        self.path=[]
-        self.nextPoint=0
-        for cone in cones:
-            if cone.position.x > robot.point.x and cone.position.x>0 and abs(cone.position.y)<0.4:
-                if math.floor(cone.position.x) % 2:
-                    self.side=-1
-                self.path.append((cone.position.x, cone.position.y + self.side*0.4))
+    def publish(self):
         for node in self.path:
             print "------"
             x=node[0] - robot.point.x
@@ -89,6 +77,22 @@ class PathPlanner:
             ## currently still in world frame, may need to rotate to 
         self.drive_pub.publish(driveTo)
 
+    def path_callback(self, data):
+        self.stampedpoint.header.stamp = self.listener.getLatestCommonTime(self.map_frame,data.header.frame_id)
+        robot = self.listener.transformPoint(self.map_frame, self.stampedpoint)
+        poses=data.poses
+        cones=poses
+        driveTo= Point()
+        self.path=[]
+        self.nextPoint=0
+        for cone in cones:
+            if cone.position.x > robot.point.x and cone.position.x>0 and abs(cone.position.y)<0.4:
+                if math.floor(cone.position.x) % 2:
+                    self.side=-1
+                self.path.append((cone.position.x, cone.position.y + self.side*0.4))
+        self.publish()
+        
+
 
 
 
@@ -101,7 +105,10 @@ if __name__ == "__main__":
 
     rospy.init_node("path_planner")
 
-    PathPlanner();
+    pp=PathPlanner();
+
+    while not rospy.is_shutdown():
+        pp.publish()
 
     # enter the ROS main loop
     rospy.spin()
