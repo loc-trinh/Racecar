@@ -70,6 +70,9 @@ class PathPlanner:
             driveTo.y=0
             #done, do not move
         else:
+            print "------"
+            print robot
+            print self.path[self.nextPoint]
             x=self.path[self.nextPoint][0] - robot.point.x
             y=self.path[self.nextPoint][1] - robot.point.y
             # phi = math.atan2(y,x)
@@ -90,7 +93,7 @@ class PathPlanner:
 
             ## currently still in world frame, may need to rotate to 
         self.drive_pub.publish(driveTo)
-        print self.path
+
 
 
 
