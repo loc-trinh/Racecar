@@ -54,7 +54,7 @@ class DriveControl:
             msg.drive.steering_angle=theta
             msg.drive.speed=0.3
 
-        else if abs(theta) > self.max_steering_angle:
+        elif abs(theta) > self.max_steering_angle:
             self.lastDistance=0
             self.lastTheta=0
             self.distanceI=0
