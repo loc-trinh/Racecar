@@ -56,8 +56,8 @@ class PathPlanner:
 
         driveTo= Point()
         for node in self.path:
-            x=node[0] - self.robot.point.x
-            y=node[1] - self.robot.point.y
+            x=node[0] 
+            y=node[1] 
             
             sp = PointStamped()
             point = Point()
@@ -75,6 +75,7 @@ class PathPlanner:
                 point.x=0
                 point.y=0
                 driveTo=point
+        print driveTo
 
             ## currently still in world frame, may need to rotate to 
         self.drive_pub.publish(driveTo)
