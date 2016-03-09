@@ -25,9 +25,9 @@ class DriveControl:
         self.topic_point="drive_to_xy"
         self.topic_output= "/vesc/ackermann_cmd_mux/input/nav"
         self.max_steering_angle = 0.3
-        self.max_speed=4
+        self.max_speed=.5
 
-        self.k=1
+        self.k=.1
         self.kp=0.6*self.k
         self.ki=2*self.k
         self.kd=0.125*self.k
