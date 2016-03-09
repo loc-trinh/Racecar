@@ -22,8 +22,8 @@ from geometry_msgs.msg import Point
 
 class DriveControl:
     def __init__(self):
-        self.topic_point="cone_location"
-        self.topic_output= "/vesc/ackermann_cmd_mux/input/teleop"
+        self.topic_point="drive_to_xy"
+        self.topic_output= "/vesc/ackermann_cmd_mux/input/nav"
         self.max_steering_angle = 0.3
         self.max_speed=4
 
