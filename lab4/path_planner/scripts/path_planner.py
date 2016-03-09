@@ -66,7 +66,7 @@ class PathPlanner:
             point.y=y
             sp.point=point
             sp.header.frame_id=self.map_frame
-            sp.header.stamp = self.listener.getLatestCommonTime(self.base_frame,data.header.frame_id)
+            sp.header.stamp = self.listener.getLatestCommonTime(self.base_frame,self.map_frame)
 
             driveTo = self.listener.transformPoint(self.base_frame, sp).point
             if driveTo.x>0:
