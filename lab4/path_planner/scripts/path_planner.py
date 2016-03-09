@@ -48,7 +48,7 @@ class PathPlanner:
 
         #Pubs and Subs
         self.drive_pub = rospy.Publisher(self.topic_output, Point, queue_size=10)
-        rospy.Subscriber(self.topic_position, PoseArray, self.path_callback)
+        rospy.Subscriber(self.topic_position, PointStamped, self.path_callback)
 
         self.listener = tf.TransformListener(True, rospy.Duration(10.0))
 
