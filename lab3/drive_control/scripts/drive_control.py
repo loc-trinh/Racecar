@@ -68,7 +68,7 @@ class DriveControl:
             tp= self.kp * theta
             ti= self.ki*(self.thetaI)
             td= self.kd* (theta-self.lastTheta)
-            msg.drive.steering_angle= max(min(self.max_steering_angle,tp+ti+td), -1*self.max_steering_angle)
+            msg.drive.steering_angle= max(min(self.max_steering_angle,theta), -1*self.max_steering_angle)
             self.lastTheta=theta
         print (msg.drive.speed, msg.drive.steering_angle)
         self.drive_pub.publish(msg)
