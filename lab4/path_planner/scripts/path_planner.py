@@ -62,8 +62,7 @@ class PathPlanner:
             if cone.position.x > robot.point.x and cone.position.x>0:
                 if math.floor(cone.position.x) % 2:
                     self.side=-1
-                self.path.append((cone.position.x -0.4, cone.position.y + self.side*0.5))
-                self.path.append((cone.position.x +0.4, cone.position.y + self.side*0.5))
+                self.path.append((cone.position.x, cone.position.y + self.side*0.2))
         for node in self.path:
             print "------"
             x=node[0] - robot.point.x
