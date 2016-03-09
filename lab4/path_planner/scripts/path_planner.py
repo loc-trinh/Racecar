@@ -41,7 +41,7 @@ class PathPlanner:
         point.z=0.0
         self.stampedpoint=PointStamped()
         self.stampedpoint.header.frame_id=self.map_frame
-        self.stampedpoint.header.stamp=time
+        self.stampedpoint.header.stamp= rospy.Time.now()
         self.stampedpoint.point=point
 
 
