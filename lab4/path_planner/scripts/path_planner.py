@@ -90,7 +90,7 @@ class PathPlanner:
 
             ## currently still in world frame, may need to rotate to 
         self.drive_pub.publish(driveTo)
-        print path
+        print self.path
 
 
 
