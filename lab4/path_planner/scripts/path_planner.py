@@ -72,12 +72,13 @@ class PathPlanner:
                 break
             else:
                 point= Point()
-                point.x=1
+                point.x=0
                 point.y=0
                 driveTo=point
 
             ## currently still in world frame, may need to rotate to 
         self.drive_pub.publish(driveTo)
+
 
     def path_callback(self, data):
         self.stampedpoint.header.stamp = self.listener.getLatestCommonTime(self.map_frame,data.header.frame_id)
@@ -88,13 +89,14 @@ class PathPlanner:
         cone_loc = self.listener.transformPoint(self.map_frame, data)
 
         self.path=[]
-        print cone.point
-        if cone.point.x > 1:
-            self.path=[(cone_loc.point.x-0.75,cone_loc.point.y)]
-        else:
-            if len(self.path)==1:
-                self.side= self.side*-1
-            self.path=[(cone_loc.point.x, cone_loc.point.y+self.side*0.2), (cone_loc.point.x+0.5, cone_loc.point.y)]
+        self.path=[(cone_loc.point.x-0.75,cone_loc.point.y)]
+        # print cone.point
+        # if cone.point.x > 1:
+        #     self.path=[(cone_loc.point.x-0.75,cone_loc.point.y)]
+        # else:
+        #     if len(self.path)==1:
+        #         self.side= self.side*-1
+        #     self.path=[(cone_loc.point.x, cone_loc.point.y+self.side*0.2), (cone_loc.point.x+0.5, cone_loc.point.y)]
         self.publish()
         
 
