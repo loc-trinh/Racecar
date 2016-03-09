@@ -86,7 +86,7 @@ class PathPlanner:
             sp.header.frame_id=self.map_frame
             sp.header.stamp = self.listener.getLatestCommonTime(self.base_frame,data.header.frame_id)
 
-            driveTo = self.listener.transformPoint(self.base_frame, sp)
+            driveTo = self.listener.transformPoint(self.base_frame, sp).point
 
             ## currently still in world frame, may need to rotate to 
         self.drive_pub.publish(driveTo)
