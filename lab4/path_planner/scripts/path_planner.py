@@ -78,9 +78,13 @@ class PathPlanner:
 
             driveTo = self.listener.transformPoint(self.base_frame, sp).point
             if driveTo.x>0:
-
                 print driveTo
                 break
+            else:
+                point= Point()
+                point.x=1
+                point.y=0
+                driveTo=point
 
             ## currently still in world frame, may need to rotate to 
         self.drive_pub.publish(driveTo)
