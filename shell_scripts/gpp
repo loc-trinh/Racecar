@@ -1,0 +1,9 @@
+bash -i << LOCAL
+gpush "$1"
+LOCAL
+sshpass -p 'racecar@mit' ssh racecar@192.168.100.63<< EOF
+bash -i << REMOTE
+gpull
+REMOTE
+EOF
+
