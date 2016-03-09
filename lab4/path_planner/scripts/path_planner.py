@@ -87,7 +87,7 @@ class PathPlanner:
         cone=data
 
         data.header.stamp = self.listener.getLatestCommonTime(self.map_frame,data.header.frame_id)
-        con_loc = self.listener.transformPoint(self.map_frame, data)
+        cone_loc = self.listener.transformPoint(self.map_frame, data)
 
         self.path=[]
         if cone.point.x > 0.5:
