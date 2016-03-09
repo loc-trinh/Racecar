@@ -56,7 +56,6 @@ class PathPlanner:
 
         driveTo= Point()
         for node in self.path:
-            print "------"
             x=node[0] - self.robot.point.x
             y=node[1] - self.robot.point.y
             
@@ -70,7 +69,6 @@ class PathPlanner:
 
             driveTo = self.listener.transformPoint(self.base_frame, sp).point
             if driveTo.x>0:
-                print driveTo
                 break
             else:
                 point= Point()
@@ -90,8 +88,9 @@ class PathPlanner:
         cone_loc = self.listener.transformPoint(self.map_frame, data)
 
         self.path=[]
+        print cone.point.x
         if cone.point.x > 0.5:
-            self.path=[(cone_loc.point.x-0.5,cone_loc.point.y)]
+            self.path=[(cone_loc.point.x-0.4,cone_loc.point.y)]
         else:
             if len(self.path)==1:
                 self.side= self.side*-1
