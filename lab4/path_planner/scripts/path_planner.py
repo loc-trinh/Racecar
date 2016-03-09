@@ -56,13 +56,13 @@ class PathPlanner:
         poses=data.poses
         cones=poses
         driveTo= Point()
-        if 2*len(self.path) != len(cones):
-            for cone in cones:
-                if math.floor(cone.position.x) not in self.seen:
-                    self.path.append((cone.position.x -0.2, cone.position.y + self.side*0.3))
-                    self.path.append((cone.position.x +0.2, cone.position.y + self.side*0.3))
-                    self.side=self.side * -1
-                    self.seen.append(math.floor(cone.position.x))
+        self.path=[]
+        self.nextPoint=0
+        for cone in cones:
+            if cone.position.x > robot.point.x:
+                self.path.append((cone.position.x -0.2, cone.position.y + self.side*0.3))
+                self.path.append((cone.position.x +0.2, cone.position.y + self.side*0.3))
+                self.side=self.side * -1
         if (robot.point.x >= self.path[self.nextPoint][0]):
             self.nextPoint+=1
         if (self.nextPoint==len(self.path)):
@@ -75,12 +75,7 @@ class PathPlanner:
             print self.path[self.nextPoint]
             x=self.path[self.nextPoint][0] - robot.point.x
             y=self.path[self.nextPoint][1] - robot.point.y
-            # phi = math.atan2(y,x)
-            # (r, p, yaw) = tf.transformations.euler_from_quaternion([robot.orientation.x, robot.orientation.y,robot.orientation.z, robot.orientation.w])
-            # theta=phi-yaw
-            # distance= math.pow(math.pow(x,2)+math.pow(y,2),0.5)
-            # driveTo.x= math.cos(theta)*distance
-            # driveTo.y= math.sin(theta)*distance
+            
             sp = PointStamped()
             point = Point()
             point.x=x
