@@ -59,7 +59,6 @@ class PathPlanner:
         if 2*len(self.path) != len(cones):
             for cone in cones:
                 if math.floor(cone.position.x) not in self.seen:
-                    print cone
                     self.path.append((cone.position.x -0.2, cone.position.y + self.side*0.2))
                     self.path.append((cone.position.x +0.2, cone.position.y + self.side*0.2))
                     self.side=self.side * -1
@@ -91,6 +90,7 @@ class PathPlanner:
 
             ## currently still in world frame, may need to rotate to 
         self.drive_pub.publish(driveTo)
+        print path
 
 
 
