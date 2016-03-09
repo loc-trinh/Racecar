@@ -40,7 +40,7 @@ class PathPlanner:
         point.y=0.0
         point.z=0.0
         self.stampedpoint=PointStamped()
-        self.stampedpoint.header.frame_id=self.map_frame
+        self.stampedpoint.header.frame_id=self.base_frame
         self.stampedpoint.header.stamp= rospy.Time.now()
         self.stampedpoint.point=point
 
@@ -52,7 +52,7 @@ class PathPlanner:
         self.listener = tf.TransformListener(True, rospy.Duration(10.0))
 
     def path_callback(self, data):
-
+        robot = self.listener.transformPoint(self.map_frame, self.stampedpoint)
         poses=data.poses
         cones=poses
         driveTo= Point()
@@ -63,7 +63,7 @@ class PathPlanner:
                     self.path.append((cone.position.x +0.2, cone.position.y + self.side*0.2))
                     self.side=self.side * -1
                     self.seen.append(cone.position.x)
-        if (robot.position.x >= self.path[self.nextPoint][0]):
+        if (robot.x >= self.path[self.nextPoint][0]):
             self.nextPoint+=1
         if (self.nextPoint==len(self.path)):
             driveTo.x=0
@@ -78,10 +78,15 @@ class PathPlanner:
             # distance= math.pow(math.pow(x,2)+math.pow(y,2),0.5)
             # driveTo.x= math.cos(theta)*distance
             # driveTo.y= math.sin(theta)*distance
-            self.stampedpoint.point.x=x
-            self.stampedpoint.point.y=y
+            sp = PointStamped()
+            point = Point()
+            point.x=x
+            point.y=y
+            sp.point=point
+            sp.header.frame_id=self.map_frame
+            sp.header.stamp= rospy.Time.now()
 
-            driveTo = self.listener.transformPoint(self.base_frame, self.stampedpoint)
+            driveTo = self.listener.transformPoint(self.base_frame, sp)
 
             ## currently still in world frame, may need to rotate to 
         self.drive_pub.publish(driveTo)
