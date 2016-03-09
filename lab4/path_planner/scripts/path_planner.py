@@ -89,8 +89,8 @@ class PathPlanner:
 
         self.path=[]
         print cone.point.x
-        if cone.point.x > 0.5:
-            self.path=[(cone_loc.point.x-0.4,cone_loc.point.y)]
+        if cone.point.x > 1:
+            self.path=[(cone_loc.point.x-0.75,cone_loc.point.y)]
         else:
             if len(self.path)==1:
                 self.side= self.side*-1
