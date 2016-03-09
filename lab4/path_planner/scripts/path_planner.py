@@ -70,8 +70,8 @@ class PathPlanner:
             driveTo.y=0
             #done, do not move
         else:
-            x=self.path[self.nextPoint][0] - robot.position.x
-            y=self.path[self.nextPoint][1] - robot.position.y
+            x=self.path[self.nextPoint][0] - robot.point.x
+            y=self.path[self.nextPoint][1] - robot.point.y
             # phi = math.atan2(y,x)
             # (r, p, yaw) = tf.transformations.euler_from_quaternion([robot.orientation.x, robot.orientation.y,robot.orientation.z, robot.orientation.w])
             # theta=phi-yaw
