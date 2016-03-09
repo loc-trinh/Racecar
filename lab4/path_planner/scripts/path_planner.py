@@ -89,7 +89,7 @@ class PathPlanner:
         self.path=[]
         self.nextPoint=0
         for cone in cones:
-            if cone.position.x > robot.point.x and cone.position.x>0 and abs(cone.position.y)<0.4:
+            if cone.position.x > self.robot.point.x and cone.position.x>0 and abs(cone.position.y)<0.4:
                 if math.floor(cone.position.x) % 2:
                     self.side=-1
                 self.path.append((cone.position.x, cone.position.y + self.side*0.4))
