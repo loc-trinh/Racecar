@@ -22,7 +22,7 @@ from geometry_msgs.msg import PointStamped
 
 class PathPlanner:
     def __init__(self):
-        self.topic_position="cone_array"
+        self.topic_position="cone_position"
         self.topic_output= "drive_to_xy"
         self.side=-1
         self.path=[]
@@ -84,15 +84,18 @@ class PathPlanner:
     def path_callback(self, data):
         self.stampedpoint.header.stamp = self.listener.getLatestCommonTime(self.map_frame,data.header.frame_id)
         self.robot = self.listener.transformPoint(self.map_frame, self.stampedpoint)
-        poses=data.poses
-        cones=poses
+        cones=data
+
+        data.header.stamp = self.listener.getLatestCommonTime(self.map_frame,data.header.frame_id)
+        con_loc = self.listener.transformPoint(self.map_frame, data)
+
         self.path=[]
-        self.nextPoint=0
-        for cone in cones:
-            if cone.position.x > self.robot.point.x and cone.position.x>0 and abs(cone.position.y)<0.4:
-                if math.floor(cone.position.x) % 2:
-                    self.side=-1
-                self.path.append((cone.position.x, cone.position.y + self.side*0.4))
+        if cone.position.x > 0.5:
+            self.path=[(cone_loc.point.x-0.5,cone_loc.point.y)]
+        else:
+            if len(self.path)==1:
+                self.side= self.side*-1
+            self.path=[(cone_loc.point.x, cone_loc.point.y+self.side*0.2), (cone_loc.point.x+0.5, cone_loc.point.y)]
         self.publish()
         
 
