@@ -60,8 +60,8 @@ class PathPlanner:
         self.nextPoint=0
         for cone in cones:
             if cone.position.x > robot.point.x:
-                self.path.append((cone.position.x -0.2, cone.position.y + self.side*0.3))
-                self.path.append((cone.position.x +0.2, cone.position.y + self.side*0.3))
+                self.path.append((cone.position.x -0.4, cone.position.y + self.side*0.5))
+                self.path.append((cone.position.x +0.4, cone.position.y + self.side*0.5))
                 self.side=self.side * -1
         if (robot.point.x >= self.path[self.nextPoint][0]):
             self.nextPoint+=1
@@ -71,8 +71,6 @@ class PathPlanner:
             #done, do not move
         else:
             print "------"
-            print robot
-            print self.path[self.nextPoint]
             x=self.path[self.nextPoint][0] - robot.point.x
             y=self.path[self.nextPoint][1] - robot.point.y
             
@@ -85,6 +83,7 @@ class PathPlanner:
             sp.header.stamp = self.listener.getLatestCommonTime(self.base_frame,data.header.frame_id)
 
             driveTo = self.listener.transformPoint(self.base_frame, sp).point
+            print driveTo
 
             ## currently still in world frame, may need to rotate to 
         self.drive_pub.publish(driveTo)
