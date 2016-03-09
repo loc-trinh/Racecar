@@ -64,7 +64,7 @@ class DriveControl:
             di= self.kd*(distance - self.lastDistance)
             dd= self.ki*(self.distanceI)
             self.lastDistance=distance
-            msg.drive.speed= min(self.max_speed, dp+di+dd)
+            msg.drive.speed= max(0.1,min(self.max_speed, dp+di+dd))
 
             self.thetaI=self.thetaI+theta
             tp= self.kp * theta
