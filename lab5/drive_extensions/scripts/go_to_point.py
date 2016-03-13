@@ -8,26 +8,27 @@ import tf
 from ackermann_msgs.msg import AckermannDriveStamped
 from geometry_msgs.msg import PoseArray, Pose, PointStamped
 
-class GoToPointNode:
-	def __init__(self):
-		# Initial Settings
-		self.k_steer = 0.1
-		self.kp=0.6*self.k
-		self.ki=0
-        self.kd=0
-        self.max_steering_angle = 0.2
-        self.max_speed=.5
-        self.lastDistance=0
-        self.lastTheta=0
-        self.distanceI=0
-        self.thetaI=0
 
-		# Default Settings
+class GoToPointNode:
+    def __init__(self):
+        # Default Settings
         self.k = 0.8
         self.topic_input = "/destination_point"
         self.topic_output = "/vesc/ackermann_cmd_mux/input/nav"
         self.base_frame = "base_link"
         self.map_frame = "odom"
+
+        # Initial Settings
+        self.k_steer = 0.1
+        self.kp = 0.6*self.k
+        self.ki = 0
+        self.kd = 0
+        self.max_steering_angle = 0.2
+        self.max_speed =.5
+        self.lastDistance = 0
+        self.lastTheta = 0
+        self.distanceI = 0
+        self.thetaI = 0
 
         # Param Settings
         self.kfactor = rospy.get_param('~k', self.k)
@@ -36,16 +37,16 @@ class GoToPointNode:
         self.base_frame = rospy.get_param('~base_frame', self.base_frame)
         self.map_frame = rospy.get_param('~map_frame', self.map_frame)
 
-		# Pubs and Subs
+        # Pubs and Subs
         self.drive_pub = rospy.Publisher(self.topic_output, AckermannDriveStamped, queue_size=1)
         rospy.Subscriber(self.topic_input, PointStamped, self.drive_callback)
 
         self.listener = tf.TransformListener(True, rospy.Duration(10.0))
 
-	def drive_callback(self, data):
-        # Get point and transform into odom frame
-        data.header.stamp = self.listener.getLatestCommonTime(self.map_frame,data.header.frame_id)
-        dest = self.listener.transformPoint(self.map_frame, data)
+    def drive_callback(self, data):
+        # Get point and transform into base_frame
+        data.header.stamp = self.listener.getLatestCommonTime(self.base_frame,data.header.frame_id)
+        dest = self.listener.transformPoint(self.base_frame, data)
         x = dest.x
         y = dest.y
 
