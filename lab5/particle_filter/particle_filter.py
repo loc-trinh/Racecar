@@ -49,8 +49,6 @@ class Particle(object):
         h = self.h
         if noisy:
             speed, h = add_noise(0.02, speed, h)
-            # needs more noise to disperse better
-            # h += random.uniform(-3, 3)
         r = h + ang_xy
 
         dx = math.cos(r) * speed*step #Could use linV components but kept as speed for now to allow for noisy option
@@ -105,6 +103,9 @@ def sample(cdf):
 
 class ParticleFilter:
     def __init__(self):
+
+        #since laser data and odometry data will come in asynchronously, current idea is to store the last readings for use in a filter with a set refresh rate
+        #May require some locking
         self.lastOdom=Odometry()
         self.topic_odom="/vesc/odom"
         #Pubs and Subs
