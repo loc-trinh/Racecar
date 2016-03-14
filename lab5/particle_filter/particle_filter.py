@@ -16,6 +16,10 @@ def get_ang_xy(x, y):
         ang = -1 * ang
     return ang
 
+def add_noise(level, *coords):
+    #helper function to add in random noise
+    return [x + random.uniform(-level, level) for x in coords]
+
 class Particle(object):
     ## Particle class, skeleton taken from template and modified to fit our purposes. Noisy left in as an option for now, may be removed
     def __init__(self, x, y, heading, w=0, 
@@ -36,9 +40,9 @@ class Particle(object):
         return self.x, self.y, self.h
 
     def motion_update(self, odom, step=0.02, noisy=False):
-        #Takes in an odometry reading and a refresh rate(step) to calculate a new position for the particle
+        #Takes in an odometry reading and a refresh rate(step) to return a new Particle that resulted from those actions in that time
         linV = odom.twist.twist.linear
-        angV = odom.twist.twist.angular
+        angV = odom.twist.twist.angular #Unused for right now
         speed = math.sqrt(linV.x**2 + linV.y**2)
         ang_xy= get_ang_xy(linV.x, linV.y) #There might be a better way to calculate angular velocity, currently using fn from online template
 
@@ -49,8 +53,9 @@ class Particle(object):
             # h += random.uniform(-3, 3)
         r = h + ang_xy
 
-        dx = math.cos(r) * speed*step
+        dx = math.cos(r) * speed*step #Could use linV components but kept as speed for now to allow for noisy option
         dy = math.sin(r) * speed*step
+
         return Particle(self.x+dx, self.y+dy, r)
 
 
@@ -58,7 +63,7 @@ class Particle(object):
 
 
 
-def MCL(iMap, particles, odom, sense):
+def MCL(iMap, particles, odom, sense): #This method should probably be moved to the ParticleFilter class eventually
     xBar=[] #Array for updated particles
     xReal=[] #Array for returned particles
     for p in particles:
@@ -111,3 +116,18 @@ class ParticleFilter:
     def filter_step(self):
         pass
 
+if __name__ == "__main__":
+    # initialize the ROS client API, giving the default node name
+    # self.period = rospy.get_param('~period', self.period)
+
+    rospy.init_node("path_planner")
+
+    pF=ParticleFilter();
+
+    # while not rospy.is_shutdown():
+    #     pF.filter_step()
+    #Commented out for now, should implement a refresh rate for the filter
+
+
+    # enter the ROS main loop
+    rospy.spin()
