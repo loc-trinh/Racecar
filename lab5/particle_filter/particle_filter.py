@@ -68,26 +68,40 @@ def MCL(iMap, particles, odom, sense): #This method should probably be moved to 
     xReal=[] #Array for returned particles
     for p in particles:
         x=p.motion_update(lastOdom)
-        weight= sensor_update(iMap,sense, particles[m])
-        xBar.append((x,weight))
+        x.w= sensor_update(iMap,sense, p)
+        xBar.append(x)
     #Normalize weights
     total=0
-    for pair in xbar:
-        total+=pair[1]
-    for pair in xbar:
-        pair[1]=pair[1]/float(total)
+    for p in xbar:
+        total+=p.w
+    for p in xbar:
+        p.w=p.w/float(total)
     #Resample
+    cdf=makecdf(xBar)
     for i in range(0,len(particles)):
-        xReal.append(sample(xBar))
+        xReal.append(xBar[sample(cdf)]) #Could potentially cause issues of repeated references, may need to append a copy instead
     return xReal
 
 
 def sensor_update(iMap,sense, particle):
     pass
 
-def sample(xBar):
-    pass
+def makecdf(xBar):
+    #makes a cdf from a list of particles with normalized weights
+    total=0
+    cdf=[]
+    for p in xBar:
+        total+=p.w
+        cdf.append(total)
+    return cdf
 
+def sample(cdf):
+    #returns index in array that was randomly chosen according to the distribution given by cdf
+    r= random.random()
+    for i in xrange(len(cdf)):
+        if r > cdf[i]:
+            return i-1
+    return len(cdf)-1
 
 class ParticleFilter:
     def __init__(self):
