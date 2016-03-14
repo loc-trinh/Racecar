@@ -13,7 +13,7 @@ class GoToPointNode:
     def __init__(self):
         # Default Settings
         self.k = 0.8
-        self.topic_input = "/destination_point"
+        self.topic_input = "/cone_position"
         self.topic_output = "/vesc/ackermann_cmd_mux/input/nav"
         self.base_frame = "base_link"
         self.map_frame = "odom"
@@ -44,7 +44,7 @@ class GoToPointNode:
         self.listener = tf.TransformListener(True, rospy.Duration(10.0))
 
     def drive_callback(self, data):
-        # Get point and transform into base_frame
+        # Get point and transform into
         data.header.stamp = self.listener.getLatestCommonTime(self.base_frame,data.header.frame_id)
         dest = self.listener.transformPoint(self.base_frame, data)
         x = dest.x
