@@ -13,7 +13,7 @@ cat << EOF
 
 export PATH=\$PATH:$ABSOLUTE_PATH
 
-alias sshcar="sshpass -p 'racecar@mit' ssh racecar@192.168.100.63"
+alias sshcar="sshpass -p 'racecar@mit' ssh racecar@192.168.100.72"
 alias cdws="cd $ABSOLUTE_PATH/../"
 alias rosenv="env | grep ROS"
 alias gs="git status"
