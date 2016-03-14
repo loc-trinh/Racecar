@@ -1,4 +1,4 @@
-sshpass -p 'racecar@mit' ssh racecar@192.168.100.63<< EOF
+sshpass -p 'racecar@mit' ssh racecar@192.168.100.72<< EOF
 bash -i << REMOTE
 gpull
 cm
