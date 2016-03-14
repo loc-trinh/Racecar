@@ -64,7 +64,7 @@
            TwistStamped, Imu). To add a new one, simply append the next number in the sequence to its base name,
            e.g., odom0, odom1, twist0, twist1, imu0, imu1, imu2, etc. The value should be the topic name. These
            parameters obviously have no default values, and must be specified. -->
-      <param name="odom0" value="odom"/>
+      <param name="odom0" value="vesc/odom"/>
       <!-- <param name="pose0" value="example/pose"/> -->
       <!-- <param name="twist0" value="example/twist"/> -->
       <param name="imu0" value="imu"/>
