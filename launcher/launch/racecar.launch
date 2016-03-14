@@ -7,6 +7,11 @@
 -->
 
 <launch>
+  
+  <!-- STATE ESTIMATION --> 
+  <include file="$(find robot_localization)/launch/racecar_ekf.launch" />
+
+  <!-- VESC -->
   <arg name="racecar_version" default="racecar-v2" />
   <group ns="vesc">
   	
