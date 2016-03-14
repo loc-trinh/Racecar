@@ -47,8 +47,8 @@ class GoToPointNode:
         # Get point and transform into
         data.header.stamp = self.listener.getLatestCommonTime(self.base_frame,data.header.frame_id)
         dest = self.listener.transformPoint(self.base_frame, data)
-        x = dest.x
-        y = dest.y
+        x = dest.point.x
+        y = dest.point.y
 
         # Computer dist and theta
         distance = math.pow(math.pow(x,2) + math.pow(y,2),  0.5)
