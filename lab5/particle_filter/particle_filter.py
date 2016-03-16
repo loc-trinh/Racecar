@@ -1,7 +1,9 @@
 import rospy
 from nav_msgs import Odometry
+from nav_msgs import OccupancyGrid
 import random
 import math
+from sensor_msgs.msg import LaserScan
 
 def get_ang_xy(x, y):
     #helper function to get angle from vx and vy, taken from online template
@@ -19,6 +21,83 @@ def get_ang_xy(x, y):
 def add_noise(level, *coords):
     #helper function to add in random noise
     return [x + random.uniform(-level, level) for x in coords]
+
+
+class Map2D(object):
+
+    def __init__(self, iMap):
+        self.occupancyArray= iMap.data
+        self.width= iMap.info.width
+        self.height= iMap.info.height
+        self.resolution = iMap.info.resolution
+        pass
+
+    def map_data(self,x,y):
+        return self.data[x*self.width+y]
+
+    def map_valid(self,x,y):
+        return (x<self.width and x>=0 and y<self.height and y>=0)
+
+    def calc_range(robot_x,robot_y,robot_a,max_range):
+        ##check if map frame is same as world frame, may not be
+        x0, y0 = self.world_to_map(robot_x, robot_y)
+        x1, y1 = self.world_to_map(robot_x + max_range*math.cos(robot_a),
+                                   robot_y + max_range*math.sin(robot_a))
+
+        if abs(y1-y0) > abs(x1-x0):
+            steep = True
+        else:
+            steep = False
+
+        if steep:
+            x0, y0 = y0, x0
+            x1, y1 = y1, x1
+
+        deltax = abs(x1-x0)
+        deltay = abs(y1-y0)
+        error = 0
+        deltaerr = deltay
+
+        x = x0
+        y = y0
+
+        if x0 < x1:
+            xstep = 1
+        else:
+            xstep = -1
+        if y0 < y1:
+            ystep = 1
+        else:
+            ystep = -1
+
+        while x != (x1 + xstep*1):
+            x += xstep
+            error += deltaerr
+            if 2*error >= deltax:
+                y += ystep
+                error -= deltax
+
+            # TODO: check
+            # if steep:
+            if not steep:
+                if self.map_valid(y, x):
+                    if self.map_data(x,y):
+                        return (math.sqrt((x-x0)*(x-x0) + (y-y0)*(y-y0)) /
+                                self.scale)
+            else:
+                if self.map_valid(x, y):
+                    if self.map_data[(x,y):
+                        return (math.sqrt((x-x0)*(x-x0) + (y-y0)*(y-y0)) /
+                                self.scale)
+
+        return max_range
+
+    def world_to_map(self,x,y):
+        ##check world to map transform
+        mapx= math.floor(x/float(self.resolution))
+        mapy= math.floor(y/float(self.resolution))
+
+
 
 class Particle(object):
     ## Particle class, skeleton taken from template and modified to fit our purposes. Noisy left in as an option for now, may be removed
@@ -80,9 +159,17 @@ def MCL(iMap, particles, odom, sense): #This method should probably be moved to 
         xReal.append(xBar[sample(cdf)]) #Could potentially cause issues of repeated references, may need to append a copy instead
     return xReal
 
+def sensor_update(iMap, sense, p):
+    ##sense is laserScan
+    angle_min= sense.angle_min
+    angle_increment= sense.angle_increment
+    ranges = sense.ranges
+    total=0
+    for i in xrange(len(ranges)):
+        p_d = iMap.calc_range(p.x, p.y, p.h+ angle_min + angle_increment*i, sense.max_range) ##probability of this measurement for this part of the laserscan
+        total+=p_d
+    return total/float(len(ranges)) ##updated particle weight
 
-def sensor_update(iMap,sense, particle):
-    pass
 
 def makecdf(xBar):
     #makes a cdf from a list of particles with normalized weights
@@ -107,9 +194,14 @@ class ParticleFilter:
         #since laser data and odometry data will come in asynchronously, current idea is to store the last readings for use in a filter with a set refresh rate
         #May require some locking
         self.lastOdom=Odometry()
+        self.lastLaser=LaserScan()
+
         self.topic_odom="/vesc/odom"
+        self.topic_laser="scan"
+        self.topic_map="map"
         #Pubs and Subs
         rospy.Subscriber(self.topic_odom, Odometry, self.odom_callback)
+        cd_sub = rospy.Subscriber(self.topic_laser, LaserScan, self.laser_callback)
 
         #Filter init
         self.numParticles=10
@@ -127,6 +219,9 @@ class ParticleFilter:
 
     def odom_callback(self, data):
         self.lastOdom=data
+
+    def laser_callback(self,data):
+        self.lastLaser=data
 
     def filter_step(self):
         pass
