@@ -47,9 +47,9 @@
                   3b. MAKE SURE something else is generating the odom->base_link transform. Note that this can even be
                       another instance of robot_localization! However, that instance should *not* fuse the global data. -->
       <!-- Defaults to "map" if unspecified -->
-      <!-- <param name="map_frame" value="map"/> -->
+      <param name="map_frame" value="map"/>
       <!-- Defaults to "odom" if unspecified -->
-      <param name="odom_frame" value="map"/>
+      <param name="odom_frame" value="odom"/>
       <!-- Defaults to "base_link" if unspecified -->
       <param name="base_link_frame" value="base_link"/>
       <!-- Defaults to the value of "odom_frame" if unspecified -->
@@ -84,7 +84,7 @@
            message types lack certain variables. For example, a TwistWithCovarianceStamped message has no pose information, so
            the first six values would be meaningless in that case. Each vector defaults to all false if unspecified, effectively
            making this parameter required for each sensor. -->
-      <rosparam param="odom0_config">[false, false, false,
+      <rosparam param="odom0_config">[true, true, true,
                                       false, false, true,
                                       true,  false, false,
                                       true, true, true,
