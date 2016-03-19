@@ -62,7 +62,7 @@ class GoToPointNode:
         # if obj close enough, else 
         if x<=0.2:
             msg.drive.steering_angle=theta
-            msg.drive.speed=0.3
+            msg.drive.speed=-0.3
         else:
             self.distanceI= self.distanceI+distance
             dp= self.kp * distance
