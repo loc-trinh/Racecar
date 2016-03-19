@@ -65,10 +65,12 @@ class ConeDetector:
             x=dist*np.sin(angle)
             y=dist*np.cos(angle)
             point = Point()
-            point.x=x
-            point.y=y
+            # point.x=x
+            # point.y=y
+            point.x = 0.0
+            point.y = 0.0
             point.z=0.0
-            
+
             self.counter+=1
             self.stampedpoint.header.seq=self.counter
             self.stampedpoint.header.frame_id="base_link"
