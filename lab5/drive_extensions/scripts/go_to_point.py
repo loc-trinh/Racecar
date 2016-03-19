@@ -59,7 +59,7 @@ class GoToPointNode:
         msg.header.stamp = rospy.Time.now()
         msg.header.frame_id = "base_link"
 
-        # if obj close enough, else 
+        # if obj too close, drive backwards, else calc speed and theta
         if x<=0.2:
             msg.drive.steering_angle=theta
             msg.drive.speed=-0.3
