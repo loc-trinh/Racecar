@@ -67,7 +67,7 @@ class ConeDetector:
             point = Point()
             # point.x=x
             # point.y=y
-            point.x = 0.0
+            point.x = 6.0
             point.y = 0.0
             point.z=0.0
 
