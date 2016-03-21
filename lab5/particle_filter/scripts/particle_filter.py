@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import rospy
 from nav_msgs.msg import Odometry
 from nav_msgs.msg import OccupancyGrid
@@ -234,8 +235,8 @@ if __name__ == "__main__":
 
     pF=ParticleFilter();
 
-    while not rospy.is_shutdown():
-        pF.filter_step()
+    #while not rospy.is_shutdown():
+    #    pF.filter_step()
     #Commented out for now, should implement a refresh rate for the filter
 
 
