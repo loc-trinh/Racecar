@@ -1,0 +1,31 @@
+What I am doing so far.
+
+I cloned the ros-navigation stack from here.
+	https://github.com/ros-planning/navigation/tree/indigo-devel
+I am trying to learn what we can do with it using. 
+	-bagfiles and maps from https://www.dropbox.com/home/gmapping.
+	
+	-To play a map run rosrun map_server map_server file.yawl
+	-To play a bagfile rosbag play file
+	-I am experimenting with move_base, local_base_planner, global_base_planner, and costmaps.
+	
+
+Here are some screenshots I have taken.
+	-> The car tranform is weird and the position is jumping around.
+	->https://www.dropbox.com/home/gmapping/nav_stack_%20experiment
+
+We need a record of the car tf_static on the bagfile to git usefull information.
+
+I started a few hours ago and haven't yet concentrated on it.
+	-> I am going to work on it for a while tonight
+
+Cloning and using package from github.
+	->create a workspace or in an existing worksapace
+		->clone the package
+		->run catkin_make on the workspace directory
+		->if not successfull try resolving dependencies by running rosdep install --from-paths ~/workspace/src/
+
+
+Questions/comments:
+	
+	
