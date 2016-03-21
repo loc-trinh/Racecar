@@ -60,6 +60,7 @@ class GoToPointNode:
         msg.header.frame_id = "base_link"
 
         # if obj too close, drive backwards, else calc speed and theta
+        # tested for points ahead/left, ahead/right, ahead, behind, and current loc
         if x<=0.2:
             msg.drive.steering_angle=theta
             msg.drive.speed=-0.3
