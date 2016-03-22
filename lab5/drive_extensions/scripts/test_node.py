@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import rospy
 import roslib
+from geometry_msgs.msg import PoseStamped
 import move_base_msgs.msg
 
 class TestDriveNode:
@@ -12,11 +13,14 @@ class TestDriveNode:
     	goal = MoveBaseGoal()
     	goal.target_pose.pose.position.x = 1.0
     	goal.target_pose.pose.position.y = 1.0
-    	goal.target_pose.pose.orientation.w = 0.0
-    	goal.target_pose.header.frame_id = 'testing'
+    	goal.target_pose.pose.position.z = 1.0
+    	goal.target_pose.pose.orientation.w = 1.0
+    	goal.target_pose.header.frame_id = 'odom'
     	goal.target_pose.header.stamp = rospy.Time.now()
-
+        drive_pub.publish(goal)
 
 if __name__=="__main__":
     try:
     	send_goal()
+    except:
+        pass
