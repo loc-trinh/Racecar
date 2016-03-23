@@ -1,5 +1,18 @@
 What I am doing so far.
 
+setting up teb_local_planner:
+
+	-> Installing
+	
+		-->sudo apt-get install ros-indigo-teb-local-planner or 
+		-->git clone https://github.com/rst-tu-dortmund/teb_local_planner.git
+			->run rosdep install teb_local_planner to install the dependences
+		--> The easiest way to do this is to move imageprocessing from the 			    directory when building these packages otherwise take the following 		    steps to install and build opencv.
+	-> install opencv http://docs.opencv.org/2.4/doc/tutorialsintroduction/		linux_install/linux_install.html
+	-> clone cv_bridge from https://github.com/ros-perception/vision_opencv.git
+		-run catkin_make and cmake on the package 
+	--> Whenever you need to install dependences run rosdep install --from-path ~/workspace/src/
+
 I cloned the ros-navigation stack from here.
 	https://github.com/ros-planning/navigation/tree/indigo-devel
 I am trying to learn what we can do with it using. 
