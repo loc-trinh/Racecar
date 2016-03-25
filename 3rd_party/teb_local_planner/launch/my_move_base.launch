@@ -1,6 +1,7 @@
 <launch>
 	<!-- Optionally run something like AMCL -->
 	<master auto="start"/>
+	<param name="/use_sim_time" value="true"/>
 	<node pkg="map_server" name="map_server" type="map_server" args="$(find teb_local_planner)/maps/full3.yaml"/>
 	<!-- run Navigation Stack Move Base -->
 	<arg name="path" default = "/home/afro/navigation-ws/src/teb_local_planner/bag_files/"/>
