@@ -1,5 +1,6 @@
 import rospy
 from nav_msgs import Odometry
+from nav_msgs.srv import GetMap
 import random
 import math
 
@@ -55,9 +56,6 @@ class Particle(object):
         dy = math.sin(r) * speed*step
 
         return Particle(self.x+dx, self.y+dy, r)
-
-
-
 
 
 
@@ -124,6 +122,17 @@ class ParticleFilter:
             theta=random.randrange(0, 2*math.pi)
             self.particles.append(Particle(x,y,theta))
 
+        #Map init
+        self.map = None
+        load_map()
+        
+	def load_map():
+		rospy.wait_for_service('static_map')
+	    try:
+	        static_map = rospy.ServiceProxy('static_map', GetMap)
+	        self.map = static_map().map
+	    except rospy.ServiceException as e:
+	        print("Service call failed: {}".format(e))
 
     def odom_callback(self, data):
         self.lastOdom=data
