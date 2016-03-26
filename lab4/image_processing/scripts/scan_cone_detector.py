@@ -12,11 +12,11 @@ import tf
 class ConeDetector:
 
     def __init__(self):
-        self.cone_sub = rospy.Subscriber("cone_location", Float32, self.phi_callback)
+        #self.cone_sub = rospy.Subscriber("cone_location", Float32, self.phi_callback)
         self.scan_window=rospy.Publisher("laser_window", LaserScan, queue_size=4)
         self.cd_sub = rospy.Subscriber("scan", LaserScan, self.laser_callback)
         self.cd_pub = rospy.Publisher("cone_position", PointStamped, queue_size=4)
-        self.phi = 100.0
+        self.phi = 0.2
         self.phi_start=self.phi
         self.phi_end = self.phi
         self.window=3
@@ -65,10 +65,12 @@ class ConeDetector:
             x=dist*np.sin(angle)
             y=dist*np.cos(angle)
             point = Point()
-            point.x=x
-            point.y=y
+            # point.x=x
+            # point.y=y
+            point.x = 6.0
+            point.y = 0.0
             point.z=0.0
-            
+
             self.counter+=1
             self.stampedpoint.header.seq=self.counter
             self.stampedpoint.header.frame_id="base_link"

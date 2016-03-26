@@ -13,7 +13,7 @@ class GoToPointNode:
     def __init__(self):
         # Default Settings
         self.k = 0.8
-        self.topic_input = "/destination_point"
+        self.topic_input = "/cone_position"
         self.topic_output = "/vesc/ackermann_cmd_mux/input/nav"
         self.base_frame = "base_link"
         self.map_frame = "odom"
@@ -44,11 +44,11 @@ class GoToPointNode:
         self.listener = tf.TransformListener(True, rospy.Duration(10.0))
 
     def drive_callback(self, data):
-        # Get point and transform into base_frame
+        # Get point and transform into
         data.header.stamp = self.listener.getLatestCommonTime(self.base_frame,data.header.frame_id)
         dest = self.listener.transformPoint(self.base_frame, data)
-        x = dest.x
-        y = dest.y
+        x = dest.point.x
+        y = dest.point.y
 
         # Computer dist and theta
         distance = math.pow(math.pow(x,2) + math.pow(y,2),  0.5)
@@ -59,10 +59,11 @@ class GoToPointNode:
         msg.header.stamp = rospy.Time.now()
         msg.header.frame_id = "base_link"
 
-        # if obj close enough, else 
+        # if obj too close, drive backwards, else calc speed and theta
+        # tested for points ahead/left, ahead/right, ahead, behind, and current loc
         if x<=0.2:
             msg.drive.steering_angle=theta
-            msg.drive.speed=0.3
+            msg.drive.speed=-0.3
         else:
             self.distanceI= self.distanceI+distance
             dp= self.kp * distance

@@ -1,0 +1,33 @@
+<launch>
+	<!-- Optionally run something like AMCL -->
+	<master auto="start"/>
+	<param name="/use_sim_time" value="true"/>
+	<node pkg="map_server" name="map_server" type="map_server" args="$(find teb_local_planner)/maps/full3.yaml"/>
+	<!-- run Navigation Stack Move Base -->
+	<arg name="path" default = "/home/afro/navigation-ws/src/teb_local_planner/bag_files/"/>
+	<arg name = "with_tf_static" default="with_tf_static"/>
+	<node pkg="rosbag" type="play" name="player" output="screen" args="--clock $(arg path)$(arg with_tf_static).bag.active"/>
+		
+		
+		
+	
+  	<node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+	    <rosparam file="$(find teb_local_planner)/cfg/costmap_common_params.yaml" command="load" ns="global_costmap" />
+	    <rosparam file="$(find teb_local_planner)/cfg/costmap_common_params.yaml" command="load" ns="local_costmap" />
+	    <rosparam file="$(find teb_local_planner)/cfg/local_costmap_params.yaml" command="load" />
+	    <rosparam file="$(find teb_local_planner)/cfg/global_costmap_params.yaml" command="load" />
+	    <rosparam file="$(find teb_local_planner)/cfg/teb_local_planner_params.yaml" command="load" />
+	    <!-- rosparam file="$(find teb_local_planner)/cfg/costmap_converter_params.yaml" command="load" /--> <!-- Enable to activate costmap_conversion plugins -->
+	    
+	    
+	    
+
+	    <remap from="map" to="/map" /> <!-- This file will be wrapped with namespace so we have to remove namespace from all appearances of map (there is only one map) -->
+	    <remap from="move_base_simple/goal" to="/move_base_simple/goal"/> <!-- We have only a single robot now, that is controlled via goals -->
+ 	</node>
+	<node pkg="amcl" type="amcl" name="amcl" output="screen"/>
+	<node pkg= "teb_local_planner" type="initial_pose.py" name="intitial_pose"/> 
+	<node pkg= "teb_local_planner" type="test_node.py" name="test_node"/> 
+	
+</launch>
+
