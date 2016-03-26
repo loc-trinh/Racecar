@@ -202,6 +202,7 @@ class ParticleFilter:
 
     def laser_callback(self,data):
         self.lastLaser = data
+        filter_step()
 
     def map_callback(self, data):
         self.map = Map(data.map)
