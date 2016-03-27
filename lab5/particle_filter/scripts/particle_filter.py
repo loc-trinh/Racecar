@@ -191,12 +191,12 @@ class ParticleFilter:
         self.map = Map(rospy.ServiceProxy('/static_map', GetMap)().map)
       
         #Filter init
-        self.numParticles = 100
+        self.numParticles = 10
         self.particles = []
-        self.minX = -100
-        self.maxX = 100
-        self.minY = -100
-        self.maxY = 100
+        self.minX = -10 + self.map.origin_x
+        self.maxX = 10 + self.map.origin_x
+        self.minY = -10 + self.map.origin_y
+        self.maxY = 10 + self.map.origin_y
         for i in xrange(self.numParticles):
             x = random.randrange(self.minX,self.maxX)
             y = random.randrange(self.minY,self.maxY)
@@ -211,8 +211,9 @@ class ParticleFilter:
 
         if self.map != None:
 			print "======= GOT MAP ========"
-			self.filter_step()
+			self.filter_step(data.scan_time)
 
+			print (self.map.origin_x, self.map.origin_y)
 			for i in self.particles:
 				print str(i),
 			print
@@ -225,11 +226,11 @@ class ParticleFilter:
 			pointcloud.header = header
 			#filling some points
 			for i in self.particles:
-				pointcloud.points.append(Point32(i.x,i.y,i.h))
+				pointcloud.points.append(Point32(-i.x,-i.y,i.h))
 			#publish
 			self.particles_pub.publish(pointcloud)
 
-    def filter_step(self):
+    def filter_step(self, scan_time):
     	if self.map == None:
     		return
 
@@ -238,7 +239,7 @@ class ParticleFilter:
         X = []
 
         for p in self.particles:
-            x = p.motion_update(self.lastOdom)
+            x = p.motion_update(self.lastOdom, step = scan_time)
             x.w = sensor_update(self.map, self.lastLaser, p)
             X_bar.append(x)
 
