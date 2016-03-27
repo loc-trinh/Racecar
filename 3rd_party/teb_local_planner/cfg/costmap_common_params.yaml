@@ -6,7 +6,7 @@
 footprint: [ [0.254, -0.0508], [0.1778, -0.0508], [0.1778, -0.1778], [-0.1905, -0.1778], [-0.254, 0], [-0.1905, 0.1778], [0.1778, 0.1778], [0.1778, 0.0508], [0.254, 0.0508] ]
 
 
-transform_tolerance: 0.2
+transform_tolerance: 0.3
 map_type: costmap
 
 obstacle_range: 6.0
@@ -16,5 +16,5 @@ track_unknown_space: false
 
 observation_sources: laser_scan_sensor
 
-laser_scan_sensor: {sensor_frame: laser, data_type: LaserScan, topic: laser/scan, marking: true, clearing: true}
+laser_scan_sensor: {sensor_frame: laser, data_type: LaserScan, topic: /scan, marking: true, clearing: true}
 
