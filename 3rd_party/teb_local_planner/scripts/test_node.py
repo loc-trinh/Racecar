@@ -22,5 +22,4 @@ class TestDriveNode:
         drive_pub.publish(goal)
 
 if __name__=="__main__":
-    try:
-        send_goal()
+    send_goal()
