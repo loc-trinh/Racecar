@@ -7,6 +7,10 @@ from nav_msgs.msg import OccupancyGrid
 from nav_msgs.srv import GetMap
 from sensor_msgs.msg import LaserScan
 
+from sensor_msgs.msg import PointCloud
+from geometry_msgs.msg import Point32
+import std_msgs.msg
+
 
 def add_noise_helper(level, *coords):
     ## Helper function to add in random noise
@@ -23,7 +27,7 @@ class Particle(object):
         self.h = heading
         self.w = w
 
-    def motion_update(self, odom, step=0.02, noisy=False):
+    def motion_update(self, odom, step=0.1, noisy=False):
         # Takes in an odometry reading and a refresh rate(step) to return a new Particle that resulted from those actions in that time
         linV = odom.twist.twist.linear
         angV = odom.twist.twist.angular #unused
@@ -41,7 +45,7 @@ class Particle(object):
 
         return Particle(self.x+dx, self.y+dy, r)
 
-    def get_ang_xy(x, y):
+    def get_ang_xy(self, x, y):
         # Helper function to get angle from vx and vy, taken from online template
         ang = 0
         if x != 0:
@@ -71,12 +75,12 @@ class Map(object):
         self.origin_y = iMap.info.origin.position.y
 
     def map_data(self,x,y):
-        return self.data[x*self.width+y]
+        return self.occupancyArray[int(x)*self.width+int(y)]
 
     def map_valid(self,x,y):
         return (x<self.width and x>=0 and y<self.height and y>=0)
 
-    def calc_range(robot_x,robot_y,robot_a,max_range):
+    def calc_range(self, robot_x,robot_y,robot_a,max_range):
         x0, y0 = self.world_to_map(robot_x, robot_y)
         x1, y1 = self.world_to_map(robot_x + max_range*math.cos(robot_a),
                                    robot_y + max_range*math.sin(robot_a))
@@ -132,8 +136,8 @@ class Map(object):
 
     def world_to_map(self,x,y):
         ## World to map transformation
-        mapx = math.floor((x - origin_x) / float(self.resolution) + 0.5) + self.width / 2
-        mapy = math.floor((y - origin_y) / float(self.resolution) + 0.5) + self.height / 2
+        mapx = math.floor((x - self.origin_x) / float(self.resolution) + 0.5) + self.width / 2
+        mapy = math.floor((y - self.origin_y) / float(self.resolution) + 0.5) + self.height / 2
         return (mapx, mapy)
 
 def gaussian(mean, variance, value):
@@ -179,18 +183,20 @@ class ParticleFilter:
         self.topic_laser = "scan"
         rospy.Subscriber(self.topic_odom, Odometry, self.odom_callback)
         rospy.Subscriber(self.topic_laser, LaserScan, self.laser_callback)
+        self.particles_pub = rospy.Publisher("/particles", PointCloud, queue_size=10)
 
         #Services
-        self.topic_map = "static_map"
-        rospy.Service(self.topic_map, GetMap, self.map_callback)
-
+        self.map = None
+        rospy.wait_for_service('/static_map')
+        self.map = Map(rospy.ServiceProxy('/static_map', GetMap)().map)
+      
         #Filter init
-        self.numParticles = 10
+        self.numParticles = 100
         self.particles = []
-        self.minX = -10
-        self.maxX = 10
-        self.minY = -10
-        self.maxY = 10
+        self.minX = -100
+        self.maxX = 100
+        self.minY = -100
+        self.maxY = 100
         for i in xrange(self.numParticles):
             x = random.randrange(self.minX,self.maxX)
             y = random.randrange(self.minY,self.maxY)
@@ -202,12 +208,31 @@ class ParticleFilter:
 
     def laser_callback(self,data):
         self.lastLaser = data
-        filter_step()
 
-    def map_callback(self, data):
-        self.map = Map(data.map)
+        if self.map != None:
+			print "======= GOT MAP ========"
+			self.filter_step()
+
+			for i in self.particles:
+				print str(i),
+			print
+			#declaring pointcloud
+			pointcloud = PointCloud()
+			#filling pointcloud header
+			header = std_msgs.msg.Header()
+			header.stamp = rospy.Time.now()
+			header.frame_id = 'base_link'
+			pointcloud.header = header
+			#filling some points
+			for i in self.particles:
+				pointcloud.points.append(Point32(i.x,i.y,i.h))
+			#publish
+			self.particles_pub.publish(pointcloud)
 
     def filter_step(self):
+    	if self.map == None:
+    		return
+
         # MCL implementation
         X_bar = []
         X = []
@@ -226,7 +251,7 @@ class ParticleFilter:
         cdf = makecdf(X_bar)
         for i in range(self.numParticles):
             p = X_bar[sample(cdf)]
-            X.append(Particle(p.x,p,y,p.w,p.h)) 
+            X.append(Particle(p.x,p.y,p.w,p.h)) 
 
         self.particles = X
 
