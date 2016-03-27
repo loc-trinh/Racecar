@@ -15,13 +15,13 @@ class TestDriveNode:
         print  "sending goal"
         while not rospy.is_shutdown():
             goal = PoseStamped()
-            goal.pose.point.position.x = 1.0
-            goal.pose.point.position.y = 1.0
-            goal.pose.point.position.z = 0.0
+            goal.pose.position.x = 1.0
+            goal.pose.position.y = 1.0
+            goal.pose.position.z = 0.0
             goal.pose.orientation.w = 1.0
             goal.header.frame_id = 'odom'
             goal.header.stamp = rospy.Time.now()
-            drive_pub.publish(goal) 
+            self.drive_pub.publish(goal) 
 
 if __name__=="__main__":
     rospy.init_node('TestDriveNode')
