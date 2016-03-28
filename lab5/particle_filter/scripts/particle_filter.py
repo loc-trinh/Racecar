@@ -190,6 +190,7 @@ class ParticleFilter:
         self.map = None
         rospy.wait_for_service('/static_map')
         self.map = Map(rospy.ServiceProxy('/static_map', GetMap)().map)
+        self.lastScanTime=0
       
         #Filter init
         self.numParticles = 10
@@ -236,7 +237,7 @@ class ParticleFilter:
         X = []
 
         for p in self.particles:
-            x = p.motion_update(self.lastOdom, step = scan_time)
+            x = p.motion_update(self.lastOdom, step = scan_time-self.lastScanTime)
             x.w = sensor_update(self.map, self.lastLaser, p)
             X_bar.append(x)
 
@@ -252,6 +253,7 @@ class ParticleFilter:
             X.append(Particle(p.x,p.y,p.w,p.h)) 
 
         self.particles = X
+        self.lastScanTme=scan_time
 
 
 if __name__ == "__main__":
