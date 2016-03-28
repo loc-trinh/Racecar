@@ -149,6 +149,7 @@ def sensor_update(iMap, sense, p):
     for i in xrange(len(sense.ranges)):
         expectated = iMap.calc_range(p.x, p.y, p.h + sense.angle_min + sense.angle_increment*i, sense.range_max)
         observed = sense.ranges[i]
+        print "expectated distance:", expectated, " observed:", observed
 
         mean, variance = expectated, 1.0
         total += gaussian(mean, variance, observed)
@@ -213,10 +214,6 @@ class ParticleFilter:
 			print "======= GOT MAP ========"
 			self.filter_step(data.scan_time)
 
-			print (self.map.origin_x, self.map.origin_y)
-			for i in self.particles:
-				print str(i),
-			print
 			#declaring pointcloud
 			pointcloud = PointCloud()
 			#filling pointcloud header
@@ -226,7 +223,7 @@ class ParticleFilter:
 			pointcloud.header = header
 			#filling some points
 			for i in self.particles:
-				pointcloud.points.append(Point32(-i.x,-i.y,i.h))
+				pointcloud.points.append(Point32(-i.x,-i.y,0))
 			#publish
 			self.particles_pub.publish(pointcloud)
 
