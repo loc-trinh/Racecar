@@ -149,7 +149,6 @@ def sensor_update(iMap, sense, p):
     for i in xrange(len(sense.ranges)):
         expectated = iMap.calc_range(p.x, p.y, p.h + sense.angle_min + sense.angle_increment*i, sense.range_max)
         observed = sense.ranges[i]
-        print "expectated distance:", expectated, " observed:", observed
 
         mean, variance = expectated, 1.0
         total += gaussian(mean, variance, observed)
@@ -190,15 +189,15 @@ class ParticleFilter:
         self.map = None
         rospy.wait_for_service('/static_map')
         self.map = Map(rospy.ServiceProxy('/static_map', GetMap)().map)
-        self.lastScanTime=0
+        self.lastScanTime=rospy.Time.now()
       
         #Filter init
-        self.numParticles = 10
+        self.numParticles = 100
         self.particles = []
-        self.minX = -10 + self.map.origin_x
-        self.maxX = 10 + self.map.origin_x
-        self.minY = -10 + self.map.origin_y
-        self.maxY = 10 + self.map.origin_y
+        self.minX = -15 + self.map.origin_x
+        self.maxX = 15 + self.map.origin_x
+        self.minY = -15 + self.map.origin_y
+        self.maxY = 15 + self.map.origin_y
         for i in xrange(self.numParticles):
             x = random.randrange(self.minX,self.maxX)
             y = random.randrange(self.minY,self.maxY)
@@ -213,22 +212,25 @@ class ParticleFilter:
 
         if self.map != None:
 			print "======= GOT MAP ========"
-			self.filter_step(data.scan_time)
-
+			print data.scan_time
+			self.filter_step()
+			for i in self.particles:
+				print str(i),
+			print
 			#declaring pointcloud
 			pointcloud = PointCloud()
 			#filling pointcloud header
 			header = std_msgs.msg.Header()
 			header.stamp = rospy.Time.now()
-			header.frame_id = 'base_link'
+			header.frame_id = 'odom'
 			pointcloud.header = header
 			#filling some points
 			for i in self.particles:
-				pointcloud.points.append(Point32(-i.x,-i.y,0))
+				pointcloud.points.append(Point32(i.x,i.y,0))
 			#publish
 			self.particles_pub.publish(pointcloud)
 
-    def filter_step(self, scan_time):
+    def filter_step(self):
     	if self.map == None:
     		return
 
@@ -237,7 +239,7 @@ class ParticleFilter:
         X = []
 
         for p in self.particles:
-            x = p.motion_update(self.lastOdom, step = scan_time-self.lastScanTime)
+            x = p.motion_update(self.lastOdom, step = (rospy.Time.now()-self.lastScanTime).to_sec())
             x.w = sensor_update(self.map, self.lastLaser, p)
             X_bar.append(x)
 
@@ -245,15 +247,16 @@ class ParticleFilter:
         total = sum([p.w for p in X_bar])
         for p in X_bar:
             p.w = p.w/float(total)
+            print p.w
 
         #Resample
         cdf = makecdf(X_bar)
         for i in range(self.numParticles):
             p = X_bar[sample(cdf)]
-            X.append(Particle(p.x,p.y,p.w,p.h)) 
+            X.append(Particle(p.x,p.y,p.h,p.w)) 
 
         self.particles = X
-        self.lastScanTme=scan_time
+        self.lastScanTme=rospy.Time.now()
 
 
 if __name__ == "__main__":
