@@ -17,6 +17,10 @@ It's probably a configuration file in navigation somewhere, but we couldn't find
 
 We are not sure where to go from here, since move_base is not publishing stuff, but we are able to run amcl and the nav_stack, without any errors. The dummy nodes have the outputs we expect from them, but we are unsure as to how to test where something is going wrong.
 
+We are not specifically running teb_local_planner currently, just the vanilla move_base. To add in teb, amend the launch file, as shown here: 
+
+http://wiki.ros.org/action/fullsearch/teb_local_planner/Tutorials/Configure%20and%20run%20Robot%20Navigation?action=fullsearch&context=180&value=linkto%3A%22teb_local_planner%2FTutorials%2FConfigure+and+run+Robot+Navigation%22
+
 The launch file on the racecar is different than the one in the repo.
 
 To run what we ran:
@@ -29,5 +33,11 @@ roslaunch launcher racecar.launch
 
 rosrun teb_local_planner cmd_vel_to_ackermann_drive
 (this runs the conversion of the output velocity of the nav stack to the final ackermann comamnds. obvs this node isn't getting anything useful, but we can add it to the launch file later)
+
+One thing that might help with debugging is this GUI:
+
+rosrun rqt_reconfigure rqt_reconfigure
+
+You can dynamically change parameters with this.
 
 Don't forget to source.
