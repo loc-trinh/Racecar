@@ -13,6 +13,8 @@ Panels:
         - /TF1/Frames1
         - /PoseArray1
         - /PointStamped1
+        - /Map1
+        - /Map1/Status1
       Splitter Ratio: 0.5
     Tree Height: 824
   - Class: rviz/Selection
@@ -70,9 +72,9 @@ Visualization Manager:
       Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
-      Max Intensity: 856
+      Max Intensity: 1558
       Min Color: 0; 0; 0
-      Min Intensity: 394
+      Min Intensity: 398
       Name: LaserScan
       Position Transformer: XYZ
       Queue Size: 10
@@ -128,16 +130,24 @@ Visualization Manager:
     - Alpha: 1
       Class: rviz/PointStamped
       Color: 204; 41; 204
-      Enabled: true
+      Enabled: false
       History Length: 1
       Name: PointStamped
       Radius: 0.2
       Topic: /cone_position
+      Value: false
+    - Alpha: 0.7
+      Class: rviz/Map
+      Color Scheme: map
+      Draw Behind: false
+      Enabled: true
+      Name: Map
+      Topic: /map
       Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: map
+    Fixed Frame: base_link
     Frame Rate: 30
   Name: root
   Tools:
@@ -158,7 +168,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 4.33297
+      Distance: 4.51169
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
@@ -170,10 +180,10 @@ Visualization Manager:
         Z: -0.122003
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 1.3498
+      Pitch: 1.1748
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 3.09503
+      Yaw: 3.20503
     Saved: ~
 Window Geometry:
   Displays:
@@ -191,5 +201,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1665
-  X: 884
-  Y: 297
+  X: 501
+  Y: 130

@@ -2,11 +2,8 @@
   <master auto="start"/>
   <arg name="no_static_map" default="false"/>
 
-  <!-- Run the map server -->
-  <node name="map_server" pkg="map_server" type="map_server" args="$(find my_map_package)/my_map.pgm my_map_resolution"/>
-
   <!--- Run AMCL -->
-  <include file="$(find amcl)/examples/amcl_diff.launch" />
+  <!--<include file="$(find amcl)/examples/amcl_diff.launch" /> -->
 
   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
     <rosparam file="$(find navigation)/cfg/costmap_common_params.yaml" command="load" ns="global_costmap" />
