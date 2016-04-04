@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package>
-  <name>navigation</name>
+  <name>racecar_nav</name>
   <version>0.0.0</version>
   <description>The navigation package</description>
 
