@@ -141,14 +141,14 @@ find_package(OpenCV REQUIRED)
 
 ## Specify libraries to link a library or executable target against
 
-target_link_libraries(cone_locator_node
-  ${catkin_LIBRARIES}
-  ${OpenCV_LIBRARIES}
-)
-target_link_libraries(image_filter_node
-  ${catkin_LIBRARIES}
-  ${OpenCV_LIBRARIES}
-)
+#target_link_libraries(cone_locator_node
+#  ${catkin_LIBRARIES}
+#  ${OpenCV_LIBRARIES}
+#)
+#target_link_libraries(image_filter_node
+#  ${catkin_LIBRARIES}
+#  ${OpenCV_LIBRARIES}
+#)
 
 #############
 ## Install ##
