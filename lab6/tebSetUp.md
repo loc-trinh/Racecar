@@ -41,8 +41,8 @@ rosrun rqt_reconfigure rqt_reconfigure
 You can dynamically change parameters with this.
 
 Don't forget to source.
-====
-4/4/16 1700 Update:
+---
+##4/4/16 1700 Update:
 
 - Base NavStack running with map input from gmapper. Cost maps are dynamically and correctly generated for both global and local.
 - Not yet generating navigation plan (need to hook in global and local planners correctly)
@@ -55,4 +55,16 @@ To run current stuff:
 	2) roslaunch racecar_nav gmapper.launch #start generating SLAM map
 	3) roslaunch racecar_nav nav_stack.launch #run the navigation stack
 ```
+
+##4/4/16 1840 Update:
+
+- Global_Planner & Local planner now outputting valid plans.
+- Sending move_base_goal from RVIZ is not working due to bad network config
+- Current issue: teb_local_planner will NOT compile on racecar due to dependency issue
+- Test script to send nav goal:
+```
+	rosrun racecar_nav test_nav_goal #sends the car 1m ahead
+```
+
+
 
