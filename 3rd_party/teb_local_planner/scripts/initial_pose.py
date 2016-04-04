@@ -1,0 +1,28 @@
+#!/usr/bin/python
+import rospy
+import roslib
+import numpy as np
+from geometry_msgs.msg import Point, PoseWithCovarianceStamped
+
+class TestStartNode:
+    def __init__(self):
+        self.pub = '/initialpose'
+        self.drive_pub = rospy.Publisher(self.pub, PoseWithCovarianceStamped, queue_size=1)
+        self.send_start()
+
+    def send_start(self):
+        print  "sending start"
+        while not rospy.is_shutdown():
+            start = PoseWithCovarianceStamped()
+            start.pose.pose.position = Point(1.0, .10, 0.001)
+            start.pose.pose.orientation.w = 1.0
+            start.pose.covariance = [0.001]*36
+            start.header.frame_id = 'map'
+            start.header.stamp = rospy.Time.now()
+            self.drive_pub.publish(start)
+
+if __name__=="__main__":
+    rospy.init_node('TestStartNode')
+    node=TestStartNode()
+    rospy.spin()
+    
