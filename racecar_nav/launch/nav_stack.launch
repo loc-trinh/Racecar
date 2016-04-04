@@ -1,5 +1,5 @@
 <launch>
-  <master auto="start"/>
+
   <arg name="no_static_map" default="false"/>
 
   <!--- Run AMCL -->
@@ -12,4 +12,5 @@
     <rosparam file="$(find racecar_nav)/cfg/global_costmap_params.yaml" command="load" />
     <rosparam file="$(find racecar_nav)/cfg/base_local_planner_params.yaml" command="load" />
   </node>
+
 </launch>

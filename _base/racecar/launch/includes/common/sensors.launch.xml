@@ -17,6 +17,8 @@
   <!-- laser -->
   <node pkg="urg_node" type="urg_node" name="laser_node" >
     <param name="frame_id" value="base_link" />
+    <param name="angle_min" value="-1.5" />
+    <param name="angle_max" value="1.5" />
   </node>
 
   
