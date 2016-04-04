@@ -41,3 +41,18 @@ rosrun rqt_reconfigure rqt_reconfigure
 You can dynamically change parameters with this.
 
 Don't forget to source.
+====
+4/4/16 1700 Update:
+
+- Base NavStack running with map input from gmapper. Cost maps are dynamically and correctly generated for both global and local.
+- Not yet generating navigation plan (need to hook in global and local planners correctly)
+- Sensor data is all now conditioned correctly
+- RVIZ config file created in /_cfg/ called "nav_stack" which visualizes all of this.
+ 
+To run current stuff:
+```
+	1) roslaunch launcher racecar.launch #Launch the hardware
+	2) roslaunch racecar_nav gmapper.launch #start generating SLAM map
+	3) roslaunch racecar_nav nav_stack.launch #run the navigation stack
+```
+
