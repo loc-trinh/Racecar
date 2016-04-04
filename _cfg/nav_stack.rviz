@@ -15,10 +15,12 @@ Panels:
         - /PointStamped1
         - /Map1
         - /Map1/Status1
-        - /Pose1
+        - /Path1
+        - /Goal Pose1
         - /Global Footprint1
         - /Global Footprint1/Status1
         - /Global Cost Map1
+        - /Path2
       Splitter Ratio: 0.543624
     Tree Height: 823
   - Class: rviz/Selection
@@ -76,9 +78,9 @@ Visualization Manager:
       Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
-      Max Intensity: 1368
+      Max Intensity: 1404
       Min Color: 0; 0; 0
-      Min Intensity: 394
+      Min Intensity: 402
       Name: LaserScan
       Position Transformer: XYZ
       Queue Size: 10
@@ -149,20 +151,6 @@ Visualization Manager:
       Topic: /map
       Value: false
     - Alpha: 1
-      Buffer Length: 1
-      Class: rviz/Path
-      Color: 25; 255; 0
-      Enabled: true
-      Line Style: Lines
-      Line Width: 0.03
-      Name: Path
-      Offset:
-        X: 0
-        Y: 0
-        Z: 0
-      Topic: /move_base/TrajectoryPlannerROS/global_plan
-      Value: true
-    - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
         Max Value: 10
@@ -203,7 +191,7 @@ Visualization Manager:
         X: 0
         Y: 0
         Z: 0
-      Topic: /move_base/NavfnROS/plan
+      Topic: /global_planner/planner/plan
       Value: true
     - Alpha: 1
       Axes Length: 1
@@ -213,7 +201,7 @@ Visualization Manager:
       Enabled: true
       Head Length: 0.3
       Head Radius: 0.1
-      Name: Pose
+      Name: Goal Pose
       Shaft Length: 0.2
       Shaft Radius: 0.05
       Shape: Arrow
@@ -280,7 +268,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 5.7688
+      Distance: 5.07654
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
