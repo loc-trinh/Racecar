@@ -6,6 +6,9 @@ project(racecar_nav)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   move_base
+  move_base_msgs 
+  actionlib 
+  roscpp
 )
 
 ## System dependencies are found with CMake's conventions
@@ -127,6 +130,9 @@ include_directories(
 
 ## Declare a C++ executable
 # add_executable(navigation_node src/navigation_node.cpp)
+
+add_executable(test_nav_goal src/test_nav_goal.cpp)
+target_link_libraries(test_nav_goal ${catkin_LIBRARIES})
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
