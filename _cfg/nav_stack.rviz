@@ -6,7 +6,6 @@ Panels:
       Expanded:
         - /Global Options1
         - /LaserScan1/Status1
-        - /TF1/Status1
         - /TF1/Frames1
         - /Global Footprint1/Status1
         - /MASTER_MAP1
@@ -68,7 +67,7 @@ Visualization Manager:
       Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
-      Max Intensity: 1261
+      Max Intensity: 961
       Min Color: 0; 0; 0
       Min Intensity: 394
       Name: LaserScan
@@ -192,7 +191,7 @@ Visualization Manager:
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: odom
+    Fixed Frame: base_link
     Frame Rate: 30
   Name: root
   Tools:
@@ -213,22 +212,22 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 4.95037
+      Distance: 4.01051
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -2.49181
-        Y: 0.541726
-        Z: -0.282328
+        X: 0
+        Y: 0
+        Z: 0
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 1.5698
+      Pitch: 0.979797
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 2.80503
+      Yaw: 3.14
     Saved: ~
 Window Geometry:
   Displays:

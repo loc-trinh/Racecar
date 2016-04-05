@@ -17,12 +17,15 @@ def convert_trans_rot_vel_to_steering_angle(v, omega, wheelbase):
 
 def cmd_callback(data):
   global wheelbase
+  global max_theta
+  global min_vel
   global ackermann_cmd_topic
   global frame_id
   global pub
   
   v = data.linear.x
   steering = convert_trans_rot_vel_to_steering_angle(v, data.angular.z, wheelbase)
+  steering = max(max_theta, min(-max_theta,steering))
   
   msg = AckermannDriveStamped()
   msg.header.stamp = rospy.Time.now()
@@ -31,9 +34,9 @@ def cmd_callback(data):
 
   #Enforce a minimum velocity
   if v<0:
-    v = min(v, -0.25)
+    v = min(v, -min_vel)
   elif v>0:
-    v = max(v, 0.25)
+    v = max(v, min_vel)
 
   msg.drive.speed = v
   
@@ -51,6 +54,8 @@ if __name__ == '__main__':
     twist_cmd_topic = rospy.get_param('~twist_cmd_topic', '/cmd_vel') 
     ackermann_cmd_topic = rospy.get_param('~ackermann_cmd_topic', '/ackermann_cmd')
     wheelbase = rospy.get_param('~wheelbase', 1.0)
+    max_theta = rospy.get_param('~max_theta', 0.35)
+    min_vel = rospy.get_param('~min_vel', 0.1)
     frame_id = rospy.get_param('~frame_id', 'odom')
     
     rospy.Subscriber(twist_cmd_topic, Twist, cmd_callback, queue_size=1)

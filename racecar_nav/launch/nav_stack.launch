@@ -28,6 +28,9 @@
 
   <node pkg="teb_local_planner" type="cmd_vel_to_ackermann_drive.py" name="twist_to_ackermann" output="screen">
     <param name="ackermann_cmd_topic" value="/vesc/ackermann_cmd_mux/input/nav"/>
+    <param name="wheelbase" value="0.25"/>
+    <param name="min_vel" value="0.25"/>
+    <param name="max_theta" value="0.36"/>
   </node>
 
 </launch>
