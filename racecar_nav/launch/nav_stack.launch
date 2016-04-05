@@ -26,4 +26,8 @@
 
   </node>
 
+  <node pkg="teb_local_planner" type="cmd_vel_to_ackermann_drive.py" name="twist_to_ackermann" output="screen">
+    <param name="ackermann_cmd_topic" value="ackermann_out"/>
+  </node>
+
 </launch>
