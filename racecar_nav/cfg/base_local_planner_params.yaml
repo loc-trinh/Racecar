@@ -10,12 +10,12 @@ TebLocalPlannerROS:
  global_plan_overwrite_orientation: True
     
  # Robot        
- max_vel_x: 0.2
- max_vel_x_backwards: 0.15
+ max_vel_x: 1
+ max_vel_x_backwards: 0.75
  max_vel_theta: 0.3
- acc_lim_x: 0.5
+ acc_lim_x: 1.0
  acc_lim_theta: 0.5
- min_turning_radius: 0.5
+ min_turning_radius: 0.4
     
  # GoalTolerance
  xy_goal_tolerance: 0.2
