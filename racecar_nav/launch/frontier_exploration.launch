@@ -1,7 +1,7 @@
 <launch>
 
     <!-- Set to your sensor's range -->
-    <arg name="sensor_range" default="1.0"/>
+    <arg name="sensor_range" default="5.0"/>
 
     <node pkg="frontier_exploration" type="explore_client" name="explore_client" output="screen"/>
 
@@ -32,7 +32,7 @@
                 - {name: static,           type: "costmap_2d::StaticLayer"}
                 - {name: explore_boundary, type: "frontier_exploration::BoundedExploreLayer"}
                 #Can disable sensor layer if gmapping is fast enough to update scans
-                #- {name: sensor,           type: "costmap_2d::ObstacleLayer"}
+                - {name: sensor,           type: "costmap_2d::ObstacleLayer"}
                 - {name: inflation,        type: "costmap_2d::InflationLayer"}
 
             static:

@@ -8,9 +8,12 @@
 
   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
 
-    <!-- Planner Selection -->
+    <!-- Planner Selection & Configuration-->
     <param name="base_global_planner" value="global_planner/GlobalPlanner"/>
     <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
+    <param name="recovery_behaviors" value=" [{name: conservative_reset, type: clear_costmap_recovery/ClearCostmapRecovery}, {name: aggressive_reset, type: clear_costmap_recovery/ClearCostmapRecovery}]" />
+    <param name="planner_frequency " value="0.25" />
+
 
     <!-- Planner Configuration -->
     <param name="controller_frequency" value="10.0" />
