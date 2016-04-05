@@ -1,28 +1,8 @@
 <launch>
-	<!-- Optionally run something like AMCL -->
+	<include file="$(find launcher)/launch/racecar_teleop.launch" />
+	<include file="$(find racecar_nav)/launch/gmapper.launch" />
+	<!--<include file="$(find racecar_nav)/launch/nav_stack.launch" /> -->
 
 
-	<!-- run Navigation Stack Move Base -->
-  	<node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
-  		<!-- CONFIGURATION -->
-	    <rosparam file="$(find teb_local_planner)/cfg/costmap_common_params.yaml" command="load" ns="global_costmap" />
-	    <rosparam file="$(find teb_local_planner)/cfg/costmap_common_params.yaml" command="load" ns="local_costmap" />
-	    <rosparam file="$(find teb_local_planner)/cfg/local_costmap_params.yaml" command="load" />
-	    <rosparam file="$(find teb_local_planner)/cfg/global_costmap_params.yaml" command="load" />
-	    <rosparam file="$(find teb_local_planner)/cfg/teb_local_planner_params.yaml" command="load" />
-	    <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
-	    <param name="controller_frequency" value="10.0" />
-
-		<!-- rosparam file="$(find teb_local_planner)/cfg/costmap_converter_params.yaml" command="load" /--> <!-- Enable to activate costmap_conversion plugins -->
-	    
-	    <!--param name="base_global_planner" value="straight_global_planner/StraightROS" /-->
-	    
-
-	    <remap from="map" to="/map" /> <!-- This file will be wrapped with namespace so we have to remove namespace from all appearances of map (there is only one map) -->
-	    <remap from="move_base_simple/goal" to="/move_base_simple/goal"/> <!-- We have only a single robot now, that is controlled via goals -->
- 	</node>
-	<!-- <node pkg="amcl" type="amcl" name="amcl" output="screen"/> --> 
-	<node pkg= "teb_local_planner" type="initial_pose.py" name="intitial_pose"/> 
-	<node pkg= "teb_local_planner" type="test_node.py" name="test_node"/> 
 </launch>
 
