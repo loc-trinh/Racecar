@@ -8,11 +8,11 @@
       base_frame: base_link
       map_frame: map
 
-      map_update_interval: 1.0 # Publish new map
+      map_update_interval: 0.5 # Publish new map
 
       maxUrange: 6.5 # Should be just less than sensor range
       maxRange: 7.1 # Should be just greater than sensor range
-      particles: 100 # Increased from 80
+      particles: 30 # 
 
       # Update frequencies
       linearUpdate: 0.25
