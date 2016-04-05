@@ -12,11 +12,11 @@
 
       maxUrange: 6.5 # Should be just less than sensor range
       maxRange: 7.1 # Should be just greater than sensor range
-      particles: 30 # 
+      particles: 15 # 
 
       # Update frequencies
       linearUpdate: 0.25
-      angularUpdate: 0.05
+      angularUpdate: 0.1
       temporalUpdate: 1.0
       resampleThreshold: 0.5
 
@@ -25,7 +25,7 @@
       ymin: -100.0
       xmax: 100.0
       ymax: 100.0
-      delta: 0.05
+      delta: 0.1
 
       # All default
       sigma: 0.05
