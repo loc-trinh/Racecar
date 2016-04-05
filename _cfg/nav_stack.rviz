@@ -68,7 +68,7 @@ Visualization Manager:
       Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
-      Max Intensity: 1520
+      Max Intensity: 1261
       Min Color: 0; 0; 0
       Min Intensity: 394
       Name: LaserScan
@@ -213,16 +213,16 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 5.90753
+      Distance: 4.95037
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -0.482702
-        Y: -0.389567
-        Z: -0.280123
+        X: -2.49181
+        Y: 0.541726
+        Z: -0.282328
       Name: Current View
       Near Clip Distance: 0.01
       Pitch: 1.5698
