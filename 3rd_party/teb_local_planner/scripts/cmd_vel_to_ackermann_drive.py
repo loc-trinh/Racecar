@@ -28,6 +28,13 @@ def cmd_callback(data):
   msg.header.stamp = rospy.Time.now()
   msg.header.frame_id = frame_id
   msg.drive.steering_angle = steering
+
+  #Enforce a minimum velocity
+  if v<0:
+    v = min(v, -0.25)
+  elif v>0:
+    v = max(v, 0.25)
+
   msg.drive.speed = v
   
   pub.publish(msg)
