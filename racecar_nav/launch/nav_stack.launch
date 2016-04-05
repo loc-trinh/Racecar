@@ -14,6 +14,7 @@
     
     <!-- Planner Configuration -->
     <param name="controller_frequency" value="20.0" />
+    <rosparam param="recovery_behaviors"> [ { name: "conservative_reset", type: "clear_costmap_recovery/ClearCostmapRecovery" },{ name: "backup_recovery", type: "backup_recovery_dwa/BackupRecovery" },{name: "aggressive_reset", type: "clear_costmap_recovery/ClearCostmapRecovery" } ] </rosparam>
     <param name="clearing_rotation_allowed" value="false" />
     <param name="conservative_reset_dist  " value="4" />
     <param name="planner_frequency " value="0.25" />
