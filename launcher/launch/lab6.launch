@@ -1,0 +1,7 @@
+<launch>
+	<include file="$(find launcher)/launch/racecar_teleop.launch" />
+	<include file="$(find racecar_nav)/launch/gmapping.launch" />
+	<include file="$(find racecar_nav)/launch/nav_stack.launch" />
+	<include file="$(find racecar_nav)/launch/frontier_exploration.launch" />
+</launch>
+

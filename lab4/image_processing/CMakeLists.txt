@@ -5,8 +5,8 @@ project(image_processing)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  cv_bridge
-  image_transport
+  #cv_bridge
+  #image_transport
   roscpp
   sensor_msgs
   std_msgs
@@ -132,8 +132,8 @@ find_package(OpenCV REQUIRED)
 # add_dependencies(image_processing ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
-add_executable(cone_locator_node src/cone_locator_node.cpp)
-add_executable(image_filter_node src/image_filter_node.cpp)
+#add_executable(cone_locator_node src/cone_locator_node.cpp)
+#add_executable(image_filter_node src/image_filter_node.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
@@ -141,14 +141,14 @@ add_executable(image_filter_node src/image_filter_node.cpp)
 
 ## Specify libraries to link a library or executable target against
 
-target_link_libraries(cone_locator_node
-  ${catkin_LIBRARIES}
-  ${OpenCV_LIBRARIES}
-)
-target_link_libraries(image_filter_node
-  ${catkin_LIBRARIES}
-  ${OpenCV_LIBRARIES}
-)
+#target_link_libraries(cone_locator_node
+#  ${catkin_LIBRARIES}
+#  ${OpenCV_LIBRARIES}
+#)
+#target_link_libraries(image_filter_node
+#  ${catkin_LIBRARIES}
+#  ${OpenCV_LIBRARIES}
+#)
 
 #############
 ## Install ##

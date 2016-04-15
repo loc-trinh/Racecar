@@ -13,9 +13,15 @@
 
   <rosparam file="$(arg sensors_config)" command="load" />
 
-  <!-- laser -->
-  <node pkg="urg_node" type="urg_node" name="laser_node" />
 
+  <!-- laser -->
+  <node pkg="urg_node" type="urg_node" name="laser_node" >
+    <param name="frame_id" value="base_link" />
+    <param name="angle_min" value="-1.7" />
+    <param name="angle_max" value="1.7" />
+  </node>
+
+  
   <!-- imu -->
   <node pkg="razor_imu_9dof" type="imu_node.py" name="imu_node" />
 

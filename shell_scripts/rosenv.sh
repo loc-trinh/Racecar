@@ -10,7 +10,7 @@ elif [ "$1" == "1" ]; then
     echo "Setting Environment Variables for Remote..."
     ip=$(/sbin/ifconfig eth0 | grep "inet addr" | cut -d ':' -f 2 | cut -d ' ' -f 1)
     export ROS_IP=$ip
-    export ROS_MASTER_URI=http://192.168.100.63:11311
+    export ROS_MASTER_URI=http://192.168.100.72:11311
 else
     echo "Useage: rosenv 0; where 0 = local 1 = remote."
 fi
