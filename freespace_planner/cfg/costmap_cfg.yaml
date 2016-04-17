@@ -1,11 +1,13 @@
-footprint: [ [-0.2, -0.15], [-0.2, 0.15], [0.2, 0.15], [0.2, -0.15], [-0.2, -0.15]]
-#Max obstacle distance to scan
-obstacle_range: 3.0
-#Trace out freespace this far
-raytrace_range: 5.5
-
 plugins: 
     - {name: obstacles,        type: "costmap_2d::VoxelLayer"}
+publish_frequency: 10.0
+footprint: [ [-0.2, -0.15], [-0.2, 0.15], [0.2, 0.15], [0.2, -0.15], [-0.2, -0.15]]
+#Max obstacle distance to scan
+#obstacle_range: 3.0
+#Trace out freespace this far
+#raytrace_range: 5.5
+
+
 
 obstacles:
     observation_sources: base_scan

@@ -1,5 +1,8 @@
 <launch>
-  <rosparam file="$(find freespace_planner)/cfg/costmap_cfg.yaml" command="load" ns="/costmap_node/costmap" />
+  <!--
+  <rosparam file="$(find freespace_planner)/cfg/costmap_cfg.yaml" command="load" ns="/costmap_node/costmap" /> -->
+  <rosparam file="$(find racecar_nav)/cfg/costmap_common_params.yaml" command="load" ns="local_costmap" />
+  <rosparam file="$(find racecar_nav)/cfg/local_costmap_params.yaml" command="load" />
   <node pkg="costmap_2d" type="costmap_2d_node" name="costmap_node">
     <rosparam>
       global_frame: odom
