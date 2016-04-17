@@ -5,8 +5,8 @@ obstacle_range: 3.0
 raytrace_range: 5.5
 
 plugins: 
-	- {name: obstacles,        type: "costmap_2d::VoxelLayer"}
+    - {name: obstacles,        type: "costmap_2d::VoxelLayer"}
 
 obstacles:
-  	observation_sources: base_scan
-  	base_scan: {data_type: LaserScan, sensor_frame: /laser, clearing: true, marking: true, topic: /scan}
+    observation_sources: base_scan
+    base_scan: {data_type: LaserScan, sensor_frame: /laser, clearing: true, marking: true, topic: /scan}
