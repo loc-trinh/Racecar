@@ -3,7 +3,7 @@
   <rosparam file="$(find freespace_planner)/cfg/costmap_cfg.yaml" command="load" ns="/costmap_node/costmap" /> -->
   <rosparam file="$(find racecar_nav)/cfg/costmap_common_params.yaml" command="load" ns="local_costmap" />
   <rosparam file="$(find racecar_nav)/cfg/local_costmap_params.yaml" command="load" />
-  <node pkg="costmap_2d" type="costmap_2d_node" name="costmap_node">
+  <node pkg="costmap_2d" type="costmap_2d_node" name="local_costmap">
     <rosparam>
       global_frame: odom
       robot_base_frame: base_link
