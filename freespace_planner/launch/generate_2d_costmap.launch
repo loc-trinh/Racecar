@@ -1,6 +1,6 @@
 <launch>
   <rosparam file="$(find freespace_planner)/cfg/costmap_cfg.yaml" command="load" ns="/costmap_node/costmap" />
-  <node pkg="costmap_2d" type="costmap_2d_node" name="costmap_2d_node">
+  <node pkg="costmap_2d" type="costmap_2d_node" name="costmap_node">
     <rosparam>
       global_frame: odom
       robot_base_frame: base_link
