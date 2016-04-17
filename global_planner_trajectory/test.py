@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 
 pt1 = (0,0)
 pt3 = (5,5)
-pt2 = (.5,3)
+pt2 = (.1,3)
 
 a11 = pt1[0]**2
 a12 = pt1[0]
