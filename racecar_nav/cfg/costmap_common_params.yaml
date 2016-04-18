@@ -14,7 +14,7 @@ obstacle_range: 5.0
 #Trace out freespace this far
 raytrace_range: 100.0 
 # setting the inflation radius at 0.55 meters means that the robot will treat all paths that stay 0.55 meters or more away from obstacles as having equal obstacle cost
-inflation_radius: 0.00
+inflation_radius: 0.01
 
 
 observation_sources: laser_scan_sensor
