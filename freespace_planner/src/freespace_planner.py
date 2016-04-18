@@ -25,7 +25,7 @@ class FreespacePlanner:
     def __init__(self):
         #Default settings
         self.kfactor = 0.6;
-        self.topic_occgrid = "/move_base/local_costmap/costmap";
+        self.topic_occgrid = "/move_base/global_costmap/costmap";
         self.topic_output = "move_goal";
         self.base_frame = "base_link"
         self.map_frame = "odom";
@@ -54,8 +54,12 @@ class FreespacePlanner:
     def costmap_callback(self, data):
         print "==============="
 
+        data.header.stamp = self.listener.getLatestCommonTime(self.map_frame,data.header.frame_id)
+        con_loc = self.listener.transformPoint(self.base_frame, data)
+
         width = data.info.width;
         height = data.info.height;
+        resolution 
 
 
         # Filter out bad points

@@ -8,3 +8,4 @@ global_costmap:
   rolling_window: true
   width: 5
   height: 5
+  no_memory: true
