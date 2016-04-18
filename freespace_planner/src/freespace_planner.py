@@ -35,7 +35,7 @@ class FreespacePlanner:
         self.kfactor = 0.6;
         self.topic_occgrid = "/move_base/global_costmap/costmap";
         self.topic_occgridupdates = "/move_base/global_costmap/costmap_updates";
-        self.topic_output = "move_goal";
+        self.topic_output = "/move_base_simple/goal";
         self.base_frame = "base_link"
         self.map_frame = "odom";
 
@@ -129,20 +129,23 @@ class FreespacePlanner:
         print "Center Navigable = %f" % center_close
 
         if center_close < 0.35:
-            x = -1;
+            x = -1.0;
         else:
             x = 4*center_far
 
         y=(left_free-right_free)*4;
 
+        #msg = MoveBaseGoal()
+
         goal = PoseStamped()
         goal.pose.position.x = x
         goal.pose.position.y = y
         goal.pose.position.z = 0.0
-        #goal.pose.orientation.w = 0#math.atan2(y,x)
+        goal.pose.orientation.w = 1.0#math.atan2(y,x)
         goal.header.frame_id = 'base_link'
 
         goal.header.stamp = rospy.Time.now()
+        #msg.target_pose = goal
         self.goal_pub.publish(goal)
 
         return
