@@ -20,26 +20,37 @@ import tf
 # ROS messages
 #from geometry_msgs.msg import PoseArray, Pose, PointStamped
 from nav_msgs.msg import OccupancyGrid
+from map_msgs.msg import OccupancyGridUpdate
+from geometry_msgs.msg import PoseStamped
+from move_base_msgs.msg import MoveBaseGoal
+
 
 class FreespacePlanner:
     def __init__(self):
+
+        #Class members
+        self.grid = None
+
         #Default settings
         self.kfactor = 0.6;
         self.topic_occgrid = "/move_base/global_costmap/costmap";
+        self.topic_occgridupdates = "/move_base/global_costmap/costmap_updates";
         self.topic_output = "move_goal";
         self.base_frame = "base_link"
         self.map_frame = "odom";
 
         #Load Settings
         self.kfactor = rospy.get_param('~kfactor', self.kfactor)
-        self.topic_occgrid = rospy.get_param('~topic_input', self.topic_occgrid)
+        self.topic_occgrid = rospy.get_param('~topic_occgrid', self.topic_occgrid)
+        self.topic_occgridupdates = rospy.get_param('~topic_occgridupdates', self.topic_occgridupdates)
         self.topic_output = rospy.get_param('~topic_output', self.topic_output)
         self.base_frame = rospy.get_param('~base_frame', self.base_frame)
         self.map_frame = rospy.get_param('~map_frame', self.map_frame)
 
         #Pubs and Subs
-        #self.goal_pub = rospy.Publisher(self.topic_output, PoseArray, queue_size=10)
+        self.goal_pub = rospy.Publisher(self.topic_output, PoseStamped, queue_size=10)
         rospy.Subscriber(self.topic_occgrid, OccupancyGrid, self.costmap_callback)
+        rospy.Subscriber(self.topic_occgridupdates, OccupancyGridUpdate, self.costmap_update_callback)
 
         #Setup TF
         self.listener = tf.TransformListener(True, rospy.Duration(10.0))
@@ -63,22 +74,9 @@ class FreespacePlanner:
         #3 - Create cell array
         #cells = [0] * ((row_end - row_start)*(col_end * col_start));
         cells = []
-
-        numcols = col_end - col_start
-        i = 0
-        for row in range(row_start, row_end):
-            for col in range(col_start, col_end):
-                cells.append(row*meta.width + col)
-                i+=1
-                #cells[(row*numcols):(row*numcols+numcols)] = range(col_start, col_end,1)
-
-        #for cell in cells:
-        print row_start
-        print row_end
-        print col_start
-        print col_end
-        print pt1
-        print pt2
+        for col in range(col_start, col_end):
+            for row in range(row_start, row_end):
+                cells.append(self.getIndex(col,row));
         return cells
 
     def count(self,grid,cells):
@@ -94,89 +92,88 @@ class FreespacePlanner:
                 full += 1
         return (unknown, empty, full);
 
-
-    def costmap_callback(self, data):
-        
-
-        #data.header.stamp = self.listener.getLatestCommonTime(self.map_frame,data.header.frame_id)
-        #con_loc = self.listener.transformPoint(self.base_frame, data)
+    def perform_update(self):
+        print "==============="
+        if self.grid == None:
+            print "Waiting for Initial OCC Grid..."
+            return
         # 1. Get cells for left, right, and center segments:
-        left_cells = self.get_cell_range([0,1],[2.5,2.5],data.info)
-        right_cells = self.get_cell_range([0,-1],[2.5,-2.5],data.info)
-        center_cells = self.get_cell_range([0,-1],[2.5,1],data.info)
+        left_cells = self.get_cell_range([0.5,0],[2.5,3],self.grid.info)
+        right_cells = self.get_cell_range([-2.5,0],[-0.5,3],self.grid.info)
+        closecenter_cells = self.get_cell_range([-0.5,0],[0.5,1.0],self.grid.info)
+        farcenter_cells = self.get_cell_range([-0.5,1.0],[0.5,4],self.grid.info)
 
         # 2. count it up
-        unknown = [0] * 3
-        empty = [0] * 3
-        full = [0] * 3
-        (unknown[0], empty[0], full[0]) = self.count(data.data, left_cells)
-        (unknown[1], empty[1], full[1]) = self.count(data.data, center_cells)
-        (unknown[2], empty[2], full[2]) = self.count(data.data, right_cells)
+        unknown = [0.0] * 4
+        empty = [0.0] * 4
+        full = [0.0] * 4
+        (unknown[0], empty[0], full[0]) = self.count(self.grid.data, left_cells)
+        (unknown[1], empty[1], full[1]) = self.count(self.grid.data, closecenter_cells)
+        (unknown[2], empty[2], full[2]) = self.count(self.grid.data, farcenter_cells)
+        (unknown[3], empty[3], full[3]) = self.count(self.grid.data, right_cells)
 
-        print "==============="
+        left_free = float(empty[0]) / (empty[0]+unknown[0]+full[0]);
+        right_free = float(empty[3]) / (empty[3]+unknown[3]+full[3]);
+        center_close = 1 - (float(full[1]) / (empty[1]+full[1]))
+        center_far = 1 - (float(full[2]) / (empty[2]+full[2]))
+        center_ranking = 0.7*center_close + 0.3*center_far;
+
         print "Left: = %d, %d, %d" % (unknown[0], empty[0], full[0])
-        print "Center: = %d, %d, %d" % (unknown[1], empty[1], full[1])
-        print "Right: = %d, %d, %d" % (unknown[2], empty[2], full[2])
+        print "Center_Close: = %d, %d, %d" % (unknown[1], empty[1], full[1])
+        print "Center_Far: = %d, %d, %d" % (unknown[2], empty[2], full[2])
+        print "Right: = %d, %d, %d" % (unknown[3], empty[3], full[3])
+        print "-------"
+        print "L Ranking = %f" % left_free
+        print "R Ranking = %f" % right_free
+        print "C Ranking = %f" % center_far
+        print "Center Navigable = %f" % center_close
+
+        if center_close < 0.35:
+            x = -1;
+        else:
+            x = 4*center_far
+
+        y=(left_free-right_free)*4;
+
+        goal = PoseStamped()
+        goal.pose.position.x = x
+        goal.pose.position.y = y
+        goal.pose.position.z = 0.0
+        #goal.pose.orientation.w = 0#math.atan2(y,x)
+        goal.header.frame_id = 'base_link'
+
+        goal.header.stamp = rospy.Time.now()
+        self.goal_pub.publish(goal)
 
         return
 
-        '''
-        # Filter out bad points
-        if data.point.x == 0 and data.point.y == 0:
-            print "No Cone"
-            return;
-        elif data.point.x > 5 and data.point.y > 5:
-            print "Filtering out far cone"
-            return;
-        # Get point and transform into odom frame
-        data.header.stamp = self.listener.getLatestCommonTime(self.map_frame,data.header.frame_id)
-        con_loc = self.listener.transformPoint(self.map_frame, data)
+    def getIndex(self,x,y):
+        sx = self.grid.info.width;
+        return y * sx + x;
 
-        #Prune list
-        i = 0
-        j = 0
-        removeList = [];
-        for i in range(len(self.cone_array.poses)-1):
-            for j in range(i+1, len(self.cone_array.poses)-1):
-                if math.sqrt( (self.cone_array.poses[i].position.x - self.cone_array.poses[j].position.x)**2 + (self.cone_array.poses[i].position.y - self.cone_array.poses[j].position.y)**2 ) < self.kfactor:
-                    removeList.append(self.cone_array.poses[j]);
+    def costmap_update_callback(self,data):
+        if self.grid == None:
+            print "Waiting for Initial OCC Grid..."
+            return
+        i =0;
+        for y in range(data.y, data.y+data.height):
+            for x in range(data.x, data.x+data.width):
+                self.grid.data[self.getIndex(x,y)] = data.data[i];
+                i+=1
 
-        self.cone_array.poses = [n for n in self.cone_array.poses if n not in removeList]
+    def costmap_callback(self, data):
+        self.grid = data;
+        self.grid.data = list(self.grid.data)
 
-
-        # Compare against existing cones
-        matched = False
-        print "Ary Length = %f" % len(self.cone_array.poses)
-        for cone in self.cone_array.poses:
-            if math.sqrt( (con_loc.point.x - cone.position.x)**2 + (con_loc.point.y - cone.position.y)**2 ) < self.kfactor:
-                print "Cone Match!"
-                cone.position.x = con_loc.point.x;
-                cone.position.y = con_loc.point.y;
-                matched = True
-                break
-
-        # If no match, add to cone list
-        if not matched:
-            print "Adding Cone at (%f,%f)!" % (con_loc.point.x, con_loc.point.y)
-            cone = Pose();
-            cone.position.x = con_loc.point.x;
-            cone.position.y = con_loc.point.y;
-            self.cone_array.poses.append(cone);
-
-
-        ## Publish array. Note: Publishing in odom
-        self.cone_array.header.stamp = rospy.Time.now();
-        self.publisher.publish(self.cone_array)
-        '''
-
-
+    
 if __name__ == "__main__":
     # initialize the ROS client API, giving the default node name
     # self.period = rospy.get_param('~period', self.period)
 
     rospy.init_node("freespace_planner")
 
-    FreespacePlanner();
+    Planner = FreespacePlanner();
+    #sleep(1);
 
     #rospy.spin();
     
@@ -184,5 +181,5 @@ if __name__ == "__main__":
     
     rate = rospy.Rate(2)
     while not rospy.is_shutdown():
-        print 'spin'
+        Planner.perform_update();
         rate.sleep()
