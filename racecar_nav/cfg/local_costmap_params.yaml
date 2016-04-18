@@ -9,4 +9,5 @@ local_costmap:
   width: 5.0
   height: 5.0
   resolution: 0.05
+  no_memory: true
 
