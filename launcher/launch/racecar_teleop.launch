@@ -7,6 +7,7 @@
 -->
 
 <launch>
+
   <arg name="racecar_version" default="racecar-v2" />
   <arg name="run_camera" default="false"/>
 
@@ -14,5 +15,6 @@
     <arg name="racecar_version" value="$(arg racecar_version)" />
     <arg name="run_camera" value="$(arg run_camera)" />
   </include>
+  <include file="$(find robot_localization)/launch/racecar_ekf.launch" />
 
 </launch>
