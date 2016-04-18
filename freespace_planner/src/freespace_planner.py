@@ -178,17 +178,11 @@ if __name__ == "__main__":
 
     FreespacePlanner();
 
-    rospy.spin();
+    #rospy.spin();
     
     # enter the ROS main loop
-    '''
-    rate = rospy.Rate(estimator.rate)
+    
+    rate = rospy.Rate(2)
     while not rospy.is_shutdown():
-        rospy.loginfo(hello_str)
-
-
-        pub.publish(hello_str)
+        print 'spin'
         rate.sleep()
-    '''
-
-
