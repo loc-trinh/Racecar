@@ -133,7 +133,7 @@ class FreespacePlanner:
         else:
             x = 4*center_far
 
-        y=(left_free-right_free)*4;
+        y=(left_free-right_free)*6;
 
         #msg = MoveBaseGoal()
 
