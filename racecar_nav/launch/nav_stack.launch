@@ -10,7 +10,7 @@
 
     <!-- Planner Selection-->
     <param name="base_global_planner" value="global_planner/GlobalPlanner"/>
-    <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
+    <!-- <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" /> -->
     
     <!-- Planner Configuration -->
     <param name="controller_frequency" value="30.0" />
