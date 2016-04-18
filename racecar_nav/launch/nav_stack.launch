@@ -13,11 +13,11 @@
     <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
     
     <!-- Planner Configuration -->
-    <param name="controller_frequency" value="20.0" />
+    <param name="controller_frequency" value="30.0" />
     <rosparam param="recovery_behaviors"> [ { name: "conservative_reset", type: "clear_costmap_recovery/ClearCostmapRecovery" },{name: "aggressive_reset", type: "clear_costmap_recovery/ClearCostmapRecovery" } ] </rosparam>
     <param name="clearing_rotation_allowed" value="false" />
     <param name="conservative_reset_dist  " value="4" />
-    <param name="planner_frequency " value="0.25" />
+    <param name="planner_frequency " value="1" />
 
     <!-- Config Files -->
     <rosparam file="$(find racecar_nav)/cfg/costmap_common_params.yaml" command="load" ns="global_costmap" />
