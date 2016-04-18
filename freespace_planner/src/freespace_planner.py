@@ -131,7 +131,7 @@ class FreespacePlanner:
         if center_close < 0.5:
             x = -2.0;
         else:
-            x = 4*center_far
+            x = 3*center_far
 
         y=(left_free-right_free)*4;
 
