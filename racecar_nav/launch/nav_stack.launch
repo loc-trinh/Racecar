@@ -1,6 +1,6 @@
 <launch>
 
-  <arg name="no_static_map" default="false"/>
+  <arg name="no_static_map" default="true"/>
 
   <!--- Run AMCL -->
   <!--<include file="$(find amcl)/examples/amcl_diff.launch" /> -->
