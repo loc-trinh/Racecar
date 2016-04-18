@@ -39,29 +39,88 @@ class FreespacePlanner:
 
         #Pubs and Subs
         #self.goal_pub = rospy.Publisher(self.topic_output, PoseArray, queue_size=10)
-        rospy.Subscriber(self.topic_input, OccupancyGrid, self.costmap_callback)
-
-        #Setup Data Structures
-        self.cone_array = PoseArray();
-        self.cone_array.header.frame_id = self.map_frame;
+        rospy.Subscriber(self.topic_occgrid, OccupancyGrid, self.costmap_callback)
 
         #Setup TF
         self.listener = tf.TransformListener(True, rospy.Duration(10.0))
 
         rospy.loginfo("FreeSpace Planner node loaded")
 
+    def get_cell_range(self,pt1, pt2, meta):
+        #1 - Convert points to map coords
+        pt1[0] -= meta.origin.position.x;
+        pt1[1] -= meta.origin.position.y;
+        pt2[0] -= meta.origin.position.x;
+        pt2[1] -= meta.origin.position.y;
+
+        #2 - convert coords to rows and cols
+        row_start  = int(pt1[0]*(1/meta.resolution));
+        row_end = int(pt2[0]*(1/meta.resolution));
+        col_start  = int(pt1[1]*(1/meta.resolution));
+        col_end = int(pt2[1]*(1/meta.resolution));
+
+
+        #3 - Create cell array
+        #cells = [0] * ((row_end - row_start)*(col_end * col_start));
+        cells = []
+
+        numcols = col_end - col_start
+        i = 0
+        for row in range(row_start, row_end):
+            for col in range(col_start, col_end):
+                cells.append(row*meta.width + col)
+                i+=1
+                #cells[(row*numcols):(row*numcols+numcols)] = range(col_start, col_end,1)
+
+        #for cell in cells:
+        print row_start
+        print row_end
+        print col_start
+        print col_end
+        print pt1
+        print pt2
+        return cells
+
+    def count(self,grid,cells):
+        unknown = 0
+        empty = 0
+        full = 0;
+        for cell in cells:
+            if grid[cell] == -1:
+                unknown+=1;
+            elif grid[cell] == 0: 
+                empty +=1;
+            else:
+                full += 1
+        return (unknown, empty, full);
+
 
     def costmap_callback(self, data):
+        
+
+        #data.header.stamp = self.listener.getLatestCommonTime(self.map_frame,data.header.frame_id)
+        #con_loc = self.listener.transformPoint(self.base_frame, data)
+        # 1. Get cells for left, right, and center segments:
+        left_cells = self.get_cell_range([0,1],[2.5,2.5],data.info)
+        right_cells = self.get_cell_range([0,-1],[2.5,-2.5],data.info)
+        center_cells = self.get_cell_range([0,-1],[2.5,1],data.info)
+
+        # 2. count it up
+        unknown = [0] * 3
+        empty = [0] * 3
+        full = [0] * 3
+        (unknown[0], empty[0], full[0]) = self.count(data.data, left_cells)
+        (unknown[1], empty[1], full[1]) = self.count(data.data, center_cells)
+        (unknown[2], empty[2], full[2]) = self.count(data.data, right_cells)
+
         print "==============="
+        print "Left: = %d, %d, %d" % (unknown[0], empty[0], full[0])
+        print "Center: = %d, %d, %d" % (unknown[1], empty[1], full[1])
+        print "Right: = %d, %d, %d" % (unknown[2], empty[2], full[2])
 
-        data.header.stamp = self.listener.getLatestCommonTime(self.map_frame,data.header.frame_id)
-        con_loc = self.listener.transformPoint(self.base_frame, data)
+        return
 
-        width = data.info.width;
-        height = data.info.height;
-        resolution 
-
-
+        '''
         # Filter out bad points
         if data.point.x == 0 and data.point.y == 0:
             print "No Cone"
@@ -108,7 +167,7 @@ class FreespacePlanner:
         ## Publish array. Note: Publishing in odom
         self.cone_array.header.stamp = rospy.Time.now();
         self.publisher.publish(self.cone_array)
-
+        '''
 
 
 if __name__ == "__main__":
