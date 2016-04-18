@@ -1,6 +1,6 @@
 <launch>
 
-  <arg name="no_static_map" default="true"/>
+  <arg name="no_static_map" default="false"/>
 
   <!--- Run AMCL -->
   <!--<include file="$(find amcl)/examples/amcl_diff.launch" /> -->
@@ -10,7 +10,7 @@
 
     <!-- Planner Selection-->
     <param name="base_global_planner" value="global_planner/GlobalPlanner"/>
-    <!-- <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" /> -->
+    <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
     
     <!-- Planner Configuration -->
     <param name="controller_frequency" value="30.0" />
