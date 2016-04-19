@@ -1,5 +1,5 @@
 #include <pluginlib/class_list_macros.h>
-#include "global_planner.h"
+#include "trajectory.h"
 #include <math.h>
 
 //register this planner as a BaseGlobalPlanner plugin
@@ -12,21 +12,13 @@ namespace global_planner {
 
 GlobalPlanner::GlobalPlanner (){}
 
-GlobalPlanner::GlobalPlanner(std::string name, costmap_2d::Costmap2DROS* costmap_ros){
-  initialize(name, costmap_ros);
-}
+GlobalPlanner::GlobalPlanner(std::string name, costmap_2d::Costmap2DROS* costmap_ros){initialize(name, costmap_ros);}
 
-
-void GlobalPlanner::initialize(std::string name, costmap_2d::Costmap2DROS* costmap_ros){
-  if(!initialized_)
-     initialized_ = true;
-   else
-     ROS_WARN("This planner has already been initialized... doing nothing");
-}
+void GlobalPlanner::initialize(std::string name, costmap_2d::Costmap2DROS* costmap_ros){}
 
 bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geometry_msgs::PoseStamped& goal,  std::vector<geometry_msgs::PoseStamped>& plan ){
   int sign = 1;
-  if goal.pose.position.y > 0:
+  if (goal.pose.position.y > 0)
     sign = -1;
 
 
@@ -54,7 +46,7 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
     point.pose.orientation.w = goal_quat.w();
 
     double dx = (end.pose.position.x-begin.pose.position.x) * .02;
-    double x = i * dx
+    double x = i * dx;
     point.pose.position.x = x * sign;
     point.pose.position.y = log(x) * a + b;
     plan.push_back(point);
