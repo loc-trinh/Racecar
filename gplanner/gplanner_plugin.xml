@@ -1,5 +1,5 @@
 <library path="lib/libgplanner_lib">
- <class name="global_planner/GlobalPlanner" type="global_planner::GlobalPlanner" base_class_type="nav_core::BaseGlobalPlanner">
+ <class name="curve_planner/CurvePlanner" type="global_planner::GlobalPlanner" base_class_type="nav_core::BaseGlobalPlanner">
    <description>This is a log regression planner plugin.</description>
  </class>
 </library>
