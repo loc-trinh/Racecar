@@ -1,7 +1,7 @@
 TebLocalPlannerROS:
 
  odom_topic: odom
- map_frame: /map # This parameter will be overridden by local_costmap/global_frame 
+ map_frame: /odom # This parameter will be overridden by local_costmap/global_frame 
     
  # Trajectory
  teb_autosize: True
@@ -20,23 +20,26 @@ TebLocalPlannerROS:
  # GoalTolerance
  xy_goal_tolerance: 0.2
  yaw_goal_tolerance: 0.1
- free_goal_vel: False
+ free_goal_vel: True
     
  # Obstacles
  min_obstacle_dist: 0.2
- costmap_emergency_stop_dist: -0.1
+ costmap_emergency_stop_dist: 0.01
  include_costmap_obstacles: True
  costmap_obstacles_front_only: True
  obstacle_poses_affected: 10
  line_obstacle_poses_affected: 25
  polygon_obstacle_poses_affected: 25
+ costmap_converter_plugin: ""
+ costmap_converter_spin_thread: True
+ costmap_converter_rate: 5
 
- # Optimization
+# Optimization
+    
  no_inner_iterations: 5
  no_outer_iterations: 4
  optimization_activate: True
  optimization_verbose: False
- penalty_scale: 0.1
  penalty_epsilon: 0.1
  weight_max_vel_x: 2
  weight_max_vel_theta: 1
@@ -44,20 +47,24 @@ TebLocalPlannerROS:
  weight_acc_lim_theta: 1
  weight_kinematics_nh: 1000
  weight_kinematics_forward_drive: 1
+ weight_kinematics_turning_radius: 1
  weight_optimaltime: 1
  weight_point_obstacle: 50
  weight_line_obstacle: 50
  weight_poly_obstacle: 50
+ weight_dynamic_obstacle: 10
+ alternative_time_cost: False
 
- # Parallel Planning in distinctive Topologies
+ # Homotopy Class Planner
+
  enable_homotopy_class_planning: True
  enable_multithreading: True
  simple_exploration: False
- max_number_classes: 10
+ max_number_classes: 5
  roadmap_graph_no_samples: 15
- roadmap_graph_area_width: 6
+ roadmap_graph_area_width: 5
  h_signature_prescaler: 0.5
- h_signature_threshold: 0.01
+ h_signature_threshold: 0.1
  obstacle_keypoint_offset: 0.1
  obstacle_heading_threshold: 0.45
  visualize_hc_graph: False
