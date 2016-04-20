@@ -40,7 +40,7 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
 
   /* Generating path */
   plan.push_back(start);
-  for (int i=1; i<50; i++){
+  for (int i=1; i<5; i++){
     geometry_msgs::PoseStamped point;
     tf::Quaternion goal_quat = tf::createQuaternionFromYaw(0);
     point.pose.orientation.x = goal_quat.x();
@@ -48,10 +48,11 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
     point.pose.orientation.z = goal_quat.z();
     point.pose.orientation.w = goal_quat.w();
 
-    double dx = (end.pose.position.x-begin.pose.position.x) * .02;
+    double dx = (end.pose.position.x-begin.pose.position.x) * .2;
     double x = i * dx;
     point.pose.position.y = -x * sign;
     point.pose.position.x = log(x) * a + b;
+    point.pose.position.x = min(point.pose.position.x,0);
     plan.push_back(point);
   }
   plan.push_back(goal);
