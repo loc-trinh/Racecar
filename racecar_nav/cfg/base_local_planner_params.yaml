@@ -9,6 +9,8 @@ TebLocalPlannerROS:
  dt_hysteresis: 0.1
  global_plan_overwrite_orientation: True
  global_plan_viapoint_sep : -1.0
+ max_global_plan_lookahead_dist: 6.0
+ feasibility_check_no_poses: 5
     
  # Robot        
  max_vel_x: 5.0
