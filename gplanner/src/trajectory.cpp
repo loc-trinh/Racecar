@@ -52,7 +52,7 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
     double x = i * dx;
     point.pose.position.y = -x * sign;
     point.pose.position.x = log(x) * a + b;
-    point.pose.position.x = min(point.pose.position.x,0);
+    point.pose.position.x = min(point.pose.position.x,0.0);
     plan.push_back(point);
   }
   plan.push_back(goal);
