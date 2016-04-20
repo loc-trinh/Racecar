@@ -14,7 +14,10 @@ GlobalPlanner::GlobalPlanner (){}
 
 GlobalPlanner::GlobalPlanner(std::string name, costmap_2d::Costmap2DROS* costmap_ros){initialize(name, costmap_ros);}
 
-void GlobalPlanner::initialize(std::string name, costmap_2d::Costmap2DROS* costmap_ros){}
+void GlobalPlanner::initialize(std::string name, costmap_2d::Costmap2DROS* costmap_ros){
+  ros::NodeHandle nh("~/" + name);
+  global_plan_pub_ = nh.advertise<nav_msgs::Path>("global_plan", 1);
+}
 
 bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geometry_msgs::PoseStamped& goal,  std::vector<geometry_msgs::PoseStamped>& plan ){
   int sign = 1;
@@ -39,7 +42,7 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
   plan.push_back(start);
   for (int i=1; i<50; i++){
     geometry_msgs::PoseStamped point;
-    tf::Quaternion goal_quat = tf::createQuaternionFromYaw(1.57079);
+    tf::Quaternion goal_quat = tf::createQuaternionFromYaw(0);
     point.pose.orientation.x = goal_quat.x();
     point.pose.orientation.y = goal_quat.y();
     point.pose.orientation.z = goal_quat.z();
@@ -47,11 +50,12 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
 
     double dx = (end.pose.position.x-begin.pose.position.x) * .02;
     double x = i * dx;
-    point.pose.position.x = x * sign;
-    point.pose.position.y = log(x) * a + b;
+    point.pose.position.y = x * sign;
+    point.pose.position.x = log(x) * a + b;
     plan.push_back(point);
   }
   plan.push_back(goal);
+  //base_local_planner::publishPlan(plan, global_plan_pub_); 
   return true;
   }
 };
