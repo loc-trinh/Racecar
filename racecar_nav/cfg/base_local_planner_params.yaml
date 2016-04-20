@@ -11,7 +11,7 @@ TebLocalPlannerROS:
  global_plan_viapoint_sep : -1.0
     
  # Robot        
- max_vel_x: 2.0
+ max_vel_x: 5.0
  max_vel_x_backwards: 0.4
  max_vel_theta: 0.35
  acc_lim_x: 0.5
