@@ -42,6 +42,8 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
   plan.push_back(start);
   for (int i=1; i<5; i++){
     geometry_msgs::PoseStamped point;
+    point.header.frame_id = start.header.frame_id;
+    point.header.stamp = start.header.stamp;
     tf::Quaternion goal_quat = tf::createQuaternionFromYaw(0);
     point.pose.orientation.x = goal_quat.x();
     point.pose.orientation.y = goal_quat.y();
