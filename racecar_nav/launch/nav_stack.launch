@@ -17,7 +17,7 @@
     <rosparam param="recovery_behaviors"> [ { name: "conservative_reset", type: "clear_costmap_recovery/ClearCostmapRecovery" },{name: "aggressive_reset", type: "clear_costmap_recovery/ClearCostmapRecovery" } ] </rosparam>
     <param name="clearing_rotation_allowed" value="false" />
     <param name="conservative_reset_dist  " value="4" />
-    <param name="planner_frequency " value="1" />
+    <param name="planner_frequency " value="0" />
 
     <!-- Config Files -->
     <rosparam file="$(find racecar_nav)/cfg/costmap_common_params.yaml" command="load" ns="global_costmap" />
