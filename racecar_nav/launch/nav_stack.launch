@@ -9,7 +9,8 @@
   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
 
     <!-- Planner Selection-->
-    <param name="base_global_planner" value="curve_planner/CurvePlanner"/>
+    
+    <param name="base_global_planner" value="carrot_planner/CarrotPlanner"/>
     <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
     
     <!-- Planner Configuration -->
