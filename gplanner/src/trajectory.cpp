@@ -55,7 +55,7 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
     plan.push_back(point);
   }
   plan.push_back(goal);
-  //base_local_planner::publishPlan(plan, global_plan_pub_); 
+  base_local_planner::publishPlan(plan, global_plan_pub_); 
   return true;
   }
 };

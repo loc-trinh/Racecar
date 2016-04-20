@@ -11,7 +11,7 @@
 #include <base_local_planner/costmap_model.h>
 #include <ros/publisher.h>
 #include <nav_msgs/Path.h>
-
+#include <base_local_planner/goal_functions.h>
 using std::string;
 
 #ifndef GLOBAL_PLANNER_CPP
