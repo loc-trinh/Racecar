@@ -10,12 +10,12 @@ TebLocalPlannerROS:
  global_plan_overwrite_orientation: True
     
  # Robot        
- max_vel_x: 0.5
+ max_vel_x: 2.0
  max_vel_x_backwards: 0.4
  max_vel_theta: 0.35
  acc_lim_x: 0.5
  acc_lim_theta: 0.5
- min_turning_radius: 0.75
+ min_turning_radius: 0.7
     
  # GoalTolerance
  xy_goal_tolerance: 0.2
@@ -23,7 +23,7 @@ TebLocalPlannerROS:
  free_goal_vel: False
     
  # Obstacles
- min_obstacle_dist: 0.1
+ min_obstacle_dist: 0.2
  costmap_emergency_stop_dist: -0.1
  include_costmap_obstacles: True
  costmap_obstacles_front_only: True
@@ -53,7 +53,7 @@ TebLocalPlannerROS:
  enable_homotopy_class_planning: True
  enable_multithreading: True
  simple_exploration: False
- max_number_classes: 5
+ max_number_classes: 10
  roadmap_graph_no_samples: 15
  roadmap_graph_area_width: 6
  h_signature_prescaler: 0.5
