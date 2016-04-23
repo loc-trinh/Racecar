@@ -82,7 +82,7 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
 	}
 	for(int i = 0; i < plan.size(); i++){
 		double temp = plan[i].pose.position.x;
-		plan[i].pose.position.x = plan[i].pose.position.y;
+		plan[i].pose.position.x = -plan[i].pose.position.y;
 		plan[i].pose.position.y = temp;
 	}
 	base_local_planner::publishPlan(plan, global_plan_pub_); 
