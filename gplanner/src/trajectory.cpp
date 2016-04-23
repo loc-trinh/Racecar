@@ -20,7 +20,7 @@ void GlobalPlanner::initialize(std::string name, costmap_2d::Costmap2DROS* costm
 }
 
 bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geometry_msgs::PoseStamped& goal,  std::vector<geometry_msgs::PoseStamped>& plan ){
-	double step = 20;
+	double step = 10;
 
 	/* Create new begin and end node */
 	geometry_msgs::PoseStamped begin = start;
