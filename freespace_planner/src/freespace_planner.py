@@ -115,7 +115,11 @@ class FreespacePlanner:
         left_free = float(empty[0]) / (empty[0]+unknown[0]+full[0]);
         right_free = float(empty[3]) / (empty[3]+unknown[3]+full[3]);
         center_close = 1 - (float(full[1]) / (empty[1]+full[1]))
-        center_far = 1 - (float(full[2]) / (empty[2]+full[2]))
+        if empty[2]+full[2] >0:
+            center_far = 1 - (float(full[2]) / (empty[2]+full[2]))
+        else: 
+            center_far=0;
+            
         center_ranking = 0.7*center_close + 0.3*center_far;
 
         print "Left: = %d, %d, %d" % (unknown[0], empty[0], full[0])
@@ -131,9 +135,9 @@ class FreespacePlanner:
         if center_close < 0.5:
             x = -2.0;
         else:
-            x = 3*center_far
+            x = 3.5*center_far
 
-        y=(left_free-right_free)*4;
+        y=(left_free-right_free)*5;
 
         if(x < 0.1):
             y = y*10;
