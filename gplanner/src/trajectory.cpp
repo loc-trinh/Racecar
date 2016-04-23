@@ -45,8 +45,9 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
 		    point.pose.orientation.z = goal_quat.z();
 		    point.pose.orientation.w = goal_quat.w();
 
-		    point.pose.position.x = i * dx;
-		    point.pose.position.y = m * point.pose.position.x;
+        point.pose.position.y = -i * dx;
+		    point.pose.position.x = m * point.pose.position.y;
+		    
 			plan.push_back(point);
 		}
 		plan.push_back(end);
@@ -76,18 +77,20 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
 
 			double dx = (end.pose.position.x-begin.pose.position.x) * 1 / step;
 			double x = i*dx;
-			point.pose.position.y = x * sign;
+			point.pose.position.y = -x * sign;
 			point.pose.position.x = log(x) * a + b;
 			plan.push_back(point);
 		}
 		end.pose.position.x = -end.pose.position.x;
 		plan.push_back(end);
 	}
+  /*
 	for(int i = 0; i < plan.size(); i++){
 		double temp = plan[i].pose.position.x;
 		plan[i].pose.position.x = plan[i].pose.position.y;
 		plan[i].pose.position.y = -temp;
 	}
+  */
 	base_local_planner::publishPlan(plan, global_plan_pub_); 
 	return true;
   }
