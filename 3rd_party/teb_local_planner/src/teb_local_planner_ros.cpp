@@ -207,6 +207,8 @@ bool TebLocalPlannerROS::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
     return false;
   }
 
+  ros::Time lastPlan = ros::Time::now();
+
   cmd_vel.linear.x = 0;
   cmd_vel.angular.z = 0;
   goal_reached_ = false;  
@@ -300,54 +302,61 @@ bool TebLocalPlannerROS::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
   tf::poseTFToMsg(robot_pose, transformed_plan.front().pose);
     
   
-  // Update obstacle container with costmap information or polygons provided by a costmap_converter plugin
-  if (costmap_converter_)
-    updateObstacleContainerWithCostmapConverter();
-  else
-    updateObstacleContainerWithCostmap();
-  
-  // also consider custom obstacles (must be called after other updates, since the container is not cleared)
-  updateObstacleContainerWithCustomObstacles();
+  double gx= goal_point.getOrigin().getX()-robot_pose_.x();
+  double gy= goal_point.getOrigin().getY()-robot_pose_.y();
+
+  //section Replanning
+
+  if (fabs(std::sqrt(gx*gx+gy*gy)) < 0.25 ||ros::Time::now()-lastPlan).toSec() >= 1){
+    // Update obstacle container with costmap information or polygons provided by a costmap_converter plugin
+    if (costmap_converter_)
+      updateObstacleContainerWithCostmapConverter();
+    else
+      updateObstacleContainerWithCostmap();
     
-  // Do not allow config changes during the following optimization step
-  boost::mutex::scoped_lock cfg_lock(cfg_.configMutex());
-    
-  // Now perform the actual planning
-//   bool success = planner_->plan(robot_pose_, robot_goal_, robot_vel_, cfg_.goal_tolerance.free_goal_vel); // straight line init
-  bool success = planner_->plan(transformed_plan, &robot_vel_twist, cfg_.goal_tolerance.free_goal_vel);
-  if (!success)
-  {
-    planner_->clearPlanner(); // force reinitialization for next time
-    ROS_WARN("teb_local_planner was not able to obtain a local plan for the current setting.");
-    return false;
-  }
-  
-  // Undo temporary horizon reduction
-  if (horizon_reduced_ && (ros::Time::now()-horizon_reduced_stamp_).toSec() >= 10 && !planner_->isHorizonReductionAppropriate(transformed_plan)) // 10s are hardcoded for now...
-  {
-    horizon_reduced_ = false;
-    ROS_INFO("Switching back to full horizon length.");
-  }
-     
-  // Check feasibility (but within the first few states only)
-  bool feasible = planner_->isTrajectoryFeasible(costmap_model_, footprint_spec_, robot_inscribed_radius_, robot_circumscribed_radius, cfg_.trajectory.feasibility_check_no_poses);
-  if (!feasible)
-  {
-    cmd_vel.linear.x = 0;
-    cmd_vel.angular.z = 0;
-   
-    if (!horizon_reduced_ && cfg_.trajectory.shrink_horizon_backup && planner_->isHorizonReductionAppropriate(transformed_plan))
+    // also consider custom obstacles (must be called after other updates, since the container is not cleared)
+    updateObstacleContainerWithCustomObstacles();
+      
+    // Do not allow config changes during the following optimization step
+    boost::mutex::scoped_lock cfg_lock(cfg_.configMutex());
+      
+    // Now perform the actual planning
+  //   bool success = planner_->plan(robot_pose_, robot_goal_, robot_vel_, cfg_.goal_tolerance.free_goal_vel); // straight line init
+    bool success = planner_->plan(transformed_plan, &robot_vel_twist, cfg_.goal_tolerance.free_goal_vel);
+    if (!success)
     {
-      horizon_reduced_ = true;
-      ROS_WARN("TebLocalPlannerROS: trajectory is not feasible, but the planner suggests a shorter horizon temporary. Complying with its wish for at least 10s...");
-      horizon_reduced_stamp_ = ros::Time::now();
-      return true; // commanded velocity is zero for this step
+      planner_->clearPlanner(); // force reinitialization for next time
+      ROS_WARN("teb_local_planner was not able to obtain a local plan for the current setting.");
+      return false;
     }
-    // now we reset everything to start again with the initialization of new trajectories.
-    planner_->clearPlanner();
-    ROS_WARN("TebLocalPlannerROS: trajectory is not feasible. Resetting planner...");
+    
+    // Undo temporary horizon reduction
+    if (horizon_reduced_ && (ros::Time::now()-horizon_reduced_stamp_).toSec() >= 10 && !planner_->isHorizonReductionAppropriate(transformed_plan)) // 10s are hardcoded for now...
+    {
+      horizon_reduced_ = false;
+      ROS_INFO("Switching back to full horizon length.");
+    }
        
-    return false;
+    // Check feasibility (but within the first few states only)
+    bool feasible = planner_->isTrajectoryFeasible(costmap_model_, footprint_spec_, robot_inscribed_radius_, robot_circumscribed_radius, cfg_.trajectory.feasibility_check_no_poses);
+    if (!feasible)
+    {
+      cmd_vel.linear.x = 0;
+      cmd_vel.angular.z = 0;
+     
+      if (!horizon_reduced_ && cfg_.trajectory.shrink_horizon_backup && planner_->isHorizonReductionAppropriate(transformed_plan))
+      {
+        horizon_reduced_ = true;
+        ROS_WARN("TebLocalPlannerROS: trajectory is not feasible, but the planner suggests a shorter horizon temporary. Complying with its wish for at least 10s...");
+        horizon_reduced_stamp_ = ros::Time::now();
+        return true; // commanded velocity is zero for this step
+      }
+      // now we reset everything to start again with the initialization of new trajectories.
+      planner_->clearPlanner();
+      ROS_WARN("TebLocalPlannerROS: trajectory is not feasible. Resetting planner...");
+         
+      return false;
+    }
   }
 
   // Get the velocity command for this sampling interval
