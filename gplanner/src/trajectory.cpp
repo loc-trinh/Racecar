@@ -85,8 +85,8 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
 			point.pose.position.x = log(x) * a + b;
 			plan.push_back(point);
 		}
-		end.pose.position.y = -end.pose.position.y;
-		plan.push_back(end);
+		//end.pose.position.y = -end.pose.position.y;
+		plan.push_back(goal);
 	}
 	base_local_planner::publishPlan(plan, global_plan_pub_); 
 	return true;
