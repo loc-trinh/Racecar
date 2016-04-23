@@ -32,6 +32,7 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
 
 	double deltax = abs(start.pose.position.x-end.pose.position.x);
 
+  //Straight Line
 	if (deltax < 1){
 		plan.push_back(start);
 		for(int i = 0; i < step; i++){
@@ -50,6 +51,7 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
 		}
 		plan.push_back(end);
 	}
+  // Curved Line
 	else{
 		int sign = 1;
 		if (end.pose.position.x < 0){
@@ -63,6 +65,7 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
 		double b = (-log(end.pose.position.x)*begin.pose.position.y + log(begin.pose.position.x)*end.pose.position.y) / det;
 
 		/* Generating path */
+    plan.push_back(start);
 		for (int i=1; i < step; i++){
 			geometry_msgs::PoseStamped point = goal;
 			tf::Quaternion goal_quat = tf::createQuaternionFromYaw(1.54);
@@ -82,8 +85,8 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
 	}
 	for(int i = 0; i < plan.size(); i++){
 		double temp = plan[i].pose.position.x;
-		plan[i].pose.position.x = -plan[i].pose.position.y;
-		plan[i].pose.position.y = temp;
+		plan[i].pose.position.x = plan[i].pose.position.y;
+		plan[i].pose.position.y = -temp;
 	}
 	base_local_planner::publishPlan(plan, global_plan_pub_); 
 	return true;
