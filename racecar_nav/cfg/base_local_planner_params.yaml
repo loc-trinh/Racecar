@@ -1,75 +1,97 @@
 TebLocalPlannerROS:
 
- odom_topic: odom
- map_frame: /odom # This parameter will be overridden by local_costmap/global_frame 
-    
- # Trajectory
- teb_autosize: True
- dt_ref: 0.3
- dt_hysteresis: 0.1
- global_plan_overwrite_orientation: True
- global_plan_viapoint_sep : -1.0
- max_global_plan_lookahead_dist: 2.0
- feasibility_check_no_poses: 1
-    
- # Robot        
- max_vel_x: 6.0
- max_vel_x_backwards: 0.7
- max_vel_theta: 0.35
- acc_lim_x: 6.0
- acc_lim_theta: 1.0
- min_turning_radius: 0.7
-    
- # GoalTolerance
- xy_goal_tolerance: 0.2
- yaw_goal_tolerance: 0.1
- free_goal_vel: True
-    
- # Obstacles
- min_obstacle_dist: 0.1
- costmap_emergency_stop_dist: 0.01
- include_costmap_obstacles: True
- costmap_obstacles_front_only: True
- obstacle_poses_affected: 10
- line_obstacle_poses_affected: 25
- polygon_obstacle_poses_affected: 25
- costmap_converter_plugin: ""
- costmap_converter_spin_thread: True
- costmap_converter_rate: 5
+	odom_topic: odom
+	map_frame: /odom # This parameter will be overridden by local_costmap/global_frame 
 
-# Optimization
-    
- #no_inner_iterations: 5
- #no_outer_iterations: 4
- no_inner_iterations: 4
- no_outer_iterations: 3
- optimization_activate: True
- optimization_verbose: False
- penalty_epsilon: 0.1
- weight_max_vel_x: 2
- weight_max_vel_theta: 1
- weight_acc_lim_x: 1
- weight_acc_lim_theta: 1
- weight_kinematics_nh: 1000
- weight_kinematics_forward_drive: 1
- weight_kinematics_turning_radius: 1
- weight_optimaltime: 1
- weight_point_obstacle: 50
- weight_line_obstacle: 50
- weight_poly_obstacle: 50
- weight_dynamic_obstacle: 10
- alternative_time_cost: False
+	# Trajectory
+	teb_autosize: True
+	dt_ref: 0.3
+	dt_hysteresis: 0.1
+	global_plan_overwrite_orientation: True
+	global_plan_viapoint_sep : -1.0
+	max_global_plan_lookahead_dist: 2.0
+	feasibility_check_no_poses: 1
 
- # Homotopy Class Planner
+	# Robot        
+	max_vel_x: 6.0
+	max_vel_x_backwards: 0.7
+	max_vel_theta: 0.35
+	acc_lim_x: 6.0
+	acc_lim_theta: 1.0
+	min_turning_radius: 0.7
 
- enable_homotopy_class_planning: False
- enable_multithreading: True
- simple_exploration: False
- max_number_classes: 5
- roadmap_graph_no_samples: 15
- roadmap_graph_area_width: 5
- h_signature_prescaler: 0.5
- h_signature_threshold: 0.1
- obstacle_keypoint_offset: 0.1
- obstacle_heading_threshold: 0.45
- visualize_hc_graph: False
+	# GoalTolerance
+	xy_goal_tolerance: 0.2
+	yaw_goal_tolerance: 0.1
+	free_goal_vel: True
+
+	# Obstacles
+	min_obstacle_dist: 0.1
+	costmap_emergency_stop_dist: 0.01
+	include_costmap_obstacles: True
+	costmap_obstacles_front_only: True
+	obstacle_poses_affected: 10
+	line_obstacle_poses_affected: 25
+	polygon_obstacle_poses_affected: 25
+	costmap_converter_plugin: ""
+	costmap_converter_spin_thread: True
+	costmap_converter_rate: 5
+
+	# Optimization
+
+	#no_inner_iterations: 5
+	#no_outer_iterations: 4
+	no_inner_iterations: 4
+	no_outer_iterations: 3
+	optimization_activate: True
+	optimization_verbose: False
+	penalty_epsilon: 0.1
+	weight_max_vel_x: 2
+	weight_max_vel_theta: 1
+	weight_acc_lim_x: 1
+	weight_acc_lim_theta: 1
+	weight_kinematics_nh: 1000
+	weight_kinematics_forward_drive: 1
+	weight_kinematics_turning_radius: 1
+	weight_optimaltime: 1
+	weight_point_obstacle: 50
+	weight_line_obstacle: 50
+	weight_poly_obstacle: 50
+	weight_dynamic_obstacle: 10
+	alternative_time_cost: False
+
+	# Homotopy Class Planner
+
+	enable_homotopy_class_planning: False
+	enable_multithreading: True
+	simple_exploration: False
+	max_number_classes: 5
+	roadmap_graph_no_samples: 15
+	roadmap_graph_area_width: 5
+	h_signature_prescaler: 0.5
+	h_signature_threshold: 0.1
+	obstacle_keypoint_offset: 0.1
+	obstacle_heading_threshold: 0.45
+	visualize_hc_graph: False
+
+	## Costmap converter plugin   
+	#costmap_converter_plugin: "costmap_converter::CostmapToPolygonsDBSMCCH"
+	costmap_converter_plugin: "costmap_converter::CostmapToLinesDBSRANSAC"
+	#costmap_converter_plugin: "costmap_converter::CostmapToLinesDBSMCCH"
+	#costmap_converter_plugin: "costmap_converter::CostmapToPolygonsDBSConcaveHull"
+	#costmap_converter_plugin: "" # deactivate plugin
+	costmap_converter_spin_thread: True
+	costmap_converter_rate: 5
+
+	## Configure plugins (namespace move_base/TebLocalPlannerROS/PLUGINNAME)
+	## The parameters must be added for each plugin separately
+	costmap_converter/CostmapToLinesDBSRANSAC:
+	  cluster_max_distance: 0.4
+	  cluster_min_pts: 2
+	  ransac_inlier_distance: 0.15
+	  ransac_min_inliers: 10
+	  ransac_no_iterations: 2000
+	  ransac_remainig_outliers: 3
+	  ransac_convert_outlier_pts: True
+	  ransac_filter_remaining_outlier_pts: False
+	  convex_hull_min_pt_separation: 0.1
