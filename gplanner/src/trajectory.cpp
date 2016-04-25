@@ -38,7 +38,7 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
 	tf2::doTransform(start, begin, transform);
 	tf2::doTransform(goal, end, transform);
 	try{
-      transform = tfBuffer.lookupTransform("/odom/", "base_link", ros::Time(0));
+      transform = tfBuffer.lookupTransform("odom/", "base_link", ros::Time(0));
     }
     catch (tf2::TransformException &ex) {
       ROS_WARN("%s",ex.what());
