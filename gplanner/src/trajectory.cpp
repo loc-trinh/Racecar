@@ -58,7 +58,7 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
 			geometry_msgs::PoseStamped point = end;
 			
 
-		    tf::Quaternion goal_quat = tf::createQuaternionFromYaw(1.54);
+		    tf::Quaternion goal_quat = tf::createQuaternionFromYaw(atan2(dx,dy));
 		    point.pose.orientation.x = goal_quat.x();
 		    point.pose.orientation.y = goal_quat.y();
 		    point.pose.orientation.z = goal_quat.z();
