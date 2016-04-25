@@ -33,7 +33,7 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
 
 	/* Create new begin and end node */
 	geometry_msgs::TransformStamped transform;
-	transform = tfBuffer.lookupTransform("base_link", start.header.frame_id, ros::Time(0));
+	transform = tfBuffer.lookupTransform("base_link", start.header.frame_id, ros::Time(0),ros::Duration(1));
 	tf2::doTransform(start, begin, transform);
 	tf2::doTransform(goal, end, transform);
 	try{
