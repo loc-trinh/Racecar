@@ -307,7 +307,7 @@ bool TebLocalPlannerROS::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
 
   //section Replanning
 
-  if (fabs(std::sqrt(gx*gx+gy*gy)) < 0.25 ||ros::Time::now()-lastPlan).toSec() >= 1){
+  if ((fabs(std::sqrt(gx*gx+gy*gy)) < 0.25 )||((ros::Time::now()-lastPlan).toSec() >= 1)){
     // Update obstacle container with costmap information or polygons provided by a costmap_converter plugin
     if (costmap_converter_)
       updateObstacleContainerWithCostmapConverter();
