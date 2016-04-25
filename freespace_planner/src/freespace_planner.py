@@ -143,7 +143,7 @@ class FreespacePlanner:
             x = 2.5*center_far
 
         if right_free > 0.15:
-            y = 3
+            y = -3
         else:
             y=(left_free-right_free)*8;
 
