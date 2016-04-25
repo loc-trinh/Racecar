@@ -302,11 +302,11 @@ bool TebLocalPlannerROS::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
   
   //section Replanning
   //if(!isset(lastPlan))
-  ros::Time lastPlan = ros::Time::now();
+  //ros::Time lastPlan = ros::Time::now();
 
 
-  if (plans >= 10){
-    plans=0;
+  //if (plans >= 10){
+    //plans=0;
 
     // Update obstacle container with costmap information or polygons provided by a costmap_converter plugin
     if (costmap_converter_)
@@ -323,7 +323,6 @@ bool TebLocalPlannerROS::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
     // Now perform the actual planning
   //   bool success = planner_->plan(robot_pose_, robot_goal_, robot_vel_, cfg_.goal_tolerance.free_goal_vel); // straight line init
     bool success = planner_->plan(transformed_plan, &robot_vel_twist, cfg_.goal_tolerance.free_goal_vel);
-    ros::Time lastPlan = ros::Time::now();
     if (!success)
     {
       planner_->clearPlanner(); // force reinitialization for next time
@@ -358,7 +357,7 @@ bool TebLocalPlannerROS::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
          
       return false;
     }
-  }
+  //}
 
   // Get the velocity command for this sampling interval
   if (!planner_->getVelocityCommand(cmd_vel.linear.x, cmd_vel.angular.z))
