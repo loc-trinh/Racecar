@@ -29,8 +29,6 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
 
 	tf2_ros::Buffer tfBuffer;
     tf2_ros::TransformListener listener(tfBuffer);
-    ros::Duration(1.0).sleep();
-	
 
 	geometry_msgs::PoseStamped begin, end;
 	//Transform incoming message from header.frame_id to base_link
