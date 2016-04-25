@@ -207,7 +207,7 @@ bool TebLocalPlannerROS::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
     return false;
   }
 
-  ros::Time lastPlan = ros::Time::now();
+  
 
   cmd_vel.linear.x = 0;
   cmd_vel.angular.z = 0;
@@ -306,6 +306,8 @@ bool TebLocalPlannerROS::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
   double gy= goal_point.getOrigin().getY()-robot_pose_.y();
 
   //section Replanning
+  //if(!isset(lastPlan))
+  ros::Time lastPlan = ros::Time::now();
 
   if ((fabs(std::sqrt(gx*gx+gy*gy)) < 0.25 )||((ros::Time::now()-lastPlan).toSec() >= 1)){
     // Update obstacle container with costmap information or polygons provided by a costmap_converter plugin
@@ -323,6 +325,7 @@ bool TebLocalPlannerROS::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
     // Now perform the actual planning
   //   bool success = planner_->plan(robot_pose_, robot_goal_, robot_vel_, cfg_.goal_tolerance.free_goal_vel); // straight line init
     bool success = planner_->plan(transformed_plan, &robot_vel_twist, cfg_.goal_tolerance.free_goal_vel);
+    ros::Time lastPlan = ros::Time::now();
     if (!success)
     {
       planner_->clearPlanner(); // force reinitialization for next time
