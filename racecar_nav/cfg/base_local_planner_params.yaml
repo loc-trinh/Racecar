@@ -33,9 +33,6 @@ TebLocalPlannerROS:
     obstacle_poses_affected: 10
     line_obstacle_poses_affected: 25
     polygon_obstacle_poses_affected: 25
-    costmap_converter_plugin: ""
-    costmap_converter_spin_thread: True
-    costmap_converter_rate: 5
 
     # Optimization
 
@@ -46,14 +43,14 @@ TebLocalPlannerROS:
     optimization_activate: True
     optimization_verbose: False
     penalty_epsilon: 0.1
-    weight_max_vel_x: 2
+    weight_max_vel_x: 1
     weight_max_vel_theta: 1
     weight_acc_lim_x: 1
     weight_acc_lim_theta: 1
     weight_kinematics_nh: 1000
     weight_kinematics_forward_drive: 1
     weight_kinematics_turning_radius: 1
-    weight_optimaltime: 1
+    weight_optimaltime: 2
     weight_point_obstacle: 50
     weight_line_obstacle: 50
     weight_poly_obstacle: 50
