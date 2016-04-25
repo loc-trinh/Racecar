@@ -306,7 +306,7 @@ bool TebLocalPlannerROS::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
 
 
   if (plans >= 10){
-    plans=0
+    plans=0;
 
     // Update obstacle container with costmap information or polygons provided by a costmap_converter plugin
     if (costmap_converter_)
