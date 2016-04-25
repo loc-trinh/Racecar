@@ -1,6 +1,7 @@
 #include <pluginlib/class_list_macros.h>
 #include "trajectory.h"
 #include <math.h>
+#include <tf/transform_listener.h>
 
 //register this planner as a BaseGlobalPlanner plugin
 PLUGINLIB_EXPORT_CLASS(global_planner::GlobalPlanner, nav_core::BaseGlobalPlanner)
@@ -17,22 +18,30 @@ GlobalPlanner::GlobalPlanner(std::string name, costmap_2d::Costmap2DROS* costmap
 void GlobalPlanner::initialize(std::string name, costmap_2d::Costmap2DROS* costmap_ros){
   ros::NodeHandle nh("~/" + name);
   global_plan_pub_ = nh.advertise<nav_msgs::Path>("global_plan", 1);
+  
 }
 
 bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geometry_msgs::PoseStamped& goal,  std::vector<geometry_msgs::PoseStamped>& plan ){
 	double step = 10;
 
+	tf::TransformListener listener;
+	geometry_msgs::PoseStamped begin, end;
+	listener.waitForTransform("base_link", start.header.frame_id, ros::Time(0), ros::Duration(10.0) );
+	listener.transformPose("base_link", start, begin);
+	listener.waitForTransform("base_link", goal.header.frame_id, ros::Time(0), ros::Duration(10.0) );
+	listener.transformPose("base_link", goal, end);
+
 	/* Create new begin and end node */
-	geometry_msgs::PoseStamped begin = start;
-	geometry_msgs::PoseStamped end = goal;
 	begin.pose.position.x = .01;
 	begin.pose.position.y = 0;
-	end.pose.position.x = -goal.pose.position.y;
-	end.pose.position.y = goal.pose.position.x;
+
+	double temp = end.pose.position.x;
+	end.pose.position.x = -end.pose.position.y;
+	end.pose.position.y = temp;
 
 	double deltax = abs(start.pose.position.x-end.pose.position.x);
 
-  //Straight Line
+ 	//Straight Line
 	if (deltax < 1){
 		plan.push_back(start);
 		for(int i = 0; i < step; i++){
@@ -47,14 +56,17 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
 
 		    point.pose.position.x = i * dx;
 		    point.pose.position.y = m * point.pose.position.x;
-			plan.push_back(point);
+
+		    geometry_msgs::PoseStamped new_point;
+		    listener.transformPose("odom", point, new_point);
+			plan.push_back(new_point);
 		}
 		plan.push_back(end);
-    for(int i = 0; i < plan.size(); i++){
-      double temp = plan[i].pose.position.x;
-      plan[i].pose.position.x = plan[i].pose.position.y;
-      plan[i].pose.position.y = -temp;
-    }
+	    for(int i = 0; i < plan.size(); i++){
+	      double temp = plan[i].pose.position.x;
+	      plan[i].pose.position.x = plan[i].pose.position.y;
+	      plan[i].pose.position.y = -temp;
+	    }
 	}
   // Curved Line
 	else{
@@ -70,7 +82,7 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
 		double b = (-log(end.pose.position.x)*begin.pose.position.y + log(begin.pose.position.x)*end.pose.position.y) / det;
 
 		/* Generating path */
-    plan.push_back(start);
+    	plan.push_back(start);
 		for (int i=1; i < step; i++){
 			geometry_msgs::PoseStamped point = goal;
 			tf::Quaternion goal_quat = tf::createQuaternionFromYaw(1.54);
@@ -83,7 +95,11 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
 			double x = i*dx;
 			point.pose.position.y = -x * sign;
 			point.pose.position.x = log(x) * a + b;
-			plan.push_back(point);
+
+
+			geometry_msgs::PoseStamped new_point;
+		    listener.transformPose("odom", point, new_point);
+			plan.push_back(new_point);
 		}
 		//end.pose.position.y = -end.pose.position.y;
 		plan.push_back(goal);
