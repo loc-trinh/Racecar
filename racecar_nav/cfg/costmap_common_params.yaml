@@ -4,17 +4,17 @@
 #footprint: [ [10, -2], [7, -2], [7, -7], [-7.5, -7], [-10, 0], [-7.5, 7], [7, 7], [7, 2], [10, 2] ]
 #---(in meters)---
 #footprint: [ [0.254, -0.0508], [0.1778, -0.0508], [0.1778, -0.1778], [-0.1905, -0.1778], [-0.254, 0], [-0.1905, 0.1778], [0.1778, 0.1778], [0.1778, 0.0508], [0.254, 0.0508] ]
-footprint: [ [-0.1, -0.1], [-0.1, 0.1], [0.1, 0.1], [0.1, -0.1], [-0.1, -0.1]]
+footprint: [ [-0.15, -0.15], [-0.15, 0.15], [0.15, 0.15], [0.15, -0.15], [-0.15, -0.15]]
 
 transform_tolerance: 1.0
 map_type: costmap
 
 #Max obstacle distance to scan
-obstacle_range: 5.0
+obstacle_range: 900.0
 #Trace out freespace this far
 raytrace_range: 1000.0 
 # setting the inflation radius at 0.55 meters means that the robot will treat all paths that stay 0.55 meters or more away from obstacles as having equal obstacle cost
-inflation_radius: 0.01
+inflation_radius: 0.2
 
 
 observation_sources: laser_scan_sensor
