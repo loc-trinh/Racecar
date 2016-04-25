@@ -136,7 +136,7 @@ class FreespacePlanner:
         print "Center Navigable = %f" % center_close
 
         if center_close < 0.5:
-            x = -2.0;
+            x = -0.5;
         else:
             x = 3.5*center_far
 
