@@ -98,10 +98,10 @@ class FreespacePlanner:
             print "Waiting for Initial OCC Grid..."
             return
         # 1. Get cells for left, right, and center segments:
-        left_cells = self.get_cell_range([0.5,0],[2.5,3],self.grid.info)
-        right_cells = self.get_cell_range([-2.5,0],[-0.5,3],self.grid.info)
-        closecenter_cells = self.get_cell_range([-0.5,0],[0.5,1.0],self.grid.info)
-        farcenter_cells = self.get_cell_range([-0.5,1.0],[0.5,4],self.grid.info)
+        left_cells = self.get_cell_range([1,0],[4,3],self.grid.info)
+        right_cells = self.get_cell_range([-4,0],[-1,3],self.grid.info)
+        closecenter_cells = self.get_cell_range([-1,0],[1,1.0],self.grid.info)
+        farcenter_cells = self.get_cell_range([-1,1.0],[1,4],self.grid.info)
 
         # 2. count it up
         unknown = [0.0] * 4
@@ -112,8 +112,8 @@ class FreespacePlanner:
         (unknown[2], empty[2], full[2]) = self.count(self.grid.data, farcenter_cells)
         (unknown[3], empty[3], full[3]) = self.count(self.grid.data, right_cells)
 
-        left_free = 1 - float(full[0]) / (empty[0]+unknown[0]+full[0]);
-        right_free = 1 - float(full[3]) / (empty[3]+unknown[3]+full[3]);
+        left_free = float(empty[0]) / (empty[0]+unknown[0]+full[0]);
+        right_free = float(empty[3]) / (empty[3]+unknown[3]+full[3]);
 
 
         if empty[1]+full[1] >0:
