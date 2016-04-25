@@ -114,7 +114,10 @@ class FreespacePlanner:
 
         left_free = float(empty[0]) / (empty[0]+unknown[0]+full[0]);
         right_free = float(empty[3]) / (empty[3]+unknown[3]+full[3]);
-        center_close = 1 - (float(full[1]) / (empty[1]+full[1]))
+        if empty[1]+full[1] >0:
+            center_close = 1 - (float(full[1]) / (empty[1]+full[1]))
+        else: 
+            center_far=0;
         if empty[2]+full[2] >0:
             center_far = 1 - (float(full[2]) / (empty[2]+full[2]))
         else: 
