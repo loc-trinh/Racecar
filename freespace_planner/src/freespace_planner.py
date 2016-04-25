@@ -142,13 +142,13 @@ class FreespacePlanner:
         else:
             x = 3.5*center_far
 
-        if right_free > 0.3:
+        if right_free > 0.2:
             y = 2
         else:
-            y=(left_free-right_free)*4;
+            y=(left_free-right_free)*6;
 
         if(x < 0.1):
-            y = y*4;
+            y = y*5;
 
         #msg = MoveBaseGoal()
 
