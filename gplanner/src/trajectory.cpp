@@ -40,10 +40,10 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
 	tf2::doTransform(start, begin, transform);
 	tf2::doTransform(goal, end, transform);
 	try{
-      transform = tfBuffer.lookupTransform("odom/", "base_link", ros::Time(0), ros::Duration(1));
+      transform = tfBuffer.lookupTransform("odom", "base_link", ros::Time(0), ros::Duration(1));
     }
     catch (tf2::TransformException &ex) {
-      ROS_WARN("%s",ex.what());
+      ROS_WARN("Curve_Planner: %s",ex.what());
       ros::Duration(1.0).sleep();
       
     }
