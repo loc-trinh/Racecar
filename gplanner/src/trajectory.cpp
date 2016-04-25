@@ -68,7 +68,7 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
 		    point.pose.orientation.z = goal_quat.z();
 		    point.pose.orientation.w = goal_quat.w();
 
-		    point.pose.position.x = begin.pose.position.y i * dy;
+		    point.pose.position.x = begin.pose.position.y + i * dy;
 		    point.pose.position.y = m * point.pose.position.x;
 
 		    //listener.transformPose("odom", point, point);
