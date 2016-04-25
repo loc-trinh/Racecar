@@ -47,13 +47,16 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
 	double dx = end.pose.position.x - begin.pose.position.x;
 	double dy = end.pose.position.y - begin.pose.position.y;
 
+	geometry_msgs::PoseStamped prev_point = begin;
+
 	tf2::doTransform(begin, begin, transform);
 	plan.push_back(begin);
 	//if (abs(dy) < 1){
+		
 		for(int i = 0; i < step; i++){
 			
 			geometry_msgs::PoseStamped point = end;
-			geometry_msgs::PoseStamped prev_point = plan[plan.size()-1];
+			
 
 		    tf::Quaternion goal_quat = tf::createQuaternionFromYaw(1.54);
 		    point.pose.orientation.x = goal_quat.x();
@@ -63,6 +66,8 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
 
 		    point.pose.position.x = prev_point.pose.position.x + 1/step * dx;
 		    point.pose.position.y = prev_point.pose.position.y + 1/step * dy;
+
+		    prev_point = point;
 
 		    tf2::doTransform(point, point, transform);
 			plan.push_back(point);
