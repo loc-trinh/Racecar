@@ -140,10 +140,13 @@ class FreespacePlanner:
         else:
             x = 3.5*center_far
 
-        y=(left_free-right_free)*5;
+        if right_free > 0.3:
+            y = 2
+        else:
+            y=(left_free-right_free)*4;
 
         if(x < 0.1):
-            y = y*10;
+            y = y*4;
 
         #msg = MoveBaseGoal()
 
@@ -192,7 +195,7 @@ if __name__ == "__main__":
     
     # enter the ROS main loop
     
-    rate = rospy.Rate(0.25)
+    rate = rospy.Rate(0.333)
     while not rospy.is_shutdown():
         Planner.perform_update();
         rate.sleep()
