@@ -53,7 +53,7 @@
 #include "g2o/solvers/csparse/linear_solver_csparse.h"
 #include "g2o/solvers/cholmod/linear_solver_cholmod.h"
 
-
+int plans =0;
 // register this planner as a BaseLocalPlanner plugin
 PLUGINLIB_DECLARE_CLASS(teb_local_planner, TebLocalPlannerROS, teb_local_planner::TebLocalPlannerROS, nav_core::BaseLocalPlanner)
 
@@ -207,7 +207,6 @@ bool TebLocalPlannerROS::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
     return false;
   }
 
-  ros::Time lastPlan = ros::Time::now();
 
   cmd_vel.linear.x = 0;
   cmd_vel.angular.z = 0;
@@ -302,12 +301,10 @@ bool TebLocalPlannerROS::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
   tf::poseTFToMsg(robot_pose, transformed_plan.front().pose);
     
   
-  double gx= goal_point.getOrigin().getX()-robot_pose_.x();
-  double gy= goal_point.getOrigin().getY()-robot_pose_.y();
-
   //section Replanning
 
-  if (fabs(std::sqrt(gx*gx+gy*gy)) < 0.25 ||ros::Time::now()-lastPlan).toSec() >= 1){
+  if (plans >= 10){
+    plans=0
     // Update obstacle container with costmap information or polygons provided by a costmap_converter plugin
     if (costmap_converter_)
       updateObstacleContainerWithCostmapConverter();
