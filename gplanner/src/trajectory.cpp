@@ -34,11 +34,11 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
 	//Transform incoming message from header.frame_id to base_link
 	//listener.waitForTransform("base_link", start.header.frame_id, ros::Time(0), ros::Duration(10.0) );
 	geometry_msgs::TransformStamped transform;
-	transform = tfBuffer.lookupTransform("base_link", start.header.frame_id, ros::Time(0));
+	transform = tfBuffer.lookupTransform("base_link", start.header.frame_id, ros::Time(0.25));
 	tf2::doTransform(start, begin, transform);
 	tf2::doTransform(goal, end, transform);
 	try{
-      transform = tfBuffer.lookupTransform("odom/", "base_link", ros::Time(0));
+      transform = tfBuffer.lookupTransform("odom/", "base_link", ros::Time(0.5));
     }
     catch (tf2::TransformException &ex) {
       ROS_WARN("%s",ex.what());
