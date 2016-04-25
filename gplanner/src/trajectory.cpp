@@ -2,9 +2,7 @@
 #include "trajectory.h"
 #include <math.h>
 //#include <tf/transform_listener.h>
-#include <tf2_ros/transform_listener.h>
-#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
-#include <geometry_msgs/TransformStamped.h>
+
 
 //register this planner as a BaseGlobalPlanner plugin
 PLUGINLIB_EXPORT_CLASS(global_planner::GlobalPlanner, nav_core::BaseGlobalPlanner)
@@ -21,6 +19,8 @@ GlobalPlanner::GlobalPlanner(std::string name, costmap_2d::Costmap2DROS* costmap
 void GlobalPlanner::initialize(std::string name, costmap_2d::Costmap2DROS* costmap_ros){
   ros::NodeHandle nh("~/" + name);
   global_plan_pub_ = nh.advertise<nav_msgs::Path>("global_plan", 1);
+  //tfBuffer = new tf2_ros::Buffer();
+  //listener = new tf2_ros::TransformListener(tfBuffer);
   
 }
 
@@ -28,17 +28,19 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
 	double step = 10;
 
 	tf2_ros::Buffer tfBuffer;
-	tf2_ros::TransformListener listener(tfBuffer);
+    tf2_ros::TransformListener listener(tfBuffer);
+    ros::Duration(1.0).sleep();
+	
 
 	geometry_msgs::PoseStamped begin, end;
 	//Transform incoming message from header.frame_id to base_link
 	//listener.waitForTransform("base_link", start.header.frame_id, ros::Time(0), ros::Duration(10.0) );
 	geometry_msgs::TransformStamped transform;
-	transform = tfBuffer.lookupTransform("base_link", start.header.frame_id, ros::Time(0.25));
+	transform = tfBuffer.lookupTransform("base_link", start.header.frame_id, ros::Time(0));
 	tf2::doTransform(start, begin, transform);
 	tf2::doTransform(goal, end, transform);
 	try{
-      transform = tfBuffer.lookupTransform("odom/", "base_link", ros::Time(0.5));
+      transform = tfBuffer.lookupTransform("odom/", "base_link", ros::Time(0), ros::Duration(1));
     }
     catch (tf2::TransformException &ex) {
       ROS_WARN("%s",ex.what());
