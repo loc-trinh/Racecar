@@ -13,20 +13,20 @@ TebLocalPlannerROS:
     feasibility_check_no_poses: 1
 
     # Robot        
-    max_vel_x: 6.0
+    max_vel_x: 7.0
     max_vel_x_backwards: 0.7
     max_vel_theta: 0.35
-    acc_lim_x: 6.0
-    acc_lim_theta: 1.0
+    acc_lim_x: 7.0
+    acc_lim_theta: 3.0
     min_turning_radius: 0.7
 
     # GoalTolerance
-    xy_goal_tolerance: 0.2
-    yaw_goal_tolerance: 0.1
+    xy_goal_tolerance: 0.4
+    yaw_goal_tolerance: 0.4
     free_goal_vel: True
 
     # Obstacles
-    min_obstacle_dist: 0.1
+    min_obstacle_dist: 0.2
     costmap_emergency_stop_dist: 0.01
     include_costmap_obstacles: True
     costmap_obstacles_front_only: True
