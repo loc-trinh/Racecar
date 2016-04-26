@@ -8,25 +8,32 @@ class HokuyoScanProcessor:
 		self.pub = rospy.Publisher("pscan", LaserScan, queue_size=0)
 
 	def callback(self, msg):
-		data = [0.0] * len(msg.intensities)
-		for i in range(10,len(msg.intensities) - 10):
-			if msg.intensities[i] < 0.1 and msg.intensities[i-2] < 0.1 and msg.intensities[i-1] < 0.1 and msg.intensities[i+1] < 0.1 and msg.intensities[i+2] < 0.1:
-				data[i] = 100;
+		intensity = [0.0] * len(msg.intensities)
+		r = [0.0] * len(msg.intensities)
+		for i in range(0,len(msg.intensities)):
+			if msg.intensities[i] < 0.1:
+
+				#"flood fill"
+				i_start = i;
+
+				while msg.intensities[i] < 0.1:
+					i+=1;
+
+				num_zeros = i-i_start
+
+				if num_zeros > 20:
+					for j in range(i_start, i):
+						intensity[i] = 100;
+						r[i] = 29.0;
 			else:
-				data[i] = msg.intensities[i];
+				intensity[i] = msg.intensities[i];
+				r[i] = msg.ranges[i];
 
-		msg.intensities = data;
-
-		data = [0.0] * len(msg.ranges)
-		for i in range(10,len(msg.ranges) - 10):
-			if msg.ranges[i] > 30 and msg.ranges[i-2] > 30 and msg.ranges[i-1] > 30 and msg.ranges[i+1] > 30 and msg.ranges[i+2] > 30:
-				data[i] = 29.0;
-			else:
-				data[i] = msg.ranges[i];
-
-		msg.ranges = data;
+		msg.intensities = intensity;
+		msg.ranges = r;
 
 		self.pub.publish(msg)
+
 
 
 if __name__ == "__main__":
