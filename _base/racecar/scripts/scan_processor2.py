@@ -21,7 +21,7 @@ class HokuyoScanProcessor:
 
 
 if __name__ == "__main__":
-	rospy.init_node("dumb node")
+	rospy.init_node("dumbnode")
 	node=HokuyoScanProcessor()
 	rospy.spin()
 
