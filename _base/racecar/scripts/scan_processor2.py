@@ -20,12 +20,13 @@ class HokuyoScanProcessor:
 					i+=1;
 
 				num_zeros = i-i_start
-				print num_zeros
+				
 
-				if num_zeros > 2:
+				if num_zeros > 10:
+					#print num_zeros
 					for j in range(i_start, i):
-						intensity[i] = 100;
-						r[i] = 29.0;
+						intensity[j] = 100;
+						r[j] = 29.0;
 			else:
 				intensity[i] = msg.intensities[i];
 				r[i] = msg.ranges[i];
