@@ -10,11 +10,11 @@ transform_tolerance: 1.0
 map_type: costmap
 
 #Max obstacle distance to scan
-obstacle_range: 66.0
+obstacle_range: 30.0
 #Trace out freespace this far
-raytrace_range: 65.0 
+raytrace_range: 30
 # setting the inflation radius at 0.55 meters means that the robot will treat all paths that stay 0.55 meters or more away from obstacles as having equal obstacle cost
-inflation_radius: 0.2
+inflation_radius: 0.05
 
 
 observation_sources: laser_scan_sensor
