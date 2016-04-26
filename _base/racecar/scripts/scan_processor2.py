@@ -16,8 +16,9 @@ class HokuyoScanProcessor:
 				#"flood fill"
 				i_start = i;
 
-				while msg.intensities[i] < 0.1:
+				while msg.intensities[i] < 0.1 and i < len(msg.intensities)-1:
 					i+=1;
+
 
 				num_zeros = i-i_start
 
