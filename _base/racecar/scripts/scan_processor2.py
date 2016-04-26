@@ -8,10 +8,14 @@ class HokuyoScanProcessor:
 		self.pub = rospy.Publisher("pscan", LaserScan, queue_size=0)
 
 	def callback(self, msg):
-
+		data = [0.0] * len(msg.intensities)
 		for i in range(0,len(msg.intensities)):
 			if msg.intensities[i] < 0.1:
-				msg.intensities[i] = 100;
+				data[i] = 100;
+			else:
+				data[i] = msg.intensities[i];
+
+		msg.intensities = data;
 
 		self.pub.publish(msg)
 
