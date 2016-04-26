@@ -10,9 +10,7 @@ class HokuyoScanProcessor:
 	def callback(self, msg):
 
 		for intensity in msg.intensities:
-			print intensity
 			if intensity < 0.1:
-				print "zero intensity found"
 				intensity = 100;
 
 		self.pub.publish(msg)
