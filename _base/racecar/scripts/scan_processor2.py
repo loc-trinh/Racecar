@@ -22,7 +22,7 @@ class HokuyoScanProcessor:
 				num_zeros = i-i_start
 				
 
-				if num_zeros > 25:
+				if num_zeros > 40:
 					#print num_zeros
 					for j in range(i_start, i):
 						intensity[j] = 100;
