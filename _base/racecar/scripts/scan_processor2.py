@@ -8,9 +8,12 @@ class HokuyoScanProcessor:
 		self.pub = rospy.Publisher("pscan", LaserScan, queue_size=0)
 
 	def callback(self, msg):
+
 		for intensity in msg.intensities:
-			if intensity == 0:
-				intensity = 1;
+			print intensity
+			if intensity < 0.1:
+				print "zero intensity found"
+				intensity = 100;
 
 		self.pub.publish(msg)
 
