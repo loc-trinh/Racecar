@@ -300,12 +300,10 @@ bool TebLocalPlannerROS::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
   // overwrite/update start of the transformed plan with the actual robot position (allows using the plan as initial trajectory)
   tf::poseTFToMsg(robot_pose, transformed_plan.front().pose);
     
-  
-  //section Replanning
-
 
   if ((plans >= 10) || (plans==0)){
     plans=0
+
     // Update obstacle container with costmap information or polygons provided by a costmap_converter plugin
     if (costmap_converter_)
       updateObstacleContainerWithCostmapConverter();
@@ -321,7 +319,7 @@ bool TebLocalPlannerROS::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
     // Now perform the actual planning
   //   bool success = planner_->plan(robot_pose_, robot_goal_, robot_vel_, cfg_.goal_tolerance.free_goal_vel); // straight line init
     bool success = planner_->plan(transformed_plan, &robot_vel_twist, cfg_.goal_tolerance.free_goal_vel);
-    
+
     if (!success)
     {
       planner_->clearPlanner(); // force reinitialization for next time
