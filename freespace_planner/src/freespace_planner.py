@@ -112,8 +112,8 @@ class FreespacePlanner:
         (unknown[2], empty[2], full[2]) = self.count(self.grid.data, farcenter_cells)
         (unknown[3], empty[3], full[3]) = self.count(self.grid.data, right_cells)
 
-        left_free = float(empty[0] - full[0]) / (empty[0]+unknown[0]+full[0]);
-        right_free = float(empty[3] - full[3]) / (empty[3]+unknown[3]+full[3]);
+        left_free = float(empty[0]) / (empty[0]+unknown[0]+full[0]);
+        right_free = float(empty[3]) / (empty[3]+unknown[3]+full[3]);
 
 
         if empty[1]+full[1] >0:
