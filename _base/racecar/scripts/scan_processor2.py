@@ -17,6 +17,15 @@ class HokuyoScanProcessor:
 
 		msg.intensities = data;
 
+		data = [0.0] * len(msg.ranges)
+		for i in range(0,len(msg.ranges)):
+			if msg.ranges[i] > 30:
+				data[i] = 29.0;
+			else:
+				data[i] = msg.ranges[i];
+
+		msg.ranges = data;
+
 		self.pub.publish(msg)
 
 
