@@ -19,8 +19,8 @@ class HokuyoScanProcessor:
 				while msg.intensities[i] < 0.1 and i < len(msg.intensities)-1:
 					i+=1;
 
-
 				num_zeros = i-i_start
+				print num_zeros
 
 				if num_zeros > 2:
 					for j in range(i_start, i):
