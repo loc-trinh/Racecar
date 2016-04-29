@@ -14,7 +14,7 @@ class GoToPointNode:
         # Default Settings
         self.k = 0.8
         self.topic_input = "/point_position"
-        self.topic_output = "drive_control/ackermann_drive"
+        self.topic_output = "drive_control/ackermann_drive"#"/vesc/ackermann_cmd_mux/input/nav"#
         self.base_frame = "base_link"
         self.map_frame = "odom"
 
@@ -24,7 +24,7 @@ class GoToPointNode:
         self.ki = 0
         self.kd = 0
         self.max_steering_angle = 0.2
-        self.max_speed =.5
+        self.max_speed =1.5
         self.lastDistance = 0
         self.lastTheta = 0
         self.distanceI = 0
@@ -39,14 +39,14 @@ class GoToPointNode:
 
         # Pubs and Subs
         self.drive_pub = rospy.Publisher(self.topic_output, AckermannDriveStamped, queue_size=1)
-        rospy.Subscriber(self.topic_input, PointStamped, self.drive_callback)
+        rospy.Subscriber(self.topic_input, PointStamped, self.drive_callback,queue_size=1)
 
         self.listener = tf.TransformListener(True, rospy.Duration(10.0))
 
     def drive_callback(self, data):
         # Get point and transform into
-        #data.header.stamp = self.listener.getLatestCommonTime(self.base_frame,data.header.frame_id)
-        #dest = self.listener.transformPoint(self.base_frame, data)
+        # data.header.stamp = self.listener.getLatestCommonTime(self.base_frame,data.header.frame_id)
+        # dest = self.listener.transformPoint(self.base_frame, data)
         x = data.point.x
         y = data.point.y
 
@@ -78,7 +78,7 @@ class GoToPointNode:
             td= self.kd* (theta-self.lastTheta)
             msg.drive.steering_angle= max(min(self.max_steering_angle,theta), -1*self.max_steering_angle)
             self.lastTheta=theta
-        print (msg.drive.speed, msg.drive.steering_angle)
+        print ("speed:",msg.drive.speed, "steer: ",msg.drive.steering_angle, "x: ",x,"y: ",y)
         self.drive_pub.publish(msg)
 
 if __name__=="__main__":

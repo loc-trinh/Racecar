@@ -8,7 +8,7 @@
 		<node pkg="racecar" name="GoToPoint" type="go_to_point.py" output="screen" />
 		
 		<node pkg="racecar" name="servo_commands" type="servo_commands.py" />
-		<node pkg="racecar" name="PointEstimator" type="point_estimator.py"/>
+		<!--node pkg="racecar" name="PointEstimator" type="point_estimator.py"-->
 
 		
 

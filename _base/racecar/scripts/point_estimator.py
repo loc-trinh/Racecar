@@ -75,13 +75,17 @@ class PointEstimator:
 		# 	print "True", point 
 		# 	self.pubs.publish(spoint)
 	def diff_dist(self,ar,al,br,bl,cl,cr,d, x):
-		d1=(abs(ar*x+np.sqrt(d**2-x**2)+cr)/np.sqrt(ar**2+1))
-		d2=(abs(al*x+np.sqrt(d**2-x**2)+cl)/np.sqrt(ar**2+1))
+		d1=(abs(ar*x-np.sqrt(d**2-x**2)+cr)/np.sqrt(ar**2+1))
+		d2=(abs(al*x-np.sqrt(d**2-x**2)+cl)/np.sqrt(ar**2+1))
 		#print "d1:",d1,"d2: ",d2
-		return d1-d2
+		return d1-1.0*d2
 	def publisher(self):
-		rate=rospy.Rate(.25)
+		rate=rospy.Rate(4)
+		corner_time=100
 		while not rospy.is_shutdown():
+			corner_time+=1
+			if corner_time<10:
+				continue 
 			point =Point32()
 			spoint=PointStamped()
 			if not self.detected:
@@ -89,37 +93,47 @@ class PointEstimator:
 				br,bl=(ar)**2+1,(al)**2+1
 				#g=br*cl**2-bl*cr**2 
 				d=self.dist
-				# a1,a2,b1,b2,c1,c2=ar,al,br,bl,cr,cl
-				x=1.5
+				#a1,a2,b1,b2,c1,c2=ar,al,br,bl,cr,cl
+				x=0.0
 				current=abs(self.diff_dist(ar,al,br,bl,cl,cr,d, x))
-				step=.02
+				step=.005
 				changing=True
 				#for i in range(int(d*1/(2.0*step))):
-				# while changing:
-				# 	#print "Here"
-				# 	down=abs(self.diff_dist(ar,al,br,bl,cl,cr,d, x-step))
-				# 	up=abs(self.diff_dist(ar,al,br,bl,cl,cr,d, x+step*(x+step<=d)))
-				# 	if min(down,up,current)==current:
-				# 		changing=False
-				# 	current=min(down,up,current)
-				# 	if current==down:
-				# 		x=x-step
-				# 	elif current==up:
-				# 		x=x+step 
-				# print "current: ", current, "x: ",x 
+				while changing:
+					#print "Here"
+					down=abs(self.diff_dist(ar,al,br,bl,cl,cr,d, x-step*(abs(x-step)<d)))
+					up=abs(self.diff_dist(ar,al,br,bl,cl,cr,d, x+step*(x+step<d)))
+					if min(down,up,current)==current:
+						changing=False
+					current=min(down,up,current)
+					if current==down:
+						x=x-step
+					elif current==up:
+						x=x+step 
+				print "current: ", current, "x: ",x 
 
-				# xcpl=x
-				# ycpl=np.sqrt(d**2-x**2)
+				xcpl=x
+				ycpl=np.sqrt(d**2-x**2)
 				slope=(self.left_slope+self.right_slope)/2.0
-				
-				y=-self.dist*np.sqrt(1.0/(1+(slope)**2))
-				x=y*slope
-				if slope<0:
-					print "Negative Slope"
-					y=-self.dist*np.sqrt(1.0/(1+(slope)**2))
-					x=y*slope
-				point.x=y
-				point.y=x
+				right_dist=abs(cr)/np.sqrt(ar**2+1.0)
+				left_dist=abs(cl)/np.sqrt(al**2+1.0)
+				# if right_dist>left_dist:
+				# 	xcpl=xcpl
+				# else:
+				# a=slope 
+				# b=(self.lefty+self.righty)/2.0
+				# x=3.0
+				# y=(x-b)/(a+000000001)
+				# 	xcpl=xcpl
+				# y=-self.dist*np.sqrt(1.0/(1+(slope)**2))
+				#x=y*slope
+				# if slope<0:
+				# 	xcpl=-xcpl
+				# 	print "Negative Slope"
+				# 	y=self.dist*np.sqrt(1.0/(1+(slope)**2))
+				# 	x=y*slope
+				point.x=abs(ycpl)
+				point.y=-xcpl
 				point.z=0.0
 				spoint.point = point 
 				#spoint.header.frame_id="odom"
@@ -127,11 +141,13 @@ class PointEstimator:
 				print "false: ", spoint
 				self.pubs.publish(spoint)
 			else:
-				x=self.dist*np.sin(angle)
-				y=self.dist*np.cos(angle)
+				corner_time=0
+				print "CornerDetected:"
+				y=self.dist*np.sin(self.angle)
+				x=self.dist*np.cos(self.angle)
 
-				point.x=x
-				point.y=y
+				point.x=y
+				point.y=-x+.5
 				point.z=0.0
 				spoint.point = point 
 				#spoint.header.frame_id="odom"

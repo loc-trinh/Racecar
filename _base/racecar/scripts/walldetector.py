@@ -16,12 +16,12 @@ class WallDetector:
 		plt.ion()
 		self.dist=3.0
 		self.left_end=2*np.pi/3
-		self.left_start=np.pi/4
-		self.right_end=-np.pi/4
+		self.left_start=np.pi/12
+		self.right_end=-np.pi/12
 		self.right_start=-2*np.pi/3
 	def diff_dist(self,ar,al,br,bl,cl,cr,d, x):
-		d1=(abs(ar*x+np.sqrt(d**2-x**2)+cr)/np.sqrt(ar**2+1))
-		d2=(abs(al*x+np.sqrt(d**2-x**2)+cl)/np.sqrt(ar**2+1))
+		d1=(abs(ar*x-np.sqrt(d**2-x**2)+cr)/np.sqrt(ar**2+1))
+		d2=(abs(al*x-np.sqrt(d**2-x**2)+cl)/np.sqrt(ar**2+1))
 		print "d1:",d1,"d2: ",d2
 		return d1-d2
 
@@ -85,7 +85,24 @@ class WallDetector:
 		ar,al,cr,cl=rightSlope,leftSlope,rightIntercept,leftIntercept
 		br,bl=(ar)**2+1,(al)**2+1
 		#g=br*cl**2-bl*cr**2 
+
+
 		d=self.dist
+
+		# a=(ar**2-al**2)
+		# b=2*((al**2*(d+cr)+cr)-(ar**2*(d+cl)+cl))
+		# c=(al**2+1)(d+cr)**2-(al**2+1)*(d+cl)**2
+		# my_y=0
+		# yn=(-b-np.sqrt(b**2-4*a*c))/(2.0*a)
+		# yp=(-b+np.sqrt(b**2-4*a*c))/(2.0*a)
+		# dn=abs(self.diff_dist(ar,al,br,bl,cl,cr,d, yn))
+		# dp=abs(self.diff_dist(ar,al,br,bl,cl,cr,d, yp))
+
+		# if dn<dp:
+		# 	my_y=yn
+		# else:
+		# 	my_y=yp
+
 		# a1,a2,b1,b2,c1,c2=ar,al,br,bl,cr,cl
 		x=0.0
 		current=abs(self.diff_dist(ar,al,br,bl,cl,cr,d, x))
@@ -105,8 +122,8 @@ class WallDetector:
 				x=x+step 
 		print "current: ", current, "x: ",x 
 
-		xcpl=x
-		ycpl=np.sqrt(d**2-x**2)
+		ycpl=x
+		xcpl=np.sqrt(d**2-x**2)
 		# p1=2*b2*a1 
 		# p2=2*b1*a2 
 		# q1=2*b2*c1 
@@ -197,29 +214,33 @@ class WallDetector:
 		# plt.plot(left_wallx,leftSlope*left_wallx+leftIntercept,'-')
 		# #plt.plot(right_wallx,rightSlope*right_wallx+rightIntercept,'-')
 		# plt.show()
-		left_line=[]
-		right_line=[]
-		for i in range(len(left_wallx)):
-			left_line.append(left_wallx[i]*left_wall_plot[0]+left_wall_plot[1])
-		for i in range(len(right_wallx)):
-			right_line.append(right_wallx[i]*right_wall_plot[0]+right_wall_plot[1])
-		sl=(left_wall_plot[0]+right_wall_plot[0])
-		x=3.0*np.sqrt(1/(1+(sl)**2))
-		y=-x*sl 
-		x=-x
-		print "goalx: ",x, "goaly: ",y
-		xo=0.0
-		yo=0.0
-		plt.plot(left_wallx,left_wally,'.')
-		plt.plot(right_wallx,right_wally,'.')
-		plt.plot(xy,yx, '.')
-		plt.plot(xcpl,ycpl,"*")
-		plt.plot(x,y,'.',xo,yo, '^')
-		plt.plot(left_wallx, left_line)
-		plt.plot(right_wallx,right_line)
-		plt.axis([-10,10,-10,10])
+		# left_line=[]
+		# right_line=[]
+		# for i in range(len(left_wallx)):
+		# 	left_line.append(left_wallx[i]*left_wall_plot[0]+left_wall_plot[1])
+		# for i in range(len(right_wallx)):
+		# 	right_line.append(right_wallx[i]*right_wall_plot[0]+right_wall_plot[1])
+		# a=(left_wall_plot[0]+right_wall_plot[0])/2.0
+		# b=(left_wall_plot[1]+right_wall_plot[1])/2.0
+		# y=3.0
+		# x=(y-b)/(a+.0001)
+		# # x=3.0*np.sqrt(1/(1+(sl)**2))
+		# # y=-x*sl 
+		# # x=-x
+		# print "goalx: ",x, "goaly: ",y
+		# xo=0.0
+		# yo=0.0
+		# plt.plot(left_wallx,left_wally,'.')
+		# plt.plot(right_wallx,right_wally,'.')
+		# plt.plot(xy,yx, '.')
+		# plt.plot(ycpl,xcpl,"*")
+		# #plot(my_y,d)
+		# plt.plot(x,y,'.',xo,yo, '^')
+		# plt.plot(left_wallx, left_line)
+		# plt.plot(right_wallx,right_line)
+		# plt.axis([-10,10,-10,10])
 		
-		plt.draw()
+		# plt.draw()
 		# # # plt.show()
 
 if __name__ == "__main__":
