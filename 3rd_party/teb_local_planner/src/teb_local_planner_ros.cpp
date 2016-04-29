@@ -301,6 +301,7 @@ bool TebLocalPlannerROS::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
   tf::poseTFToMsg(robot_pose, transformed_plan.front().pose);
     
 
+
   if ((plans >= 10) || (plans==0)){
     plans=0
 
@@ -356,8 +357,10 @@ bool TebLocalPlannerROS::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
          
       return false;
     }
+
   }
   plans=plans+1;
+
 
   // Get the velocity command for this sampling interval
   if (!planner_->getVelocityCommand(cmd_vel.linear.x, cmd_vel.angular.z))

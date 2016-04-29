@@ -98,10 +98,10 @@ class FreespacePlanner:
             print "Waiting for Initial OCC Grid..."
             return
         # 1. Get cells for left, right, and center segments:
-        left_cells = self.get_cell_range([0.5,0],[2.5,3],self.grid.info)
-        right_cells = self.get_cell_range([-2.5,0],[-0.5,3],self.grid.info)
-        closecenter_cells = self.get_cell_range([-0.5,0],[0.5,1.0],self.grid.info)
-        farcenter_cells = self.get_cell_range([-0.5,1.0],[0.5,4],self.grid.info)
+        left_cells = self.get_cell_range([1,0],[4,3],self.grid.info)
+        right_cells = self.get_cell_range([-4,0],[-1,3],self.grid.info)
+        closecenter_cells = self.get_cell_range([-1,0],[1,1.0],self.grid.info)
+        farcenter_cells = self.get_cell_range([-1,1.0],[1,4],self.grid.info)
 
         # 2. count it up
         unknown = [0.0] * 4
@@ -114,11 +114,13 @@ class FreespacePlanner:
 
         left_free = float(empty[0]) / (empty[0]+unknown[0]+full[0]);
         right_free = float(empty[3]) / (empty[3]+unknown[3]+full[3]);
-        center_close = 1 - (float(full[1]) / (empty[1]+full[1]))
-        if empty[2]+full[2] >0:
-            center_far = 1 - (float(full[2]) / (empty[2]+full[2]))
+        center_far = float(empty[2]) / (empty[2]+unknown[2]+full[2]);
+
+        if empty[1]+full[1] >0:
+            center_close = 1 - (float(full[1]) / (empty[1]+full[1]))
         else: 
-            center_far=0;
+            center_close=0;
+
             
         center_ranking = 0.7*center_close + 0.3*center_far;
 
@@ -132,15 +134,18 @@ class FreespacePlanner:
         print "C Ranking = %f" % center_far
         print "Center Navigable = %f" % center_close
 
-        if center_close < 0.5:
-            x = -2.0;
+        if center_close < 0.4:
+            x = -0.5;
         else:
-            x = 3.5*center_far
+            x = 4*center_far
 
-        y=(left_free-right_free)*5;
+        if right_free > 0.4:
+            y = -3
+        else:
+            y=(left_free-right_free)*2;
 
-        if(x < 0.1):
-            y = y*10;
+        #if(x < 0.1):
+        #    y = y*5;
 
         #msg = MoveBaseGoal()
 
