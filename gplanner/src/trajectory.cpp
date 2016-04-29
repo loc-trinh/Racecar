@@ -48,9 +48,9 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
 
 	tf2::doTransform(begin, begin, transform);
 	plan.push_back(begin);
+
 	if (abs(dy) < 1){
 		for(int i = 0; i < step; i++){
-			
 			geometry_msgs::PoseStamped point = end;
 			geometry_msgs::PoseStamped prev_point = plan[plan.size()-1];
 
