@@ -16,5 +16,7 @@
     <arg name="run_camera" value="$(arg run_camera)" />
   </include>
   <include file="$(find robot_localization)/launch/racecar_ekf.launch" />
+  <node pkg="racecar" name="scan_processor" type="scan_processor2.py" />
+
 
 </launch>
