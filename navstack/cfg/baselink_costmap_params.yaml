@@ -1,13 +1,13 @@
-global_costmap:
-  global_frame: base_link
-  robot_base_frame: base_link
-  update_frequency: 10.0
-  publish_frequency: 10.0
-  static_map: false
-  resolution: 0.1
-  rolling_window: true
-  width: 8
-  height: 8
-  no_memory: true
-  track_unknown_space: true
-  unknown_cost_value: -1
+
+global_frame: base_link
+robot_base_frame: base_link
+update_frequency: 10.0
+publish_frequency: 10.0
+static_map: false
+resolution: 0.1
+rolling_window: true
+width: 8
+height: 8
+no_memory: true
+track_unknown_space: true
+unknown_cost_value: -1
