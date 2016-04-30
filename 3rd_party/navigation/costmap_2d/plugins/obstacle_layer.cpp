@@ -103,6 +103,9 @@ void ObstacleLayer::onInitialize()
     source_node.param("clearing", clearing, false);
     source_node.param("marking", marking, true);
 
+    ROS_INFO("    data_type: %s", data_type.c_str());
+    ROS_INFO("    sensor_frame: %s", sensor_frame.c_str());
+
     if (!sensor_frame.empty())
     {
       sensor_frame = tf::resolve(tf_prefix, sensor_frame);
