@@ -51,13 +51,8 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
 
 	tf2::doTransform(begin, begin, transform);
 	plan.push_back(begin);
-<<<<<<< HEAD
 
 	if (abs(dy) < 1){
-=======
-	//if (abs(dy) < 1){
-		
->>>>>>> fd30a21730b1943e1bbc11ad579ba5f1833b9c07
 		for(int i = 0; i < step; i++){
 			geometry_msgs::PoseStamped point = end;
 			
@@ -76,7 +71,7 @@ bool GlobalPlanner::makePlan(const geometry_msgs::PoseStamped& start, const geom
 		    tf2::doTransform(point, point, transform);
 			plan.push_back(point);
 		}
-	//}
+	}
 	tf2::doTransform(end, end, transform);
 	plan.push_back(end);
 	
