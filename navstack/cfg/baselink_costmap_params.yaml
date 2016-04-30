@@ -10,6 +10,6 @@ width: 8
 height: 8
 obstacle_layer: 
   pscan:
-    no_memory: true
+    no_memory: false
 track_unknown_space: true
 unknown_cost_value: -1
