@@ -10,7 +10,6 @@
 #include "nav_msgs/MapMetaData.h"
 
 #include <vector>
-// #include "geometry_msgs/PoseArray.h"
 #include "nav_msgs/Path.h"
 #include "geometry_msgs/PoseStamped.h"
 
@@ -45,8 +44,11 @@ private:
 	void costMapCallback(const nav_msgs::OccupancyGrid::ConstPtr &msg);
 
 	// locals
-	nav_msgs::OccupancyGrid::ConstPtr localCostMapPtr;
-	nav_msgs::Path trajPtr;
+	std_msgs::Header pathHeader;	
+	vector<geometry_msgs::PoseStamped> path;
+	nav_msgs::MapMetadata metaMapInfo;
+	std_msgs::Header mapHeader;
+	nav_msgs::OccupancyGrid map;
 
 AltLocalPlannerNode::AltLocalPlannerNode() : it(nh) {
 	globalPathSub = it.subscribe("/somewhere", 1, &AltLocalPlannerNode::trajectoryCallback, this);
@@ -54,19 +56,17 @@ AltLocalPlannerNode::AltLocalPlannerNode() : it(nh) {
 	localDriveComdsPub = it.advertise("localDriveCommands", 1);
 }
 
-void AltLocalPlannerNode::trajectorycallback(const geometry_msgs_vector::ConstPtr &msg) {
-	// not sure how to store the info from a pointer so that it can be used by the class?
-	trajPtr = msg.data;
+void AltLocalPlannerNode::trajectorycallback(const nav_msgs::Path::ConstPtr &msg) {
+	std_msgs::Header pathHeader = msg.header;	
+	vector<geometry_msgs::PoseStamped> path = msg.poses;
 
-	// change possible array type to vector?
 	// tf transform the posestamped into base_link?
 }
 
-void AltLocalPlannerNode::costMapCallback(const nav_msgs::OccupancyGrid::ConstPtr& msg){
-	// again, not sure how to store things in C++?
-	localCostMapPtr = msg.data;
-
-	// do the tf transforms here on the occupancygrid?
+void AltLocalPlannerNode::costMapCallback(const nav_msgs::OccupancyGrid::ConstPtr &msg){
+	nav_msgs::MapMetadata metaMapInfo = msg.info;
+	std_msgs::Header mapHeader = msg.header;
+	nav_msgs::OccupancyGrid map = msg.data;
 }
 
 /* Params: not sure how to do params in C++? http://wiki.ros.org/roscpp/Overview/Parameter%20Server
@@ -81,38 +81,54 @@ void AltLocalPlannerNode::costMapCallback(const nav_msgs::OccupancyGrid::ConstPt
 
 	how to pass in cost map/locations?
 */
-void AltLocalPlannerNode::pathPlanning(OccupancyGrid map, Path traj){
+void AltLocalPlannerNode::pathPlanning(){
 	// v is a vector of PostStamped
-	int delta = v.at(1).data.pose.point.x - v.at(0).data.pose.point.x
-	tuple<int,int,int> point (10,10,10);
+	int delta = path.at(1).data.pose.point.x - path.at(0).data.pose.point.x
+	// tuple<int,int,int> point (10,10,10);
+	// std::vector<tuple<int,int,int>> myvector (branchFactor);
 
-	// check on this param
-	int branchFactor = 5;
-	std::vector<tuple<int,int,int>> myvector (branchFactor);
-
-	// threshold should be a param? currently set in config file?
+	// these should be params? threshold currently set in config file?
 	int threshold = 0.35;
+	int branchFactor = 5;
 
-	for(std::vector<T>::iterator it = v.begin(); it != v.end(); ++it) {
-    	// std::cout << *it;
+	// need to initialize new path?
 
-    	// check current point's value in occupancy grid
-    	// if invalid, branch, else, move to next point
-    	grid_x = (unsigned int)((*it.data.pose.point.x - map.info.origin.position.x) / map.info.resolution);
-    	grid_y = (unsigned int)((*it.data.pose.point.y - map.info.origin.position.y) / map.info.resolution);  
-		int occ_val = map[grid_x * width + grid_y];
+	// iterate over all points in the path
+	for(std::vector<geometry_msgs::PoseStamped>::size_type i = 0; i != path.size(); i++) {
+	    /* std::cout << someVector[i]; ... */
 
-		if (occ_val > threshold):
+		// add logic here - if current point has already been overruled, or we should consider the one in the new path instead, add decision here
+		
+
+    	// check each traj point's value in occupancy grid
+    	grid_x1 = (unsigned int)((*path[i].data.pose.point.x - map.info.origin.position.x) / map.info.resolution);
+    	grid_y1 = (unsigned int)((*path[i].data.pose.point.y - map.info.origin.position.y) / map.info.resolution);  
+		int occVal1 = map[grid_x1 * map.info.width + grid_y1];
+
+		// check dest point's val in occupancy grid, if not the last point
+		if (i != path.size()) {
+			grid_x2 = (unsigned int)((*path[i+1].data.pose.point.x - map.info.origin.position.x) / map.info.resolution);
+	    	grid_y2 = (unsigned int)((*path[i+1].data.pose.point.y - map.info.origin.position.y) / map.info.resolution);  
+			int occVal2 = map[grid_x2 * map.info.width + grid_y2];	
+		} 
+		
+		// check the path between them in the occupancy grid
+		new vector<>
+
+
+		// if origin, dest, or path between invalid, branch
+		if (occVal1 > threshold) or (occVal2 > threshold) or (branch):
+			// randomly sample from [0,1]*delta
+			// sort by closest
+			// add these to the dest point, check if valid
+			// if valid, 
 
      // how to access costmap data?
      // if point in invalid part of cost map,
      // sample points in range, delta ahead of car
      // prune these points,
      // append to an array
-     // 
-
-
-
+     
 
 	}
 
