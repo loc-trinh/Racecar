@@ -103,7 +103,7 @@ void ObstacleLayer::onInitialize()
     source_node.param("clearing", clearing, false);
     source_node.param("marking", marking, true);
 
-    ROS_INFO("    Source: %s", source.c_str());
+    ROS_INFO("    namespace: %s", source_node.getNamespace().c_str());
     ROS_INFO("    data_type: %s", data_type.c_str());
     ROS_INFO("    sensor_frame: %s", sensor_frame.c_str());
 
