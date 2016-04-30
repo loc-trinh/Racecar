@@ -18,6 +18,7 @@ inflation_radius: 0.01
 
 
 observation_sources: laser_scan_sensor
+data_type: LaserScan
 
 obstacle_layer: {enabled: true, lethal_cost_threshold: 100, track_unknown_space: true, unknown_cost_value: -1}
 
