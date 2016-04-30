@@ -102,10 +102,12 @@ void ObstacleLayer::onInitialize()
     source_node.param("inf_is_valid", inf_is_valid, false);
     source_node.param("clearing", clearing, false);
     source_node.param("marking", marking, true);
+    source_node.param("no_memory", no_memory, false);
 
     ROS_INFO("    namespace: %s", source_node.getNamespace().c_str());
     ROS_INFO("    data_type: %s", data_type.c_str());
     ROS_INFO("    sensor_frame: %s", sensor_frame.c_str());
+    ROS_INFO("    no_memory: %d", (int)no_memory);
 
     if (!sensor_frame.empty())
     {
@@ -430,8 +432,12 @@ void ObstacleLayer::updateFootprint(double robot_x, double robot_y, double robot
 
 void ObstacleLayer::updateCosts(costmap_2d::Costmap2D& master_grid, int min_i, int min_j, int max_i, int max_j)
 {
+
   if (!enabled_)
     return;
+
+  if(no_memory)
+    reset();
 
   if (footprint_clearing_enabled_)
   {

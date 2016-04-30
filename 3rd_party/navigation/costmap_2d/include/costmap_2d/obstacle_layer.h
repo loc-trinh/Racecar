@@ -167,6 +167,7 @@ protected:
   dynamic_reconfigure::Server<costmap_2d::ObstaclePluginConfig> *dsrv_;
 
   int combination_method_;
+  bool no_memory;
 
 private:
   void reconfigureCB(costmap_2d::ObstaclePluginConfig &config, uint32_t level);
