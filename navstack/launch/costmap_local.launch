@@ -1,13 +1,16 @@
 <launch>
-  
+
   <node pkg="costmap_2d" type="costmap_2d_markers" name="voxel_visualizer">
     <remap from="voxel_grid" to="costmap/voxel_grid"/>
   </node>
 
   <node pkg="costmap_2d" type="costmap_2d_node" respawn="false" name="costmap_local" output="screen">
     <!-- Config Files -->
+    <rosparam file="$(find navstack)/cfg/costmap_local.yaml" command="load" ns="costmap" />
+    <!--
     <rosparam file="$(find navstack)/cfg/costmap_common_params.yaml" command="load" ns="costmap" />
     <rosparam file="$(find navstack)/cfg/local_costmap_params.yaml" command="load" ns="costmap" />
+    -->
     <!-- <remap from="move_base/goal" to="/move_base_simple/goal"/>  -->
 
   </node>
