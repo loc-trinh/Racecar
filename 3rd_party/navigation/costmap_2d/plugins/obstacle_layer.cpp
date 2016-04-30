@@ -436,8 +436,8 @@ void ObstacleLayer::updateCosts(costmap_2d::Costmap2D& master_grid, int min_i, i
   if (!enabled_)
     return;
 
-  if(no_memory)
-    resetMaps();
+  //if(no_memory)
+  //  resetMaps();
 
   if (footprint_clearing_enabled_)
   {
@@ -621,10 +621,10 @@ void ObstacleLayer::updateRaytraceBounds(double ox, double oy, double wx, double
 
 void ObstacleLayer::reset()
 {
-    deactivate();
+    //deactivate();
     resetMaps();
     current_ = true;
-    activate();
+    //activate();
 }
 
 }  // namespace costmap_2d

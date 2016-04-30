@@ -8,8 +8,6 @@ resolution: 0.1
 rolling_window: true
 width: 8
 height: 8
-obstacle_layer: 
-  pscan:
-    no_memory: false
+no_memory: true
 track_unknown_space: true
 unknown_cost_value: -1
