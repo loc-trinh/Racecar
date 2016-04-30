@@ -437,7 +437,7 @@ void ObstacleLayer::updateCosts(costmap_2d::Costmap2D& master_grid, int min_i, i
     return;
 
   if(no_memory)
-    reset();
+    resetMaps();
 
   if (footprint_clearing_enabled_)
   {
