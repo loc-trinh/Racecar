@@ -1,17 +1,14 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(global_planner)
+project(navstack)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  geometry_msgs
-  nav_core
-  nav_msgs
-  rospy
-  tf2
-  tf2_msgs
-  tf2_ros
+  move_base
+  move_base_msgs 
+  actionlib 
+  roscpp
 )
 
 ## System dependencies are found with CMake's conventions
@@ -71,7 +68,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate added messages and services with any dependencies listed here
 # generate_messages(
 #   DEPENDENCIES
-#   geometry_msgs#   nav_msgs#   tf2_msgs
+#   std_msgs  # Or other packages containing msgs
 # )
 
 ################################################
@@ -105,8 +102,8 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES global_planner
-#  CATKIN_DEPENDS geometry_msgs nav_core nav_msgs rospy tf2 tf2_msgs tf2_ros
+#  LIBRARIES navigation
+#  CATKIN_DEPENDS move_base my_odom_configuration_dep my_sensor_configuration_dep my_tf_configuration_dep
 #  DEPENDS system_lib
 )
 
@@ -122,24 +119,27 @@ include_directories(
 )
 
 ## Declare a C++ library
-# add_library(global_planner
-#   src/${PROJECT_NAME}/global_planner.cpp
+# add_library(navigation
+#   src/${PROJECT_NAME}/navigation.cpp
 # )
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
-# add_dependencies(global_planner ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# add_dependencies(navigation ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
-# add_executable(global_planner_node src/global_planner_node.cpp)
+# add_executable(navigation_node src/navigation_node.cpp)
+
+add_executable(test_nav_goal src/test_nav_goal.cpp)
+target_link_libraries(test_nav_goal ${catkin_LIBRARIES})
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
-# add_dependencies(global_planner_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# add_dependencies(navigation_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(global_planner_node
+# target_link_libraries(navigation_node
 #   ${catkin_LIBRARIES}
 # )
 
@@ -158,7 +158,7 @@ include_directories(
 # )
 
 ## Mark executables and/or libraries for installation
-# install(TARGETS global_planner global_planner_node
+# install(TARGETS navigation navigation_node
 #   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
@@ -183,7 +183,7 @@ include_directories(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_global_planner.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_navigation.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
