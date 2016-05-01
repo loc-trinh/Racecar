@@ -23,6 +23,7 @@ from nav_msgs.msg import OccupancyGrid
 from map_msgs.msg import OccupancyGridUpdate
 from geometry_msgs.msg import PoseStamped
 from move_base_msgs.msg import MoveBaseGoal
+from std_msgs.msg import Bool
 
 
 class FreespacePlanner:
@@ -36,6 +37,7 @@ class FreespacePlanner:
         self.topic_occgrid = "/costmap_base/costmap/costmap";
         self.topic_occgridupdates = "/costmap_base/costmap/costmap_updates";
         self.topic_output = "/move_base_simple/goal";
+        self.topic_recovery = "/recovery/direction";
         self.base_frame = "base_link"
         self.map_frame = "odom";
 
@@ -49,6 +51,7 @@ class FreespacePlanner:
 
         #Pubs and Subs
         self.goal_pub = rospy.Publisher(self.topic_output, PoseStamped, queue_size=10)
+        self.recover_pub = rospy.Publisher(self.topic_recovery, Bool, queue_size=10)
         rospy.Subscriber(self.topic_occgrid, OccupancyGrid, self.costmap_callback)
         rospy.Subscriber(self.topic_occgridupdates, OccupancyGridUpdate, self.costmap_update_callback)
 
@@ -140,6 +143,10 @@ class FreespacePlanner:
             y = -3
         else:
             y=(left_free-right_free)*2;
+        if right_free > left_free:
+            self.recover_pub.publish(True)
+        else:
+            self.recover_pub.publish(False)
 
         #if(x < 0.1):
         #    y = y*5;
@@ -156,6 +163,7 @@ class FreespacePlanner:
         goal.header.stamp = rospy.Time.now()
         #msg.target_pose = goal
         self.goal_pub.publish(goal)
+
 
         return
 

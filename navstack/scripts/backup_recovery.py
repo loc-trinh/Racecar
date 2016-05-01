@@ -4,6 +4,7 @@ from nav_msgs.msg import OccupancyGrid
 from map_msgs.msg import OccupancyGridUpdate
 from ackermann_msgs.msg import AckermannDriveStamped
 from geometry_msgs.msg import PoseStamped
+from std_msgs.msg import Bool
 import tf
 import math
 
@@ -15,6 +16,7 @@ class BackupRecovery:
         self.grid = None
         self.confident = 0
         self.topic_goal_in = "/plan_executor/goal_out"
+        self.topic_recovery = "/recovery/direction";
         self.base_frame = "base_link"
         self.look_ahead = 0.75
 
@@ -25,6 +27,7 @@ class BackupRecovery:
         rospy.Subscriber("/costmap_base/costmap/costmap", OccupancyGrid, self.costmap_callback)
         rospy.Subscriber("/costmap_base/costmap/costmap_updates", OccupancyGridUpdate, self.costmap_update_callback)
         rospy.Subscriber(self.topic_goal_in, PoseStamped, self.new_dest_callback)
+        rospy.Subscriber(self.topic_recovery, Bool, self.recover_callback)
         self.drive_pub = rospy.Publisher("/vesc/ackermann_cmd_mux/input/nav", AckermannDriveStamped, queue_size=1)
 
         self.listener = tf.TransformListener(True, rospy.Duration(10.0))
@@ -51,6 +54,9 @@ class BackupRecovery:
     def new_dest_callback(self,data):
         self.cGoal = data;
 
+    def recover_callback(self,data):
+        self.goRight = data;
+
     def count(self,grid,cells):
         unknown = 0
         empty = 0
@@ -76,10 +82,6 @@ class BackupRecovery:
 
         self.cGoal.header.stamp = self.listener.getLatestCommonTime(self.base_frame,self.cGoal.header.frame_id)
         dest = self.listener.transformPose(self.base_frame, self.cGoal)
-        if dest.pose.position.y <= 0:
-            self.goRight = True
-        else:
-            self.goRight = False
 
         #Generate points in direction:
         step_dist = 0.1;
@@ -126,7 +128,7 @@ class BackupRecovery:
         bkpmsg.header.stamp = rospy.Time.now()
         bkpmsg.header.frame_id = "base_link"
         bkpmsg.drive.speed = -0.75
-        bkpmsg.drive.acceleration = 1
+        bkpmsg.drive.acceleration = 3
         if(self.goRight):
             bkpmsg.drive.steering_angle = 0.3
         else:
@@ -137,7 +139,7 @@ class BackupRecovery:
             self.drive_pub.publish(stopmsg);
             rospy.sleep(.01)
 
-        for i in range(1,50):
+        for i in range(1,75):
             bkpmsg.header.stamp = rospy.Time.now()
             self.drive_pub.publish(bkpmsg);
             rospy.sleep(.01)
@@ -147,10 +149,10 @@ class BackupRecovery:
             self.drive_pub.publish(stopmsg);
             rospy.sleep(.01)
 
-        bkpmsg.drive.speed = 1
+        bkpmsg.drive.speed = 0.75
         bkpmsg.drive.steering_angle = 0
 
-        for i in range(1,25):
+        for i in range(1,50):
             stopmsg.header.stamp = rospy.Time.now()
             self.drive_pub.publish(bkpmsg);
             rospy.sleep(.01)
