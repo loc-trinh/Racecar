@@ -54,7 +54,7 @@ class WallDetector:
 
 
 		#find the x-y transformation of the walldata
-		#print "leftstart:", left_start, "leftend: ",left_end, "right_start: ",right_start,"right_end: ", right_end
+		print "leftstart:", left_start, "leftend: ",left_end, "right_start: ",right_start,"right_end: ", right_end
 		right_wallx=[]
 		right_wally=[]
 		for i in range(len(right_wall)):
