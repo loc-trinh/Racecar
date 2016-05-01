@@ -128,7 +128,7 @@ class BackupRecovery:
         bkpmsg.header.stamp = rospy.Time.now()
         bkpmsg.header.frame_id = "base_link"
         bkpmsg.drive.speed = -0.75
-        bkpmsg.drive.acceleration = 3
+        bkpmsg.drive.acceleration = 1.0
         if(self.goRight):
             bkpmsg.drive.steering_angle = 0.3
         else:
@@ -139,18 +139,18 @@ class BackupRecovery:
             self.drive_pub.publish(stopmsg);
             rospy.sleep(.01)
 
-        for i in range(1,75):
+        for i in range(1,150):
             bkpmsg.header.stamp = rospy.Time.now()
             self.drive_pub.publish(bkpmsg);
             rospy.sleep(.01)
 
-        for i in range(1,10):
+        for i in range(1,25):
             stopmsg.header.stamp = rospy.Time.now()
             self.drive_pub.publish(stopmsg);
             rospy.sleep(.01)
 
         bkpmsg.drive.speed = 0.75
-        bkpmsg.drive.steering_angle = 0
+        bkpmsg.drive.steering_angle = -bkpmsg.drive.steering_angle
 
         for i in range(1,50):
             stopmsg.header.stamp = rospy.Time.now()
