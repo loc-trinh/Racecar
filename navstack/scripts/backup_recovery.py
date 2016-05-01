@@ -95,7 +95,7 @@ class BackupRecovery:
         #Generate list of cells involved
         cells = set()
         for (x,y) in points:
-            cells.add(self.getIndex(x,y))
+            cells.add(self.positionToIndex(x,y))
 
         
         #Check for collision
@@ -138,12 +138,15 @@ class BackupRecovery:
             self.drive_pub.publish(stopmsg);
             rospy.sleep(.01)
 
-
-    def getIndex(self,x,y):
+    def positionToIndex(self,x,y):
         x -= self.grid.info.origin.position.x
         y -= self.grid.info.origin.position.y
         x = int(x*(1/self.grid.info.resolution));
         y  = int(y*(1/self.grid.info.resolution));
+        sx = self.grid.info.width;
+        return int(round(y * sx + x));
+
+    def getIndex(self,x,y):
         sx = self.grid.info.width;
         return int(round(y * sx + x));
 
