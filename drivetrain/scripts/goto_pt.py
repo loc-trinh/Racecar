@@ -55,8 +55,8 @@ class GoToPointNode:
     def doDrive(self):
         # Get point and transform base_frame
         if(self.drive):
-            data.header.stamp = self.listener.getLatestCommonTime(self.base_frame,data.header.frame_id)
-            dest = self.listener.transformPose(self.base_frame, data)
+            self.targetPose.header.stamp = self.listener.getLatestCommonTime(self.base_frame,self.targetPose.header.frame_id)
+            dest = self.listener.transformPose(self.base_frame, self.targetPose)
             
             x = dest.pose.position.x
             y = dest.pose.position.y
