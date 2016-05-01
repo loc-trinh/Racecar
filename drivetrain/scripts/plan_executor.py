@@ -47,11 +47,11 @@ class PlanExecutor:
 
     def req_callback(self, _):
         self.step+=1;
-        rospy.loginfo("Publishing Step " + str(self.step))
+        #rospy.loginfo("Publishing Step " + str(self.step))
         self.pubPlan();
 
     def new_plan_callback(self,data):
-        rospy.loginfo("New Plan Received")
+        #rospy.loginfo("New Plan Received")
         self.cPlan = data;
         self.step = 2;
         self.pubPlan();
