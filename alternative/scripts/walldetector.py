@@ -104,28 +104,28 @@ class WallDetector:
 		# else:
 		# 	my_y=yp
 
-		# a1,a2,b1,b2,c1,c2=ar,al,br,bl,cr,cl
-		x=0.0
-		current=abs(self.diff_dist(ar,al,br,bl,cl,cr,d, x))
-		step=.02
-		changing=True
-		##for i in range(int(d*1/(2.0*step))):
-		while changing:
-			#print "Here"
-			down=abs(self.diff_dist(ar,al,br,bl,cl,cr,d, x-step*(abs(x-step)<=d)))
-			up=abs(self.diff_dist(ar,al,br,bl,cl,cr,d, x+step*(x+step<d)))
-			if min(down,up,current)==current:
-				changing=False
-			current=min(down,up,current)
-			if current==down:
-				x=x-step
-			elif current==up:
-				x=x+step 
-		print "current: ", current, "x: ",x 
+		# # a1,a2,b1,b2,c1,c2=ar,al,br,bl,cr,cl
+		# x=0.0
+		# current=abs(self.diff_dist(ar,al,br,bl,cl,cr,d, x))
+		# step=.02
+		# changing=True
+		# ##for i in range(int(d*1/(2.0*step))):
+		# while changing:
+		# 	#print "Here"
+		# 	down=abs(self.diff_dist(ar,al,br,bl,cl,cr,d, x-step*(abs(x-step)<=d)))
+		# 	up=abs(self.diff_dist(ar,al,br,bl,cl,cr,d, x+step*(x+step<d)))
+		# 	if min(down,up,current)==current:
+		# 		changing=False
+		# 	current=min(down,up,current)
+		# 	if current==down:
+		# 		x=x-step
+		# 	elif current==up:
+		# 		x=x+step 
+		# print "current: ", current, "x: ",x 
 
-		ycpl=x
-		xcpl=np.sqrt(d**2-x**2)
-		# p1=2*b2*a1 
+		# ycpl=x
+		# xcpl=np.sqrt(d**2-x**2)
+		# # p1=2*b2*a1 
 		# p2=2*b1*a2 
 		# q1=2*b2*c1 
 		# q2=2*b1*c2 
@@ -171,13 +171,13 @@ class WallDetector:
 		# print "x1,x2,x3,x4: ",x1,x2,x3,x4
 
 
-		mystart=510
-		xy=[]
-		yx=[]
-		for i in range(30):
-			lx,ly=self.dist_angle_to_xy_transform(i, data.ranges[mystart+i], data.angle_increment, mystart, data.angle_min)
-			xy.append(lx)
-			yx.append(ly)
+		# mystart=510
+		# xy=[]
+		# yx=[]
+		# for i in range(30):
+		# 	lx,ly=self.dist_angle_to_xy_transform(i, data.ranges[mystart+i], data.angle_increment, mystart, data.angle_min)
+		# 	xy.append(lx)
+		# 	yx.append(ly)
 
 
 
