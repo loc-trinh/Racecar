@@ -22,4 +22,7 @@
     </node>
 
 
+    <node pkg="navstack" type="backup_recovery.py" name="backup_recovery" output="screen"/>
+
+
 </launch>
