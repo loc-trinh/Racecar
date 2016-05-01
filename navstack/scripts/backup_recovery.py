@@ -12,8 +12,8 @@ class BackupRecovery:
         self.confident = 0
 
         #Pubs & Subs
-        rospy.Subscriber("/move_base/global_costmap/costmap", OccupancyGrid, self.costmap_callback)
-        rospy.Subscriber("/move_base/global_costmap/costmap_updates", OccupancyGridUpdate, self.costmap_update_callback)
+        rospy.Subscriber("/costmap_base/costmap/costmap", OccupancyGrid, self.costmap_callback)
+        rospy.Subscriber("/costmap_base/costmap/costmap_updates", OccupancyGridUpdate, self.costmap_update_callback)
         self.drive_pub = rospy.Publisher("/vesc/ackermann_cmd_mux/input/nav", AckermannDriveStamped, queue_size=1)
 
     def get_cell_range(self, pt1, pt2, meta):
