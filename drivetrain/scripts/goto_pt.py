@@ -12,11 +12,12 @@ from geometry_msgs.msg import PoseArray, Pose, PointStamped
 class GoToPointNode:    
     x = 0
     y = 0
+    drive=False
 
     def __init__(self):
         # Default Settings
         self.k = 0.8
-        self.topic_input = "/cone_position"
+        self.topic_input = "/move_base_simple/goal"
         self.topic_output = "/vesc/ackermann_cmd_mux/input/nav"
         self.base_frame = "base_link"
         self.map_frame = "odom"
@@ -32,6 +33,8 @@ class GoToPointNode:
         self.lastTheta = 0
         self.distanceI = 0
         self.thetaI = 0
+        self.threshold = 1
+        self.rate=30
 
         # Param Settings
         self.kfactor = rospy.get_param('~k', self.k)
@@ -39,35 +42,39 @@ class GoToPointNode:
         self.topic_output = rospy.get_param('~topic_output', self.topic_output)
         self.base_frame = rospy.get_param('~base_frame', self.base_frame)
         self.map_frame = rospy.get_param('~map_frame', self.map_frame)
+        self.max_speed = rospy.get_param('~max_vel', self.max_speed)
+        self.max_steering_angle = rospy.get_param('~max_theta', self.max_steering_angle)
+        self.threshold = rospy.get_param('~threshold', self.threshold)
+        self.rate = rospy.get_param('~rate', self.rate)
 
         # Pubs and Subs
         self.drive_pub = rospy.Publisher(self.topic_output, AckermannDriveStamped, queue_size=1)
-        rospy.Subscriber(self.topic_input, PointStamped, self.drive_callback)
+        rospy.Subscriber(self.topic_input, PointStamped, self.new_dest_callback)
 
         self.listener = tf.TransformListener(True, rospy.Duration(10.0))
 
-    def drive_callback(self, data):
+    def doDrive(self):
         # Get point and transform base_frame
-        data.header.stamp = self.listener.getLatestCommonTime(self.base_frame,data.header.frame_id)
-        dest = self.listener.transformPoint(self.base_frame, data)
-        x = dest.point.x
-        y = dest.point.y
+        if(self.drive):
+            x = self.x
+            y = self.y
+            # Computer dist and theta
+            distance = math.pow(math.pow(x,2) + math.pow(y,2),  0.5)
+            theta = math.atan2(y,x)
 
-        # Computer dist and theta
-        distance = math.pow(math.pow(x,2) + math.pow(y,2),  0.5)
-        theta = math.atan2(y,x)
+            if(distance < self.threshold):
+                rospy.loginfo("Goal Reached!")
+                self.drive = False
+                return;
 
-        # Prepare to Publish Drive Msg
-        msg = AckermannDriveStamped()
-        msg.header.stamp = rospy.Time.now()
-        msg.header.frame_id = "base_link"
 
-        # if obj too close, drive backwards, else calc speed and theta
-        # tested for points ahead/left, ahead/right, ahead, behind, and current loc
-        if x<=0.2:
-            msg.drive.steering_angle=theta
-            msg.drive.speed=-0.3
-        else:
+            # Prepare to Publish Drive Msg
+            msg = AckermannDriveStamped()
+            msg.header.stamp = rospy.Time.now()
+            msg.header.frame_id = "base_link"
+
+            # calc speed and theta
+            # tested for points ahead/left, ahead/right, ahead, behind, and current loc
             self.distanceI= self.distanceI+distance
             dp= self.kp * distance
             di= self.kd*(distance - self.lastDistance)
@@ -81,10 +88,21 @@ class GoToPointNode:
             td= self.kd* (theta-self.lastTheta)
             msg.drive.steering_angle= max(min(self.max_steering_angle,theta), -1*self.max_steering_angle)
             self.lastTheta=theta
-        print (msg.drive.speed, msg.drive.steering_angle)
-        self.drive_pub.publish(msg)
+            self.drive_pub.publish(msg)
+
+
+    def new_dest_callback(self,data):
+        data.header.stamp = self.listener.getLatestCommonTime(self.base_frame,data.header.frame_id)
+        dest = self.listener.transformPoint(self.base_frame, data)
+        self.x = dest.point.x
+        self.y = dest.point.y
+        self.drive = True
 
 if __name__=="__main__":
-    rospy.init_node("GoToPoint")
-    node = GoToPointNode()
-    rospy.spin()
+    rospy.init_node("goto_pt")
+
+    GotoPt = GoToPointNode()
+    rate = rospy.Rate(GotoPt.rate)
+    while not rospy.is_shutdown():
+        GotoPt.doDrive();
+        rate.sleep();

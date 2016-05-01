@@ -9,14 +9,16 @@ Panels:
         - /LaserScan1
         - /LaserScan1/Status1
         - /TF1/Frames1
-        - /Global Cost Map1/Status1
+        - /Baselink Cost Map1
+        - /Baselink Cost Map1/Status1
         - /Local Costmap1
         - /Local Costmap1/Status1
+        - /Global Plan1
         - /Local Plan1
         - /CurrentGoal1
         - /MASTER_MAP1
         - /MASTER_MAP1/Status1
-      Splitter Ratio: 0.543624
+      Splitter Ratio: 0.549488
     Tree Height: 688
   - Class: rviz/Selection
     Name: Selection
@@ -73,7 +75,7 @@ Visualization Manager:
       Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
-      Max Intensity: 1038
+      Max Intensity: 1831
       Min Color: 0; 0; 0
       Min Intensity: 394
       Name: LaserScan
@@ -130,22 +132,22 @@ Visualization Manager:
       Color Scheme: costmap
       Draw Behind: false
       Enabled: false
-      Name: Global Cost Map
-      Topic: /move_base/global_costmap/costmap
+      Name: Baselink Cost Map
+      Topic: /costmap_base/costmap/costmap
       Value: false
     - Alpha: 0.4
       Class: rviz/Map
       Color Scheme: costmap
       Draw Behind: false
-      Enabled: false
+      Enabled: true
       Name: Local Costmap
-      Topic: /move_base/local_costmap/costmap
-      Value: false
+      Topic: /costmap_odom/costmap/costmap
+      Value: true
     - Alpha: 0.8
       Buffer Length: 1
       Class: rviz/Path
       Color: 85; 85; 255
-      Enabled: false
+      Enabled: true
       Line Style: Billboards
       Line Width: 0.03
       Name: Global Plan
@@ -153,8 +155,8 @@ Visualization Manager:
         X: 0
         Y: 0
         Z: 0
-      Topic: /move_base/TebLocalPlannerROS/global_plan
-      Value: false
+      Topic: /global_plan
+      Value: true
     - Alpha: 0.8
       Buffer Length: 1
       Class: rviz/Path
@@ -215,22 +217,22 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 6.25976
+      Distance: 9.6213
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 1.41769
-        Y: -0.239551
-        Z: 0.665589
+        X: -1.95343
+        Y: -1.92312
+        Z: 0.634419
       Name: Current View
       Near Clip Distance: 0.01
       Pitch: 1.5698
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 3.14499
+      Yaw: 2.58
     Saved: ~
 Window Geometry:
   Displays:
