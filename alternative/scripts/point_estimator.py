@@ -3,11 +3,13 @@
 import rospy
 import tf
 import numpy as np 
+
 import matplotlib.pyplot as plt
 from sensor_msgs.msg import LaserScan
 from std_msgs.msg import Float32
 from geometry_msgs.msg import Point32
-from geometry_msgs.msg import PointStamped
+from geometry_msgs.msg import PointStamped,PoseStamped
+
 from std_msgs.msg import Bool 
 class PointEstimator:
 	"""docstring for PointEstimator"""
@@ -24,7 +26,7 @@ class PointEstimator:
 		self.escape=rospy.Subscriber("escape_point",Point32,self.escape_callback)
 
 
-		self.pubs=rospy.Publisher("/move_base_simple/goal", PointStamped, queue_size=3)
+		self.pubs=rospy.Publisher("/move_base_simple/goal", PoseStamped, queue_size=3)
 		self.listener = tf.TransformListener(True, rospy.Duration(10.0))
 		self.time = rospy.Time.now()
 		#rospy.rate(10)
@@ -150,10 +152,10 @@ class PointEstimator:
 				point.z=0.0
 				spoint.point = point 
 				#spoint.header.frame_id="odom"
-				goal.header.frame_id = 'base_link'
+				spoint.header.frame_id = 'base_link'
 				spoint.header.stamp=self.time 
 				print "false: ", spoint
-				self.pubs.publish(spoint)
+				#self.pubs.publish(spoint)
 			elif self.detected:
 				corner_time=0
 				print "CornerDetected:"
@@ -165,19 +167,27 @@ class PointEstimator:
 				point.z=0.0
 				spoint.point = point 
 				#spoint.header.frame_id="odom"
-				goal.header.frame_id = 'base_link'
+				spoint.header.frame_id = 'base_link'
 				spoint.header.stamp=self.time 
 				print "True", point 
-				self.pubs.publish(spoint)
+
+				#self.pubs.publish(spoint)
 			else:
 				print "OBS_DETECTED"
 				point.x=max(4.0,abs(self.escape.x))
 				point.y=self.escape.y 
 				point.z=0.0
 				spoint.point=point
-				goal.header.frame_id = 'base_link'
+				spoint.header.frame_id = 'base_link'
 				spoint.header.stamp=self.time 
-				self.pubs.publish(spoint)
+				#self.pubs.publish(spoint)
+			goal = PoseStamped()
+	        goal.pose.position.x = spoint.point.x
+	        goal.pose.position.y = spoint.point.y
+	        goal.pose.position.z = 0.0
+	        goal.pose.orientation.w = 1.0#math.atan2(y,x)
+	        goal.header.frame_id = 'base_link'
+	        self.pubs.publish(goal)
 
 			rate.sleep()
 if __name__=="__main__":
