@@ -11,7 +11,7 @@
         <param name="k_dist" type="double" value="4.0"/>
         <param name="max_vel" type="double" value="1"/>
         <param name="max_theta" type="double" value="0.3"/>
-        <param name="threshold" type="double" value="0.4"/>
+        <param name="threshold" type="double" value="0.2"/>
         <param name="rate" type="double" value="30"/>
     </node>
     <node pkg="drivetrain" type="plan_executor.py" name="plan_exec" output="screen" >

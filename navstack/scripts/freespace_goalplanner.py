@@ -191,7 +191,7 @@ if __name__ == "__main__":
     
     # enter the ROS main loop
     
-    rate = rospy.Rate(4)
+    rate = rospy.Rate(30)
     while not rospy.is_shutdown():
         Planner.perform_update();
         rate.sleep()
