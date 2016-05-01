@@ -53,6 +53,7 @@ class WallDetector:
 
 
 		print "angle_min,angle_max: ",data.angle_min,data.angle_max
+		print "range: ", len(data.ranges)
 		#find the x-y transformation of the walldata
 		print "leftstart:", left_start, "leftend: ",left_end, "right_start: ",right_start,"right_end: ", right_end
 		right_wallx=[]
