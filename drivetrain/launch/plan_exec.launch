@@ -2,7 +2,7 @@
     <node pkg="drivetrain" type="goto_pt.py" name="goto_pt" output="screen" >
 
         <param name="topic_goal_in" type="string" value="/plan_executor/goal_out"/>
-        <param name="topic_drive_out" type="string" value="vesc/ackermann_cmd_mux/input/nav"/>
+        <param name="topic_drive_out" type="string" value="vesc/ackermann_cmd_mux/input/nav3"/>
         <param name="topic_plan_req" type="string" value="goto_pt/plan_req"/>
         <param name="base_frame" type="string" value="base_link"/>
         <param name="map_frame" type="string" value="odom"/>
