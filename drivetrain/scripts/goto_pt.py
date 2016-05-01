@@ -25,7 +25,7 @@ class GoToPointNode:
 
         # Initial Settings
         self.k_steer = 0.1
-        self.kp = 0.6*self.k
+        self.kp = 0.6
         self.ki = 0
         self.kd = 0
         self.max_steering_angle = 0.2
@@ -38,7 +38,8 @@ class GoToPointNode:
         self.rate=30
 
         # Param Settings
-        self.kfactor = rospy.get_param('~k', self.k)
+        self.k_steer = rospy.get_param('~k_steer', self.k_steer)
+        self.kp = rospy.get_param('~k_dist', self.kp)
         self.topic_goal_in = rospy.get_param('~topic_goal_in', self.topic_goal_in)
         self.topic_plan_req = rospy.get_param('~topic_plan_req', self.topic_plan_req)
         self.topic_drive_out = rospy.get_param('~topic_drive_out', self.topic_drive_out)

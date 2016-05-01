@@ -7,10 +7,11 @@
         <param name="base_frame" type="string" value="base_link"/>
         <param name="map_frame" type="string" value="odom"/>
 
-        <param name="k" type="double" value="0.1"/>
+        <param name="k_steer" type="double" value="0.1"/>
+        <param name="k_dist" type="double" value="0.5"/>
         <param name="max_vel" type="double" value="0.75"/>
         <param name="max_theta" type="double" value="0.2"/>
-        <param name="threshold" type="double" value="1"/>
+        <param name="threshold" type="double" value="0.4"/>
         <param name="rate" type="double" value="30"/>
     </node>
     <node pkg="drivetrain" type="plan_executor.py" name="plan_exec" output="screen" >
