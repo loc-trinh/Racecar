@@ -140,8 +140,8 @@ class BackupRecovery:
 
 
     def getIndex(self,x,y):
-        x -= self.grid.origin.position.x
-        y -= self.grid.origin.position.y
+        x -= self.grid.info.origin.position.x
+        y -= self.grid.info.origin.position.y
         x = int(x*(1/self.grid.info.resolution));
         y  = int(y*(1/self.grid.info.resolution));
         sx = self.grid.info.width;
