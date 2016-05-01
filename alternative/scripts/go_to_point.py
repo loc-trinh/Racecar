@@ -24,7 +24,7 @@ class GoToPointNode:
         self.ki = 0
         self.kd = 0
         self.max_steering_angle = 0.2
-        self.max_speed =1.0
+        self.max_speed =1.5
         self.lastDistance = 0
         self.lastTheta = 0
         self.distanceI = 0

@@ -151,14 +151,14 @@ class PointEstimator:
 				spoint.header.stamp=self.time 
 				print "false: ", spoint
 				self.pubs.publish(spoint)
-			elif self.detected and not self.obs_detected:
+			elif self.detected:
 				corner_time=0
 				print "CornerDetected:"
 				y=self.dist*np.sin(self.angle)
 				x=self.dist*np.cos(self.angle)
 
-				point.x=y
-				point.y=-x
+				point.x=abs(x)
+				point.y=-y
 				point.z=0.0
 				spoint.point = point 
 				#spoint.header.frame_id="odom"
@@ -167,7 +167,7 @@ class PointEstimator:
 				self.pubs.publish(spoint)
 			else:
 				print "OBS_DETECTED"
-				point.x=self.escape.x
+				point.x=max(4.0,abs(self.escape.x))
 				point.y=self.escape.y 
 				point.z=0.0
 				spoint.point=point
