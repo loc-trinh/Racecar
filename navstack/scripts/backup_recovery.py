@@ -53,7 +53,7 @@ class BackupRecovery:
             print "Waiting for Initial OCC Grid..."
             return
 
-        cells = self.get_cell_range([-.5,0],[.5,.5],self.grid.info)
+        cells = self.get_cell_range([-.5,0],[.5,1.0],self.grid.info)
         unknown, empty, full = self.count(self.grid.data, cells)
 
         if full > 10:
@@ -67,6 +67,7 @@ class BackupRecovery:
             msg.header.stamp = rospy.Time.now()
             msg.header.frame_id = "base_link"
             msg.drive.speed = -5
+            msg.drive.acceleration = 100
             msg.drive.steering_angle = 0
             self.drive_pub.publish(msg)
 
