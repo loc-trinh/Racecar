@@ -6,7 +6,7 @@ import math
 import tf
 
 from ackermann_msgs.msg import AckermannDriveStamped
-from geometry_msgs.msg import PoseArray, Pose, PointStamped
+from geometry_msgs.msg import PoseArray, Pose, PoseStamped
 
 
 class GoToPointNode:    
@@ -49,7 +49,7 @@ class GoToPointNode:
 
         # Pubs and Subs
         self.drive_pub = rospy.Publisher(self.topic_output, AckermannDriveStamped, queue_size=1)
-        rospy.Subscriber(self.topic_input, PointStamped, self.new_dest_callback)
+        rospy.Subscriber(self.topic_input, PoseStamped, self.new_dest_callback)
 
         self.listener = tf.TransformListener(True, rospy.Duration(10.0))
 
@@ -94,8 +94,8 @@ class GoToPointNode:
     def new_dest_callback(self,data):
         data.header.stamp = self.listener.getLatestCommonTime(self.base_frame,data.header.frame_id)
         dest = self.listener.transformPoint(self.base_frame, data)
-        self.x = dest.point.x
-        self.y = dest.point.y
+        self.x = dest.pose.position.x
+        self.y = dest.pose.position.y
         self.drive = True
 
 if __name__=="__main__":
