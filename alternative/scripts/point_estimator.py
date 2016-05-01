@@ -1,5 +1,7 @@
 #!/usr/bin/python
+
 import rospy
+import tf
 import numpy as np 
 import matplotlib.pyplot as plt
 from sensor_msgs.msg import LaserScan
@@ -22,8 +24,8 @@ class PointEstimator:
 		self.escape=rospy.Subscriber("escape_point",Point32,self.escape_callback)
 
 
-		self.pubs=rospy.Publisher("point_position", PointStamped, queue_size=3)
-
+		self.pubs=rospy.Publisher("/move_base_simple/goal", PointStamped, queue_size=3)
+		self.listener = tf.TransformListener(True, rospy.Duration(10.0))
 		self.time = rospy.Time.now()
 		#rospy.rate(10)
 
@@ -148,6 +150,7 @@ class PointEstimator:
 				point.z=0.0
 				spoint.point = point 
 				#spoint.header.frame_id="odom"
+				goal.header.frame_id = 'base_link'
 				spoint.header.stamp=self.time 
 				print "false: ", spoint
 				self.pubs.publish(spoint)
@@ -162,6 +165,7 @@ class PointEstimator:
 				point.z=0.0
 				spoint.point = point 
 				#spoint.header.frame_id="odom"
+				goal.header.frame_id = 'base_link'
 				spoint.header.stamp=self.time 
 				print "True", point 
 				self.pubs.publish(spoint)
@@ -171,6 +175,7 @@ class PointEstimator:
 				point.y=self.escape.y 
 				point.z=0.0
 				spoint.point=point
+				goal.header.frame_id = 'base_link'
 				spoint.header.stamp=self.time 
 				self.pubs.publish(spoint)
 
