@@ -56,7 +56,7 @@ class BackupRecovery:
         cells = self.get_cell_range([-.5,0],[.5,.5],self.grid.info)
         unknown, empty, full = self.count(self.grid.data, cells)
 
-        if self.full > 10:
+        if full > 10:
             self.confident += 1
 
         if confident > 5:
