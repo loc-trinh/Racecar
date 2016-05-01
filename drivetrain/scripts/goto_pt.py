@@ -10,7 +10,7 @@ from geometry_msgs.msg import PoseArray, Pose, PoseStamped
 
 
 class GoToPointNode:    
-    self.targetPose = None
+    targetPose = None
     drive=False
 
     def __init__(self):
