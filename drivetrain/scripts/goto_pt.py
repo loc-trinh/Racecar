@@ -10,8 +10,7 @@ from geometry_msgs.msg import PoseArray, Pose, PoseStamped
 
 
 class GoToPointNode:    
-    x = 0
-    y = 0
+    self.targetPose = None
     drive=False
 
     def __init__(self):
@@ -56,11 +55,16 @@ class GoToPointNode:
     def doDrive(self):
         # Get point and transform base_frame
         if(self.drive):
-            x = self.x
-            y = self.y
+            data.header.stamp = self.listener.getLatestCommonTime(self.base_frame,data.header.frame_id)
+            dest = self.listener.transformPose(self.base_frame, data)
+            
+            x = dest.pose.position.x
+            y = dest.pose.position.y
+            
             # Computer dist and theta
             distance = math.pow(math.pow(x,2) + math.pow(y,2),  0.5)
             theta = math.atan2(y,x)
+            rospy.loginfo("Distance: " + str(distance))
 
             if(distance < self.threshold):
                 rospy.loginfo("Goal Reached!")
@@ -92,10 +96,8 @@ class GoToPointNode:
 
 
     def new_dest_callback(self,data):
-        data.header.stamp = self.listener.getLatestCommonTime(self.base_frame,data.header.frame_id)
-        dest = self.listener.transformPose(self.base_frame, data)
-        self.x = dest.pose.position.x
-        self.y = dest.pose.position.y
+
+        self.targetPose = data;
         self.drive = True
 
 if __name__=="__main__":
