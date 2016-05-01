@@ -5,6 +5,7 @@ from map_msgs.msg import OccupancyGridUpdate
 from ackermann_msgs.msg import AckermannDriveStamped
 from geometry_msgs.msg import PoseStamped
 import tf
+import math
 
 class BackupRecovery:
     cGoal = None
@@ -106,6 +107,7 @@ class BackupRecovery:
             self.perform_backup_move();
 
     def perform_backup_move(self):
+        rospy.loginfo("Performing Backup Recovery!")
         stopmsg = AckermannDriveStamped()
         stopmsg.header.stamp = rospy.Time.now()
         stopmsg.header.frame_id = "base_link"
