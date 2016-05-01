@@ -53,7 +53,7 @@ class PlanExecutor:
     def new_plan_callback(self,data):
         rospy.loginfo("New Plan Received")
         self.cPlan = data;
-        self.step = 0;
+        self.step = 2;
         self.pubPlan();
 
 
