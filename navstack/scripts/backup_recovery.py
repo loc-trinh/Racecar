@@ -55,7 +55,7 @@ class BackupRecovery:
         self.cGoal = data;
 
     def recover_callback(self,data):
-        self.goRight = data;
+        self.goRight = data.data;
 
     def count(self,grid,cells):
         unknown = 0
