@@ -45,7 +45,7 @@ class PlanExecutor:
             msg.pose = self.cPlan.poses[self.step].pose;
             self.pose_pub.publish(msg)
 
-    def req_callback(self):
+    def req_callback(self, _):
         self.step+=1;
         rospy.loginfo("Publishing Step " + str(self.step))
         self.pubPlan();
