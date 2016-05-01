@@ -104,6 +104,7 @@ Costmap2DROS::Costmap2DROS(std::string name, tf::TransformListener& tf) :
   private_nh.param("track_unknown_space", track_unknown_space, false);
   private_nh.param("always_send_full_costmap", always_send_full_costmap, false);
   private_nh.param("no_memory", no_memory, false);
+  ROS_INFO("    no_memory: %d", (int)no_memory);
 
   layered_costmap_ = new LayeredCostmap(global_frame_, rolling_window, track_unknown_space);
 
@@ -384,8 +385,8 @@ void Costmap2DROS::mapUpdateLoop(double frequency)
     double start_t, end_t, t_diff;
     gettimeofday(&start, NULL);
     
-    //if(no_memory)
-    resetLayers();
+    if(no_memory)
+      resetLayers();
 
     updateMap();
 
