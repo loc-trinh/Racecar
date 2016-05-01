@@ -100,6 +100,7 @@ class BackupRecovery:
         
         #Check for collision
         collide = False
+        rospy.loginfo(cells)
         for cell in cells:
             if self.grid.data[cell] > 0:
                 collide = True
