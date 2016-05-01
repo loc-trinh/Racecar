@@ -93,7 +93,7 @@ class GoToPointNode:
 
     def new_dest_callback(self,data):
         data.header.stamp = self.listener.getLatestCommonTime(self.base_frame,data.header.frame_id)
-        dest = self.listener.transformPoint(self.base_frame, data)
+        dest = self.listener.transformPose(self.base_frame, data)
         self.x = dest.pose.position.x
         self.y = dest.pose.position.y
         self.drive = True
