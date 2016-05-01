@@ -1,8 +1,8 @@
 global_frame: /odom
 robot_base_frame: base_link
 robot_radius: 0.05
-update_frequency: 20.0
-publish_frequency: 20.0
+update_frequency: 30.0
+publish_frequency: 30.0
 publish_voxel_map: true
 static_map: false
 #rolling_window: true
