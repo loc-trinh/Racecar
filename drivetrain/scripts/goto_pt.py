@@ -79,6 +79,7 @@ class GoToPointNode:
                 rospy.loginfo("Goal Reached!")
                 self.drive = False
                 self.reqed = False
+                self.req_pub.publish(True)
                 return;
 
 
