@@ -8,7 +8,7 @@ from geometry_msgs.msg import Point32
 from std_msgs.msg import Bool
 class ProbNav:
 	def __init__(self):
-		self.subs=rospy.Subscriber("/racecar/laser/scan",LaserScan, self.goalcallback, queue_size=1)
+		self.subs=rospy.Subscriber("/scan",LaserScan, self.goalcallback, queue_size=1)
 		self.goal=rospy.Publisher("escape_point",Point32,queue_size=1)
 		self.obs_detected=rospy.Publisher("obs_detected", Bool,queue_size=1)
 		self.front_wind=np.pi/72

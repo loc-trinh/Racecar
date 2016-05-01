@@ -187,6 +187,7 @@ class PointEstimator:
 			goal.pose.position.z = 0.0
 			goal.pose.orientation.w = 1.0#math.atan2(y,x)
 			goal.header.frame_id = 'base_link'
+			print "goal: ", goal
 			self.pubs.publish(goal)
 
 			rate.sleep()
