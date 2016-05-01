@@ -24,7 +24,8 @@ class BackupRecovery:
         rospy.Subscriber(self.topic_goal_in, PoseStamped, self.new_dest_callback)
         self.drive_pub = rospy.Publisher("/vesc/ackermann_cmd_mux/input/nav", AckermannDriveStamped, queue_size=1)
 
-
+        self.listener = tf.TransformListener(True, rospy.Duration(10.0))
+        
     def get_cell_range(self, pt1, pt2, meta):
         #1 - Convert points to map coords
         pt1[0] -= meta.origin.position.x;
