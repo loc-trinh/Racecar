@@ -7,7 +7,7 @@ from std_msgs.msg import Float32
 class WallDetector:
 	def __init__(self):
 		
-		self.subs=rospy.Subscriber("/racecar/laser/scan", LaserScan, self.wallcallback)
+		self.subs=rospy.Subscriber("scan", LaserScan, self.wallcallback)
 		self.right_slope=rospy.Publisher("walldata/rslope",Float32, queue_size=1)
 		self.right_intercept=rospy.Publisher("walldata/rintercept",Float32, queue_size=1)
 		self.l_slope=rospy.Publisher("walldata/lslope",Float32, queue_size=1)

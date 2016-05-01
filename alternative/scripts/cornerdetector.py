@@ -6,7 +6,7 @@ from std_msgs.msg import Bool
 import numpy as np 
 class CornerDetector:
 	def __init__(self):
-		self.subs=rospy.Subscriber("/scan", LaserScan, self.cornercallback)
+		self.subs=rospy.Subscriber("scan", LaserScan, self.cornercallback)
 		self.bool=rospy.Publisher("corner/bool",Bool,queue_size=2)
 		self.corner_angle=rospy.Publisher("corner/angle",Float32,queue_size=2)
 		self.detection_window=[np.pi/6,np.pi/3] #where to watch
