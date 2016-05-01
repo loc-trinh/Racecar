@@ -134,10 +134,7 @@ class FreespacePlanner:
         print "C Ranking = %f" % center_far
         print "Center Navigable = %f" % center_close
 
-        if center_close < 0.4:
-            x = -0.5;
-        else:
-            x = 4*center_far
+        x = min(0.75, 4*center_far)
 
         if right_free > 0.4:
             y = -3
