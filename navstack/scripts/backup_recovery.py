@@ -77,8 +77,8 @@ class BackupRecovery:
         #Generate points in direction:
         step_dist = 0.1;
         prev_point = (0,0)
-        deltax = end.pose.position.x - 0
-        deltay = end.pose.position.y - 0
+        deltax = dest.pose.position.x - 0
+        deltay = dest.pose.position.y - 0
         vnorm = math.sqrt(deltax**2 + deltay**2)
         dx = deltax / vnorm
         dy = deltay / vnorm
