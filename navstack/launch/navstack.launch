@@ -3,6 +3,6 @@
   <include file="$(find navstack)/launch/costmaps.launch" />
   
   <!-- Planners -->
-  <node pkg="global_planner" type="global_planner.py" name="global_planner" output="screen"/>
+  <node pkg="navstack" type="curve_planner.py" name="curve_planner" output="screen"/>
 
 </launch>
