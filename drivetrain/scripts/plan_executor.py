@@ -41,7 +41,7 @@ class PlanExecutor:
         # Get point and transform base_frame
         if(self.step < len(self.cPlan.poses)):
             msg = PoseStamped();
-            msg.header = cPlan.header;
+            msg.header = self.cPlan.header;
             msg.pose = self.cPlan.poses[step].pose;
             self.pose_pub.publish(msg)
 
