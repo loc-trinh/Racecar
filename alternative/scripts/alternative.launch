@@ -5,9 +5,9 @@
 		
 		<node pkg="alternative" name="WallDetector" type="walldetector.py" />
 		
-		<node pkg="alternative" name="GoToPoint" type="go_to_point.py" output="screen" />
+		<!--node pkg="alternative" name="GoToPoint" type="go_to_point.py" output="screen" -->
 		
-		<node pkg="alternative" name="servo_commands" type="servo_commands.py" />
+		<!--node pkg="alternative" name="servo_commands" type="servo_commands.py" -->
 		<!--node pkg="alternative" name="ProbNav" type="prob_planner.py"-->
 		<node pkg="alternative" name="PointEstimator" type="point_estimator.py"/>
 
