@@ -31,7 +31,7 @@ class PlanExecutor:
         #self.rate = rospy.get_param('~rate', self.rate)
 
         # Pubs and Subs
-        self.pose_pub = rospy.Publisher(self.topic_output, AckermannDriveStamped, queue_size=1)
+        self.pose_pub = rospy.Publisher(self.topic_output, PoseStamped, queue_size=1)
         rospy.Subscriber(self.topic_plan_in, Path, self.new_plan_callback)
         rospy.Subscriber(self.topic_req, Bool, self.req_callback)
 
