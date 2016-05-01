@@ -69,14 +69,14 @@ class GoToPointNode:
             # Computer dist and theta
             distance = math.pow(math.pow(x,2) + math.pow(y,2),  0.5)
             theta = math.atan2(y,x)
-            rospy.loginfo("Distance: " + str(distance))
+            #rospy.loginfo("Distance: " + str(distance))
 
             if(distance < self.threshold * 2 and self.reqed == False): 
                 self.reqed = True
                 self.req_pub.publish(True)
 
             if(distance < self.threshold):
-                rospy.loginfo("Goal Reached!")
+                #rospy.loginfo("Goal Reached!")
                 self.drive = False
                 self.reqed = False
                 self.req_pub.publish(True)
