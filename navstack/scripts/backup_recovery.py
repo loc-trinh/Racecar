@@ -140,7 +140,7 @@ class BackupRecovery:
 
     def getIndex(self,x,y):
         sx = self.grid.info.width;
-        return int(y * sx + x);
+        return int(round(y * sx + x));
 
     def costmap_update_callback(self,data):
         if self.grid == None:
