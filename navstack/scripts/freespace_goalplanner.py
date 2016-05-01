@@ -33,8 +33,8 @@ class FreespacePlanner:
 
         #Default settings
         self.kfactor = 0.6;
-        self.topic_occgrid = "/move_base/global_costmap/costmap";
-        self.topic_occgridupdates = "/move_base/global_costmap/costmap_updates";
+        self.topic_occgrid = "/costmap_base/costmap/costmap";
+        self.topic_occgridupdates = "/costmap_base/costmap/costmap_updates";
         self.topic_output = "/move_base_simple/goal";
         self.base_frame = "base_link"
         self.map_frame = "odom";
