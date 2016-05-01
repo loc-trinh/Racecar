@@ -42,7 +42,7 @@ class PlanExecutor:
         if(self.step < len(self.cPlan.poses)):
             msg = PoseStamped();
             msg.header = self.cPlan.header;
-            msg.pose = self.cPlan.poses[step].pose;
+            msg.pose = self.cPlan.poses[self.step].pose;
             self.pose_pub.publish(msg)
 
     def req_callback(self):
