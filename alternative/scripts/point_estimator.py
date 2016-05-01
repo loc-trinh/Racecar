@@ -91,7 +91,7 @@ class PointEstimator:
 		#print "d1:",d1,"d2: ",d2
 		return d1-1.0*d2
 	def publisher(self):
-		rate=rospy.Rate(4)
+		rate=rospy.Rate(10)
 		corner_time=100
 		while not rospy.is_shutdown():
 			corner_time+=1

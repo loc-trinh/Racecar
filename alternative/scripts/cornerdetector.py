@@ -16,7 +16,7 @@ class CornerDetector:
 		self.last_detection_state=False#wether something was detected for the last run
 		self.change_threshold=2.0#change in the reading
 		self.wind=5
-		self.angle_offset=np.pi/36
+		self.angle_offset=np.pi/30
 		self.front_wind=np.pi/144
 	def means(self,window):
 		"""
@@ -74,7 +74,7 @@ class CornerDetector:
 			point=start+index
 			angle=point/float(len(data.ranges))*(data.angle_max-data.angle_min)+data.angle_min
 			if angle>0:
-				angle=angle-self.angle_offset
+				angle=angle-self.angle_offset/2.0
 			else:
 				angle=angle+self.angle_offset
 			boool=True

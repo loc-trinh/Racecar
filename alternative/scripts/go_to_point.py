@@ -12,7 +12,7 @@ from geometry_msgs.msg import PoseArray, Pose, PointStamped
 class GoToPointNode:
     def __init__(self):
         # Default Settings
-        self.k = 0.8
+        self.k = 0.9
         self.topic_input = "/point_position"
         self.topic_output = "drive_control/ackermann_drive"#"/vesc/ackermann_cmd_mux/input/nav"#
         self.base_frame = "base_link"
@@ -20,11 +20,11 @@ class GoToPointNode:
 
         # Initial Settings
         self.k_steer = 0.1
-        self.kp = 0.6*self.k
+        self.kp = 0.9*self.k
         self.ki = 0
         self.kd = 0
         self.max_steering_angle = 0.2
-        self.max_speed =1.5
+        self.max_speed =2.5
         self.lastDistance = 0
         self.lastTheta = 0
         self.distanceI = 0
