@@ -9,6 +9,7 @@ import math
 
 class BackupRecovery:
     cGoal = None
+    goRight = True
     def __init__(self):
         #Class members
         self.grid = None
@@ -75,6 +76,10 @@ class BackupRecovery:
 
         self.cGoal.header.stamp = self.listener.getLatestCommonTime(self.base_frame,self.cGoal.header.frame_id)
         dest = self.listener.transformPose(self.base_frame, self.cGoal)
+        if dest.pose.position.y <= 0:
+            self.goRight = True
+        else:
+            self.goRight = False
 
         #Generate points in direction:
         step_dist = 0.1;
@@ -122,7 +127,10 @@ class BackupRecovery:
         bkpmsg.header.frame_id = "base_link"
         bkpmsg.drive.speed = -0.75
         bkpmsg.drive.acceleration = 1
-        bkpmsg.drive.steering_angle = 0.3
+        if(self.goRight):
+            bkpmsg.drive.steering_angle = 0.3
+        else:
+            bkpmsg.drive.steering_angle = -0.3
 
         for i in range(1,25):
             stopmsg.header.stamp = rospy.Time.now()
@@ -137,6 +145,14 @@ class BackupRecovery:
         for i in range(1,10):
             stopmsg.header.stamp = rospy.Time.now()
             self.drive_pub.publish(stopmsg);
+            rospy.sleep(.01)
+
+        bkpmsg.drive.speed = 1
+        bkpmsg.drive.steering_angle = 0
+
+        for i in range(1,25):
+            stopmsg.header.stamp = rospy.Time.now()
+            self.drive_pub.publish(bkpmsg);
             rospy.sleep(.01)
 
     def positionToIndex(self,x,y):
