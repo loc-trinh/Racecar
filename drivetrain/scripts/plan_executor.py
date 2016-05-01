@@ -39,7 +39,7 @@ class PlanExecutor:
 
     def pubPlan(self):
         # Get point and transform base_frame
-        if(step < len(self.cPlan.poses)):
+        if(self.step < len(self.cPlan.poses)):
             msg = PoseStamped();
             msg.header = cPlan.header;
             msg.pose = self.cPlan.poses[step].pose;
