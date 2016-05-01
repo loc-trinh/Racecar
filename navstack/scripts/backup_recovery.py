@@ -57,10 +57,12 @@ class BackupRecovery:
         unknown, empty, full = self.count(self.grid.data, cells)
 
         if full > 10:
-            self.confident += 1
+            self.confident = max(6, self.confident+1)
+        else: 
+            self.confident = min(0, self.confident-1)
 
-        if self.confident > 5:
-            self.confident = 0
+        if self.confident > 3:
+            #self.confident = 0
             msg = AckermannDriveStamped()
             msg.header.stamp = rospy.Time.now()
             msg.header.frame_id = "base_link"
