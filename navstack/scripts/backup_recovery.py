@@ -59,7 +59,7 @@ class BackupRecovery:
         if full > 10:
             self.confident += 1
 
-        if confident > 5:
+        if self.confident > 5:
             self.confident = 0
             msg = AckermannDriveStamped()
             msg.header.stamp = rospy.Time.now()
