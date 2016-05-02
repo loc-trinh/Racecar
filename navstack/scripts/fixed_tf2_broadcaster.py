@@ -19,7 +19,7 @@ class FixedTFBroadcaster:
             t.header.stamp = rospy.Time.now()
             t.child_frame_id = "base_link"
             t.transform.translation.x = -2.0
-            t.transform.translation.y = -4.0
+            t.transform.translation.y = -3.0
             t.transform.translation.z = 0.0
 
             t.transform.rotation.x = 0.0
