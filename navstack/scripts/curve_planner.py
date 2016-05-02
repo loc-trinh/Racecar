@@ -30,7 +30,7 @@ class GlobalPlanner:
 		end = tf2_geometry_msgs.do_transform_pose(goal, transform_ob)
 
 		#Creating plan
-		step = 20
+		step = 8
 		points = []
 		prev_point = start
 		dx = end.pose.position.x - start.pose.position.x

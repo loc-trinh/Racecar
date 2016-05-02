@@ -19,6 +19,7 @@ Panels:
         - /CurrentGoal1
         - /MASTER_MAP1
         - /MASTER_MAP1/Status1
+        - /C_goal1
       Splitter Ratio: 0.549488
     Tree Height: 688
   - Class: rviz/Selection
@@ -76,9 +77,9 @@ Visualization Manager:
       Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
-      Max Intensity: 1499
+      Max Intensity: 1342
       Min Color: 0; 0; 0
-      Min Intensity: 395
+      Min Intensity: 394
       Name: LaserScan
       Position Transformer: XYZ
       Queue Size: 0
@@ -194,6 +195,20 @@ Visualization Manager:
       Name: MASTER_MAP
       Topic: /map
       Value: false
+    - Alpha: 1
+      Axes Length: 1
+      Axes Radius: 0.1
+      Class: rviz/Pose
+      Color: 255; 25; 0
+      Enabled: true
+      Head Length: 0.3
+      Head Radius: 0.1
+      Name: C_goal
+      Shaft Length: 1
+      Shaft Radius: 0.05
+      Shape: Arrow
+      Topic: /plan_executor/goal_out
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -218,22 +233,22 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 3.8236
+      Distance: 3.96005
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -0.366079
-        Y: -1.79264
-        Z: 0.635693
+        X: 0.680709
+        Y: -0.237489
+        Z: 0.465977
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 1.5698
+      Pitch: 1.5648
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 2.58
+      Yaw: 2.605
     Saved: ~
 Window Geometry:
   Displays:
