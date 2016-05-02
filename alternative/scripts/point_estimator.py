@@ -152,7 +152,7 @@ class PointEstimator:
 				point.z=0.0
 				spoint.point = point 
 				#spoint.header.frame_id="odom"
-				spoint.header.frame_id = 'base_link'
+				#spoint.header.frame_id = 'base_link'
 				spoint.header.stamp=self.time 
 				print "false: ", spoint
 				self.pubs.publish(spoint)
@@ -167,7 +167,7 @@ class PointEstimator:
 				point.z=0.0
 				spoint.point = point 
 				#spoint.header.frame_id="odom"
-				spoint.header.frame_id = 'base_link'
+				#spoint.header.frame_id = 'base_link'
 				spoint.header.stamp=self.time 
 				print "True", point 
 
@@ -178,7 +178,7 @@ class PointEstimator:
 				point.y=self.escape.y 
 				point.z=0.0
 				spoint.point=point
-				spoint.header.frame_id = 'base_link'
+				#spoint.header.frame_id = 'base_link'
 				spoint.header.stamp=self.time 
 				self.pubs.publish(spoint)
 			# goal = PoseStamped()
