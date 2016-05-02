@@ -155,7 +155,7 @@ class PointEstimator:
 				spoint.header.frame_id = 'base_link'
 				spoint.header.stamp=self.time 
 				print "false: ", spoint
-				#self.pubs.publish(spoint)
+				self.pubs.publish(spoint)
 			elif self.detected:
 				corner_time=0
 				print "CornerDetected:"
@@ -171,7 +171,7 @@ class PointEstimator:
 				spoint.header.stamp=self.time 
 				print "True", point 
 
-				#self.pubs.publish(spoint)
+				self.pubs.publish(spoint)
 			else:
 				print "OBS_DETECTED"
 				point.x=max(4.0,abs(self.escape.x))
@@ -180,15 +180,15 @@ class PointEstimator:
 				spoint.point=point
 				spoint.header.frame_id = 'base_link'
 				spoint.header.stamp=self.time 
-				#self.pubs.publish(spoint)
-			goal = PoseStamped()
-			goal.pose.position.x = spoint.point.x
-			goal.pose.position.y = spoint.point.y
-			goal.pose.position.z = 0.0
-			goal.pose.orientation.w = 1.0#math.atan2(y,x)
-			goal.header.frame_id = 'base_link'
-			print "goal: ", goal
-			self.pubs.publish(goal)
+				self.pubs.publish(spoint)
+			# goal = PoseStamped()
+			# goal.pose.position.x = spoint.point.x
+			# goal.pose.position.y = spoint.point.y
+			# goal.pose.position.z = 0.0
+			# goal.pose.orientation.w = 1.0#math.atan2(y,x)
+			# goal.header.frame_id = 'base_link'
+			# print "goal: ", goal
+			# self.pubs.publish(goal)
 
 			rate.sleep()
 if __name__=="__main__":
