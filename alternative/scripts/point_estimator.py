@@ -26,7 +26,7 @@ class PointEstimator:
 		self.escape=rospy.Subscriber("escape_point",Point32,self.escape_callback)
 
 
-		self.pubs=rospy.Publisher("/move_base_simple/goal", PointStamped, queue_size=3)
+		self.pubs=rospy.Publisher("/point_position", PointStamped, queue_size=3)
 		self.listener = tf.TransformListener(True, rospy.Duration(10.0))
 		self.time = rospy.Time.now()
 		#rospy.rate(10)
