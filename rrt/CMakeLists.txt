@@ -131,7 +131,7 @@ include_directories(
 # add_dependencies(image_processing ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
-add_executable(alt_local_planner src/alt_local_planner.cpp)
+#add_executable(alt_local_planner src/alt_local_planner.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
@@ -139,9 +139,9 @@ add_executable(alt_local_planner src/alt_local_planner.cpp)
 
 ## Specify libraries to link a library or executable target against
 
-target_link_libraries(alt_local_planner
-  ${catkin_LIBRARIES}
-)
+#target_link_libraries(alt_local_planner
+#  ${catkin_LIBRARIES}
+#)
 #target_link_libraries(image_filter_node
 #  ${catkin_LIBRARIES}
 #  ${OpenCV_LIBRARIES}
