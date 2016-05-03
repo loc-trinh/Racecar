@@ -52,10 +52,12 @@ class LocalPlannerNode:
     		# check if the current dest point is valid
     		# check if the points in between are valid (reachability)
     		# if either check violated, one-step branch
-    			# sample random range of points
+                # compute y (ROS's +x) distance
+    			# sample random range of points at this dist
     			# order by proximity to current point
     			# pick closest point that is free
     			# add new dest point to newPath
+                # TODO - prune for max steering angle/infeasibility of final goal
     		# else, append current dest point from globalPath to newPath
 
     	for pose_ind in xrange(1,len(globalPath)):
@@ -89,10 +91,36 @@ class LocalPlannerNode:
 
 			# if need to branch, run helper, else append current path to newPath
             if branch:
-                # run helper function
+                new_dest = self.branch(newPath[pose_ind-1].pose.position, dest)
+                newPath.append(new_dest)
             else:
                 # need to update point header or...?
                 newPath.append(globalPath[pose_ind])
+
+    # one-step RRT branch, returns PoseStamped
+    def branch(self, prev, dest):
+        # change when adding bounding box
+        # dist = dest.y-prev.y
+        # dude what's a reasonable width for this?
+        width = self.grid.info.width / 6
+
+        rands = []
+        for i in xrange(10):
+            sample_dest = (dest.x+random.uniform(0, width), dest.y)
+            cost_of_dest = self.grid.data[positionToIndex(sample_dest[0], sample_dest[1])]
+            if cost_of_dest > 0:
+                rands.append(new_dest)
+        
+        new_dest = min(rands, key=lambda x: x[0])
+
+        # create new PoseStamped
+        pose = geometry_msgs.msg.PoseStamped()
+        pose.pose.position.x = new_dest[0]
+        pose.pose.position.y = new_dest[1]
+        pose.header.frame_id = self.base_frame
+        pose.header.stamp = rospy.Time.now()
+
+        return pose
 
     # Converts base_link position to index in occupancygrid
     def positionToIndex(self,x,y):
