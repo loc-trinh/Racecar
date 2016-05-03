@@ -61,6 +61,8 @@ class LocalPlannerNode:
     	for pose_ind in xrange(1,len(globalPath)):
 			branch = False
 
+			prev = newPath[pose_ind-1].pose.position
+
 			# lookup dest and find its value
 			dest = globalPath[pose_ind].pose.position
 			dest_grid = self.positionToIndex(dest.x, dest.y)
@@ -68,23 +70,29 @@ class LocalPlannerNode:
 				branch = True
 
 			# sample points between current newPath and next dest
+			# find slope and sample some points to next dest
+			inbetween = []
+			slope = float(dest.y - prev.y) / (dest.x - prev.x)
+			partition = 10
+			delta = float(sqrt(sum(dest.x-prev.x)**2,(dest.y-prev.y)**2) / partition)
+			for i in xrange(partition):
+				sample_x = prev.x + delta
+				sample_y = prev.y + ratio * delta
+                inbetween.append((sample_x, sample_y))
+                prev.x = sample_x
+                prev.y = sample_y
+            for point in inbetween:
+                grid_ind = positionToIndex(point[0], point[1])
+    			if self.grid.data[grid_ind] > 0:
+    				branch = True
+    				break
 
-			# find slope
-
-			if self.grid.data[grid_ind] > 0:
-				branch = True
-				break
-
-			# branch (helper function?)
-
-			float ratio = (grid_x2 - grid_x1) / (grid_y2 - grid_y1)
-			float width = grid_y2 - grid_y1;
-			for(int i = 0; i < width; i++) {
-			    float new_y = grid_y1 + i;
-			    float new_x = grid_x1 + (ratio * i);
-			    if (map[new_x * map.info.width + new_y] > threshold);
-			    	branch = true;
-
+			# if need to branch, run helper, else append current path to newPath
+            if branch:
+                # run helper function
+            else:
+                # need to update point header or...?
+                newPath.append(globalPath[pose_ind])
 
     # Converts base_link position to index in occupancygrid
     def positionToIndex(self,x,y):
