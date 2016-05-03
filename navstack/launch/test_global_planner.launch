@@ -1,0 +1,4 @@
+<launch>
+    <node pkg="global_planner" type="fixed_tf2_broadcaster.py" name="broadcaster_fixed" output="screen"/>
+    <node pkg="global_planner" type="global_planner.py" name="global_planner" output="screen"/>
+</launch>

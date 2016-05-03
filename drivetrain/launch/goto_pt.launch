@@ -1,0 +1,16 @@
+<launch>
+    <node pkg="drivetrain" type="goto_pt.py" name="GotoPt" output="screen" >
+
+        <param name="topic_input" type="string" value="/move_base_simple/goal"/>
+        <param name="topic_output" type="string" value="vesc/ackermann_cmd_mux/input/nav"/>
+        <param name="base_frame" type="string" value="base_link"/>
+        <param name="map_frame" type="string" value="odom"/>
+
+        <param name="k" type="double" value="0.1"/>
+        <param name="max_vel" type="double" value="0.75"/>
+        <param name="max_theta" type="double" value="0.2"/>
+        <param name="threshold" type="double" value="1"/>
+        <param name="rate" type="double" value="30"/>
+    </node>
+
+</launch>

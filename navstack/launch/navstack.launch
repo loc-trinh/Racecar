@@ -1,0 +1,10 @@
+<launch>
+  <!-- Costmaps -->
+  <include file="$(find navstack)/launch/costmaps.launch" />
+  
+  <!-- Planners -->
+  <node pkg="navstack" type="curve_planner.py" name="curve_planner" output="screen"/>
+
+
+
+</launch>

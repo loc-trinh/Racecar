@@ -1,0 +1,14 @@
+global_frame: /odom
+robot_base_frame: base_link
+robot_radius: 0.05
+update_frequency: 30.0
+publish_frequency: 30.0
+publish_voxel_map: true
+static_map: false
+#rolling_window: true
+width: 5.0
+height: 5.0
+resolution: 0.1
+#no_memory: true
+track_unknown_space: false
+
