@@ -4,7 +4,8 @@
   
   <!-- Planners -->
   <node pkg="navstack" type="curve_planner.py" name="curve_planner" output="screen"/>
+  <node pkg="navstack" type="freespace_goalplanner.py" name="freespace_goalplanner" output="screen"/>
   <node pkg="navstack" type="backup_recovery.py" name="backup_recovery" output="screen"/>
 
-
+  
 </launch>
