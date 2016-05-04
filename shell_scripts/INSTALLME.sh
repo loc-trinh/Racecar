@@ -38,6 +38,14 @@ gitmakebranch() {
     git branch --set-upstream-to=origin/\$1 \$1
     cd \$CURRDIR
 }
+gitcheckout() {
+    CURRDIR="\$(pwd)"
+    cdws
+    git fetch origin
+    git checkout -b \$1
+    git branch --set-upstream-to=origin/\$1
+    cd \$CURRDIR
+}
 cm(){
     CURRDIR="\$(pwd)"
     cdws
@@ -63,6 +71,7 @@ cmc(){
 alias gpush=gitpush
 alias gpull=gitpull
 alias gmb=gitmakebranch
+alias gco=gitcheckout
 alias roslocal=". rosenv.sh 0"
 alias rosremote=". rosenv.sh 1"
 

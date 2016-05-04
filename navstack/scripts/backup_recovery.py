@@ -11,6 +11,8 @@ import math
 class BackupRecovery:
     cGoal = None
     goRight = True
+    collide = 0
+
     def __init__(self):
         #Class members
         self.grid = None
@@ -19,7 +21,6 @@ class BackupRecovery:
         self.topic_recovery = "/recovery/direction";
         self.base_frame = "base_link"
         self.look_ahead = 0.75
-
 
         self.base_frame = rospy.get_param('~base_frame', self.base_frame)
 
@@ -82,9 +83,12 @@ class BackupRecovery:
         if(self.cGoal == None):
             rospy.loginfo("Warning: No goal")
             return
-
-        self.cGoal.header.stamp = self.listener.getLatestCommonTime(self.base_frame,self.cGoal.header.frame_id)
-        dest = self.listener.transformPose(self.base_frame, self.cGoal)
+        try:
+            self.cGoal.header.stamp = self.listener.getLatestCommonTime(self.base_frame,self.cGoal.header.frame_id)
+            dest = self.listener.transformPose(self.base_frame, self.cGoal)
+        except:
+            print "TF Error!"
+            return
 
         #Generate points in direction:
         step_dist = 0.1;
@@ -109,13 +113,17 @@ class BackupRecovery:
 
         
         #Check for collision
-        collide = False
+        stop = False
         #rospy.loginfo(cells)
         for cell in cells:
             if self.grid.data[cell] > 0:
-                collide = True
+                stop = True
+        if stop:
+            self.collide = min(self.collide+1, 60);
+        else:
+            self.collide = min(self.collide-5, 0);
 
-        if collide:
+        if self.collide > 30:
             self.perform_backup_move();
 
     def perform_backup_move(self):
@@ -142,7 +150,7 @@ class BackupRecovery:
             self.drive_pub.publish(stopmsg);
             rospy.sleep(.01)
 
-        for i in range(1,75):
+        for i in range(1,90):
             bkpmsg.header.stamp = rospy.Time.now()
             self.drive_pub.publish(bkpmsg);
             rospy.sleep(.01)
@@ -151,14 +159,17 @@ class BackupRecovery:
             stopmsg.header.stamp = rospy.Time.now()
             self.drive_pub.publish(stopmsg);
             rospy.sleep(.01)
-
+        """
         bkpmsg.drive.speed = 0.75
         bkpmsg.drive.steering_angle = 0
 
-        for i in range(1,50):
+        for i in range(1,75):
             stopmsg.header.stamp = rospy.Time.now()
             self.drive_pub.publish(bkpmsg);
             rospy.sleep(.01)
+        """
+
+        self.collide = 0;
 
     def positionToIndex(self,x,y):
         x -= self.grid.info.origin.position.x
