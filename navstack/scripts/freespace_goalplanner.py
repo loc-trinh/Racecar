@@ -127,15 +127,15 @@ class FreespacePlanner:
             
         center_ranking = 0.7*center_close + 0.3*center_far;
 
-        print "Left: = %d, %d, %d" % (unknown[0], empty[0], full[0])
-        print "Center_Close: = %d, %d, %d" % (unknown[1], empty[1], full[1])
-        print "Center_Far: = %d, %d, %d" % (unknown[2], empty[2], full[2])
-        print "Right: = %d, %d, %d" % (unknown[3], empty[3], full[3])
-        print "-------"
-        print "L Ranking = %f" % left_free
-        print "R Ranking = %f" % right_free
-        print "C Ranking = %f" % center_far
-        print "Center Navigable = %f" % center_close
+        #print "Left: = %d, %d, %d" % (unknown[0], empty[0], full[0])
+        #print "Center_Close: = %d, %d, %d" % (unknown[1], empty[1], full[1])
+        #print "Center_Far: = %d, %d, %d" % (unknown[2], empty[2], full[2])
+        #print "Right: = %d, %d, %d" % (unknown[3], empty[3], full[3])
+        #print "-------"
+        #print "L Ranking = %f" % left_free
+        #print "R Ranking = %f" % right_free
+        #print "C Ranking = %f" % center_far
+        #print "Center Navigable = %f" % center_close
 
         x = max(0.75, 4*center_far)
 

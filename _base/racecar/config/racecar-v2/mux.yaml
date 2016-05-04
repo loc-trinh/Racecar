@@ -23,12 +23,12 @@ subscribers:
     short_desc:  "Input for autonomous navigation"
   - name:        "Navigation2"
     topic:       "input/nav2"
-    timeout:     0.02
+    timeout:     0.03
     priority:    2
     short_desc:  "Input for autonomous navigation"
   - name:        "Navigation3"
     topic:       "input/nav3"
-    timeout:     0.02
+    timeout:     0.075
     priority:    1
     short_desc:  "Input for autonomous navigation"
   - name:        "Default"
