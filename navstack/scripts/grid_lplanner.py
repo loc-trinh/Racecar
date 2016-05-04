@@ -37,6 +37,7 @@ class GridLocalPlanner:
 
     def get_cell_range(self, pt1, pt2, meta):
         #1 - Convert points to map coords
+
         pt1[0] -= meta.origin.position.x;
         pt1[1] -= meta.origin.position.y;
         pt2[0] -= meta.origin.position.x;
@@ -73,7 +74,7 @@ class GridLocalPlanner:
         y1 = y * self.y_space
         y2 = self.y_space + y*self.y_space
 
-        return self.get_cell_range((x1,y1), (x2,y2), meta)
+        return self.get_cell_range([x1,y1], [x2,y2], meta)
 
     def recover_callback(self,data):
         self.goRight = data.data;
