@@ -26,7 +26,7 @@ class PointEstimator:
 
 
 		#self.pubs=rospy.Publisher("/point_position", PointStamped, queue_size=3)
-		self.pubs=rospy.Publisher("/move_base_simple/goal", PoseStamped, queue_size=3)
+		self.pubs=rospy.Publisher("/plan_executor/goal_out", PoseStamped, queue_size=3)
 		self.listener = tf.TransformListener(True, rospy.Duration(10.0))
 		self.time = rospy.Time.now()
 		#rospy.rate(10)
@@ -60,6 +60,7 @@ class PointEstimator:
 		while not rospy.is_shutdown():
 			corner_time+=1
 			if corner_time<100:
+                                print "pass"
 				continue 
 			point =Point32()
 			spoint=PointStamped()
@@ -73,7 +74,7 @@ class PointEstimator:
 				spoint.header.frame_id = 'base_link'
 				spoint.header.stamp=self.time 
 				print "false: ", spoint
-				self.pubs.publish(spoint)
+				#self.pubs.publish(spoint)
 			elif self.detected:
 				corner_time=0
 				print "CornerDetected:"
@@ -89,7 +90,7 @@ class PointEstimator:
 				spoint.header.stamp=self.time 
 				print "True", point 
 
-				self.pubs.publish(spoint)
+				#self.pubs.publish(spoint)
 			else:
 				print "OBS_DETECTED"
 				point.x=max(4.0,abs(self.escape.x))
@@ -98,14 +99,14 @@ class PointEstimator:
 				spoint.point=point
 				spoint.header.frame_id = 'base_link'
 				spoint.header.stamp=self.time 
-				self.pubs.publish(spoint)
+				#self.pubs.publis
 			goal = PoseStamped()
-	        goal.pose.position.x = spoint.point.x
-	        goal.pose.position.y = spoint.point.y
-	        goal.pose.position.z = 0.0
-	        goal.pose.orientation.w = 1.0#math.atan2(y,x)
-	        goal.header.frame_id = 'base_link'
-	        self.pubs.publish(goal)
+		        goal.pose.position.x = spoint.point.x
+			goal.pose.position.y = -spoint.point.y
+	        	goal.pose.position.z = 0.0
+		        goal.pose.orientation.w = 1.0#math.atan2(y,x)
+		        goal.header.frame_id = 'base_link'
+		        self.pubs.publish(goal)
 
 			rate.sleep()
 if __name__=="__main__":
