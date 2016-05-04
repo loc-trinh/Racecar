@@ -111,7 +111,9 @@ class GridLocalPlanner:
 
         for i in range(0,3):
             for j in range(0,3):
-                cells[i][j] = self.get_region(i-1,j,self.grid.info)
+                cell = self.get_region(i-1,j,self.grid.info)
+                (unknown, empty, full) = self.count(cell)
+                cells[i][j] = full > 0
 
 
         #Is there a collision risk?
