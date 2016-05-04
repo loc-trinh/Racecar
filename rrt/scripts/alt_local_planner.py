@@ -36,10 +36,10 @@ class LocalPlannerNode:
      	rospy.Subscriber("/costmap_base/costmap/costmap_updates", OccupancyGridUpdate, self.costmap_update_callback)
         
         # Need to add subscription to global Path trajectory
-        rospy.Subscriber("somethinghere", Path, self.trajectory_callback)
+        rospy.Subscriber("global_plan", Path, self.trajectory_callback)
 
         # Need to update publishing to trajectory follower
-        self.drive_pub = rospy.Publisher("/trajFollower", Path, queue_size=1)
+        self.drive_pub = rospy.Publisher("local_plan", Path, queue_size=1)
 
         # Tf Stuff
         self.listener = tf.TransformListener(True, rospy.Duration(10.0))
