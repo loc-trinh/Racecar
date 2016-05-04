@@ -28,6 +28,7 @@ class LocalPlannerNode:
         self.newPath = []
         self.globalPath = []
         self.grid = None
+        self.base_frame = "base_link"
 
         self.base_frame = rospy.get_param('~base_frame', self.base_frame)
 
