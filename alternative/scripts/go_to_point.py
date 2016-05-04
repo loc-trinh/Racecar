@@ -14,7 +14,7 @@ class GoToPointNode:
         # Default Settings
         self.k = 0.9
         self.topic_input = "/point_position"
-        self.topic_output = "/vesc/ackermann_cmd_mux/input/nav"#"drive_control/ackermann_drive"#
+        self.topic_output = "drive_control/ackermann_drive"#"/vesc/ackermann_cmd_mux/input/nav"
         self.base_frame = "base_link"
         self.map_frame = "odom"
 

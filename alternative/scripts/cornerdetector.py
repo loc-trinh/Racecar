@@ -31,6 +31,10 @@ class CornerDetector:
 		means=np.mean(np.array(new_window).reshape(self.k,subwindows),axis=1)
 		return means
 	def corner_finder(self,start,end, data):
+		"""
+		slides two adjacent windows to and measures the changes in the difference in the means
+		"""
+		
 		windowr=data.ranges[start:end]
 		if start>end:
 			windowr=data.ranges[end:start]
@@ -83,63 +87,29 @@ class CornerDetector:
 		print "maxChange: ",maxChange
 		return angle, boool
 	def cornercallback(self,data):
+		#calculate the edges of the window to be scanned for a corner
 		start=int((self.turn*self.detection_window[0]+data.angle_max)/(data.angle_max-data.angle_min)*len(data.ranges))
 		end=int((self.turn*self.detection_window[1]+data.angle_max)/(data.angle_max-data.angle_min)*len(data.ranges))
 
-		#print "start: ", start, "end: ",end
-
 		
-		
-		#means=self.means(window)
 
 		angle,boool=self.corner_finder(start,end,data)
-		if not boool:
+		if not boool:#if no wall is detected from the side indicated by self.turn
 			start=int((-self.turn*self.detection_window[0]+data.angle_max)/(data.angle_max-data.angle_min)*len(data.ranges))
 			end=int((-self.turn*self.detection_window[1]+data.angle_max)/(data.angle_max-data.angle_min)*len(data.ranges))
 			front_start=int((-self.front_wind+data.angle_max)/(data.angle_max-data.angle_min)*len(data.ranges))
 			front_end=int((self.front_wind+data.angle_max)/(data.angle_max-data.angle_min)*len(data.ranges))
 			print np.mean(data.ranges[front_start:front_end]), "After No corner"
+			#if the front wall is fairly close then try -self.turn detection
 			if np.mean(data.ranges[front_start:front_end])<5.5:
 				print "checking right"
 				angle,boool=self.corner_finder(start,end,data)
 
-		# mean_difference=np.subtract(means,self.last_means)
-
-		#max_change=np.max(means)
-		#print window
-		####
 		
-		####
-		
-		#print "angle"
-		#print "differences: ", mean_difference
-		# if max_change>=self.change_threshold:
-		# 	print "means: ", means,"last_means: ", self.last_means
-		# 	boool=True
-		# 	index=(means).tolist().index(max_change)
-		# 	sub=int(len(window)/float(self.k))
-		# 	point = start+sub*index+sub/2.0
-		# 	if start>end:
-		# 		point = end+sub*index+sub/2.0
-		# 	print "point: ", point
-		# 	angle=point/(len(data.ranges))*(data.angle_max-data.angle_min)+data.angle_min
-		
-
-
-		#print "angle: ",angle,"bool: ",boool
-		#if self.last_detection_state:
-			
-		#print "angle: ", angle, boool
 		self.bool.publish(boool)
 		self.corner_angle.publish(angle)
 
 	
-		# self.last_detection_state=True
-		# if not boool:
-		# 	self.last_detection_state=False
-		
-
-		# self.last_means=means
 		
 if __name__=="__main__":
 	rospy.init_node("CornerDetector")
