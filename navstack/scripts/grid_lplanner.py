@@ -104,13 +104,13 @@ class GridLocalPlanner:
             return
         """
 
-        
+
         #Figure out which cells are filled
         cells = [[False] * 3] * 3
 
         for i in range(0,3):
             for j in range(0,3):
-                cells[i][j] = get_region(i-1,j,self.grid.info)
+                cells[i][j] = self.get_region(i-1,j,self.grid.info)
 
 
         #Is there a collision risk?
