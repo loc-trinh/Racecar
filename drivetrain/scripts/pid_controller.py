@@ -56,8 +56,6 @@ class PIDControlNode:
         # Param Settings
         self.k_steer = rospy.get_param('~k_steer', self.k_steer)
         self.kp = rospy.get_param('~k_dist', self.kp)
-        self.topic_goal_in = rospy.get_param('~topic_goal_in', self.topic_goal_in)
-        self.topic_plan_req = rospy.get_param('~topic_plan_req', self.topic_plan_req)
         self.topic_drive_out = rospy.get_param('~topic_drive_out', self.topic_drive_out)
         self.base_frame = rospy.get_param('~base_frame', self.base_frame)
         self.map_frame = rospy.get_param('~map_frame', self.map_frame)
