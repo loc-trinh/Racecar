@@ -148,12 +148,12 @@ class LocalPlannerNode:
         self.grid = data;
         self.grid.data = list(self.grid.data)
 
-    if __name__ == "__main__":
-        rospy.init_node("local_planner_node")
-        local_planner = LocalPlannerNode()
-        rate = rospy.Rate(60)
-        while not rospy.is_shutdown():
-            # update and add-in recovery behavior
-            # update with the name of the function
-            local_planner.do_something();
-            rate.sleep()
+if __name__ == "__main__":
+    rospy.init_node("local_planner_node")
+    local_planner = LocalPlannerNode()
+    rate = rospy.Rate(60)
+    while not rospy.is_shutdown():
+        # update and add-in recovery behavior
+        # update with the name of the function
+        local_planner.do_something();
+        rate.sleep()
