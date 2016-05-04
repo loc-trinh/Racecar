@@ -9,7 +9,6 @@ import tf
 import math
 
 class GridLocalPlanner:
-    cGoal = None
     goRight = True
     speed = (0.7,1.25,2)
     theta = (0.3, 0.2, 0.1, 0.5)
@@ -96,13 +95,16 @@ class GridLocalPlanner:
         if self.grid == None:
             print "Waiting for Initial OCC Grid..."
             return
+        """       
         try: 
             self.cGoal.header.stamp = self.listener.getLatestCommonTime(self.base_frame,self.cGoal.header.frame_id)
             dest = self.listener.transformPose(self.base_frame, self.cGoal)
         except:
             print "TF Error!"
             return
+        """
 
+        
         #Figure out which cells are filled
         cells = [[False] * 3] * 3
 
