@@ -19,6 +19,7 @@ import math
 #   branch - one-step RRT, takes in two endpoints of a traj and returns PointStamped
 #   positionToIndex - takes two x,y coords in base_link and calls getIndex
 #   getIndex - takes two x,y coords and turns translates to OccupancyGrid index
+#   check_inbetween - takes a prev and dest Point and samples the costmap inbetween them
 
 # Callbacks:
 #   trajectory_callback - stores globalPath as a list of PoseStamped
@@ -29,7 +30,6 @@ import math
 
 # Progress:
 #   Needs to be tested
-#   Needs to be logic- and type- checked
 #   Needs to prune for max-turning/destination impossible to reach
 #   Needs to be merged with the freespace detector
 #   Needs to be merged with backup
@@ -69,7 +69,8 @@ class LocalPlannerNode:
                 # order by proximity to current point
                 # pick closest point that is free
                 # add new dest point to newPath
-                # TODO - prune for max steering angle/infeasibility of final goal
+                # TODO - prune for max steering angle (0.25 radians)
+                # TODO - infeasibility of final goal
             # else, append current dest point from globalPath to newPath
 
         for pose_ind in xrange(1,len(globalPath)):
@@ -117,9 +118,12 @@ class LocalPlannerNode:
 
     # one-step RRT branch, returns PoseStamped
     def branch(self, prev, dest):
-        # change when adding bounding box
-        # dude what's a reasonable width for this?
-        width = self.grid.info.width / 6
+        # change limits when adding bounding box
+
+        # sampling width is controlled by max steering angle (radians)
+        max_steering_angle = 0.25
+        depth = dest.y - prev.y
+        width = depth * math.tan(max_steering_angle)
 
         # create list of new possible destinations
         rands = []
