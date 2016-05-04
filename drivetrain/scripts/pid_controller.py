@@ -159,7 +159,6 @@ class PIDControlNode:
         self.cPlan = data;
         self.planHeader=data.header
         self.step = 2;
-        self.pubPlan();
 
 if __name__=="__main__":
     rospy.init_node("pid_node")
