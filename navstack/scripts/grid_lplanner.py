@@ -49,9 +49,9 @@ class GridLocalPlanner:
         col_end = int(pt2[1]*(1/meta.resolution));
 
         if row_start > row_end:
-            (row_start, row_end) = flip(row_start, row_end)
+            (row_start, row_end) = self.flip(row_start, row_end)
         if col_start > col_end:
-            (col_start, col_end) = flip(col_start, col_end)
+            (col_start, col_end) = self.flip(col_start, col_end)
 
         cells = []
         for col in range(col_start, col_end):
@@ -59,10 +59,10 @@ class GridLocalPlanner:
                 cells.append(self.getIndex(col,row));
         return cells
 
-    def flip(a,b):
+    def flip(self,a,b):
         return (b, a)
 
-    def get_region(x,y,meta):
+    def get_region(self, x,y,meta):
         if x == 0:
             x1 = -self.x_space
             x2 = slef.x_space
@@ -131,22 +131,22 @@ class GridLocalPlanner:
         left=1;
 
         if not left_open and right_open:
-            drive(cells,right)
+            self.drive(cells,right)
         elif left_open and not right_open:
-            drive(cells,left)
+            self.drive(cells,left)
         elif turnRight and right_possible:
-            drive(cells,right)
+            self.drive(cells,right)
         elif not turnRight and left_possible:
-            drive(cells,left)
+            self.drive(cells,left)
         elif right_possible:
-            drive(cells,right)
+            self.drive(cells,right)
         elif left_possible:
-            drive(cells,left)
+            self.drive(cells,left)
         else:
-            drive(cells,right)
+            self.drive(cells,right)
 
 
-    def drive(cells, direction):
+    def drive(self, cells, direction):
         xind = 1 - direction;
 
         #determine velocity
