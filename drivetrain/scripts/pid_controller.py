@@ -9,6 +9,9 @@ from ackermann_msgs.msg import AckermannDriveStamped
 from geometry_msgs.msg import PoseArray, Pose, PoseStamped
 from std_msgs.msg import Bool
 
+from nav_msgs.msg import Path
+
+
 class PIDControlNode:    
     targetPose = None
     drive = False
