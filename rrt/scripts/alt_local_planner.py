@@ -149,6 +149,10 @@ class LocalPlannerNode:
         self.grid = data;
         self.grid.data = list(self.grid.data)
 
+    def getIndex(self,x,y):
+        sx = self.grid.info.width;
+        return int(round(y * sx + x));
+
 if __name__ == "__main__":
     rospy.init_node("local_planner_node")
     local_planner = LocalPlannerNode()
