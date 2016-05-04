@@ -161,5 +161,5 @@ if __name__=="__main__":
     pid = PIDControlNode()
     rate = rospy.Rate(pid.rate)
     while not rospy.is_shutdown():
-        PIDControlNode.doDrive();
+        pid.doDrive();
         rate.sleep();
