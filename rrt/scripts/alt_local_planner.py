@@ -9,14 +9,14 @@ import tf
 import math
 
 # Input: 
-# 	OccupancyGrid (base_link)
-# 	Global Trajectory (10 PoseStamped from a Path)
+#   OccupancyGrid (base_link)
+#   Global Trajectory (10 PoseStamped from a Path)
 # Output:
-# 	updated 10 pt trajectory to be sent to a trajectory follower
+#   updated 10 pt trajectory to be sent to a trajectory follower
 
 
 # Helper Functions:
-#	snag tf and stuff? from Reo's 
+#   snag tf and stuff? from Reo's 
 
 # https://github.mit.edu/rss2016-team9/racecar/blob/mubarik_alt_global/navstack/scripts/backup_recovery.py
 
@@ -31,9 +31,9 @@ class LocalPlannerNode:
 
         self.base_frame = rospy.get_param('~base_frame', self.base_frame)
 
-     	#Pubs & Subs
-     	rospy.Subscriber("/costmap_base/costmap/costmap", OccupancyGrid, self.costmap_callback)
-     	rospy.Subscriber("/costmap_base/costmap/costmap_updates", OccupancyGridUpdate, self.costmap_update_callback)
+        #Pubs & Subs
+        rospy.Subscriber("/costmap_base/costmap/costmap", OccupancyGrid, self.costmap_callback)
+        rospy.Subscriber("/costmap_base/costmap/costmap_updates", OccupancyGridUpdate, self.costmap_update_callback)
         
         # Need to add subscription to global Path trajectory
         rospy.Subscriber("global_plan", Path, self.trajectory_callback)
@@ -45,51 +45,51 @@ class LocalPlannerNode:
         self.listener = tf.TransformListener(True, rospy.Duration(10.0))
 
     def check_trajectory(self):
-    	# first point in trajectory is current loc, add to newPath
-    	self.newPath[0] = self.globalPath[0]
+        # first point in trajectory is current loc, add to newPath
+        self.newPath[0] = self.globalPath[0]
 
-    	# for each point in the global trajectory after the first once
-    		# check if the current dest point is valid
-    		# check if the points in between are valid (reachability)
-    		# if either check violated, one-step branch
+        # for each point in the global trajectory after the first once
+            # check if the current dest point is valid
+            # check if the points in between are valid (reachability)
+            # if either check violated, one-step branch
                 # compute y (ROS's +x) distance
-    			# sample random range of points at this dist
-    			# order by proximity to current point
-    			# pick closest point that is free
-    			# add new dest point to newPath
+                # sample random range of points at this dist
+                # order by proximity to current point
+                # pick closest point that is free
+                # add new dest point to newPath
                 # TODO - prune for max steering angle/infeasibility of final goal
-    		# else, append current dest point from globalPath to newPath
+            # else, append current dest point from globalPath to newPath
 
-    	for pose_ind in xrange(1,len(globalPath)):
-			branch = False
+        for pose_ind in xrange(1,len(globalPath)):
+            branch = False
 
-			prev = newPath[pose_ind-1].pose.position
+            prev = newPath[pose_ind-1].pose.position
 
-			# lookup dest and find its value
-			dest = globalPath[pose_ind].pose.position
-			dest_grid = self.positionToIndex(dest.x, dest.y)
-			if self.grid.data[dest_grid] > 0:
-				branch = True
+            # lookup dest and find its value
+            dest = globalPath[pose_ind].pose.position
+            dest_grid = self.positionToIndex(dest.x, dest.y)
+            if self.grid.data[dest_grid] > 0:
+                branch = True
 
-			# sample points between current newPath and next dest
-			# find slope and sample some points to next dest
-			inbetween = []
-			slope = float(dest.y - prev.y) / (dest.x - prev.x)
-			partition = 10
-			delta = float(sqrt(sum(dest.x-prev.x)**2,(dest.y-prev.y)**2) / partition)
-			for i in xrange(partition):
-				sample_x = prev.x + delta
-				sample_y = prev.y + ratio * delta
+            # sample points between current newPath and next dest
+            # find slope and sample some points to next dest
+            inbetween = []
+            slope = float(dest.y - prev.y) / (dest.x - prev.x)
+            partition = 10
+            delta = float(sqrt(sum(dest.x-prev.x)**2,(dest.y-prev.y)**2) / partition)
+            for i in xrange(partition):
+                sample_x = prev.x + delta
+                sample_y = prev.y + ratio * delta
                 inbetween.append((sample_x, sample_y))
                 prev.x = sample_x
                 prev.y = sample_y
             for point in inbetween:
                 grid_ind = positionToIndex(point[0], point[1])
-    			if self.grid.data[grid_ind] > 0:
-    				branch = True
-    				break
+                if self.grid.data[grid_ind] > 0:
+                    branch = True
+                    break
 
-			# if need to branch, run helper, else append current path to newPath
+            # if need to branch, run helper, else append current path to newPath
             if branch:
                 new_dest = self.branch(newPath[pose_ind-1].pose.position, dest)
                 newPath.append(new_dest)
@@ -132,7 +132,7 @@ class LocalPlannerNode:
         return int(round(y * sx + x));
 
     def trajectory_callback(self, data):
-    	self.globalPath = list(data.poses)
+        self.globalPath = list(data.poses)
 
     def costmap_update_callback(self,data):
         if self.grid == None:
@@ -148,12 +148,12 @@ class LocalPlannerNode:
         self.grid = data;
         self.grid.data = list(self.grid.data)
 
-	if __name__ == "__main__":
-		rospy.init_node("local_planner_node")
-		local_planner = LocalPlannerNode()
-	    rate = rospy.Rate(60)
-	    while not rospy.is_shutdown():
-	        # update and add-in recovery behavior
-	        # update with the name of the function
-	        local_planner.do_something();
-	        rate.sleep()
+    if __name__ == "__main__":
+        rospy.init_node("local_planner_node")
+        local_planner = LocalPlannerNode()
+        rate = rospy.Rate(60)
+        while not rospy.is_shutdown():
+            # update and add-in recovery behavior
+            # update with the name of the function
+            local_planner.do_something();
+            rate.sleep()
