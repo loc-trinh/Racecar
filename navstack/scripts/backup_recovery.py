@@ -27,11 +27,9 @@ class BackupRecovery:
         #Pubs & Subs
         rospy.Subscriber("/costmap_base/costmap/costmap", OccupancyGrid, self.costmap_callback)
         rospy.Subscriber("/costmap_base/costmap/costmap_updates", OccupancyGridUpdate, self.costmap_update_callback)
-<<<<<<< HEAD
-=======
+
         rospy.Subscriber(self.topic_goal_in, PoseStamped, self.new_dest_callback)
         rospy.Subscriber(self.topic_recovery, Bool, self.recover_callback)
->>>>>>> 31cc4e2e22409eacaac1206dc71c9473ec8996f8
         self.drive_pub = rospy.Publisher("/vesc/ackermann_cmd_mux/input/nav", AckermannDriveStamped, queue_size=1)
 
         self.listener = tf.TransformListener(True, rospy.Duration(10.0))
