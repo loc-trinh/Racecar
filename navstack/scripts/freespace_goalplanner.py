@@ -139,8 +139,7 @@ class FreespacePlanner:
 
         x = max(0.75, 4*center_far)
 
-        y = -3
-            y=(left_free-right_free)*2;
+        y=(left_free-right_free)*2;
         if right_free > left_free:
             self.recover_pub.publish(True)
         else:
