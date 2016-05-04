@@ -73,8 +73,13 @@ class PIDControlNode:
         # Get point and transform base_frame
 
         if self.step>=2:
-            self.targetPose = self.cPlan.poses[self.step].pose;
-            self.prevPose= self.cPlan.poses[self.step-1].pose;
+            self.targetPose = PoseStamped();
+            self.targetPose.header = self.cPlan.header;
+            self.targetPose.pose =  self.cPlan.poses[self.step].pose;
+
+            self.prevPose = PoseStamped();
+            self.prevPose.header = self.cPlan.header;
+            self.prevPose.pose =self.cPlan.poses[self.step-1].pose;
 
             self.targetPose.header.stamp = self.listener.getLatestCommonTime(self.base_frame,self.targetPose.header.frame_id)
             target = self.listener.transformPose(self.base_frame, self.targetPose)
@@ -152,6 +157,7 @@ class PIDControlNode:
     def new_plan_callback(self,data):
         #rospy.loginfo("New Plan Received")
         self.cPlan = data;
+        self.planHeader=data.header
         self.step = 2;
         self.pubPlan();
 
