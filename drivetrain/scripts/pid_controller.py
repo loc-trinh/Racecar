@@ -127,7 +127,7 @@ class PIDControlNode:
 
             angle = theta + self.driveDamp*(dp+di+dd) * lineSign(xS,yS,xP,yP,xT,yT)
 
-            msg.drive.steering_angle= max(min(self.max_steering_angle,theta), -1*self.max_steering_angle)
+            msg.drive.steering_angle= max(min(self.max_steering_angle,angle), -1*self.max_steering_angle)
             self.lastTheta=theta
             self.drive_pub.publish(msg)
 
