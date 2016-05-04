@@ -66,7 +66,6 @@ class PIDControlNode:
 
         # Pubs and Subs
         self.drive_pub = rospy.Publisher(self.topic_drive_out, AckermannDriveStamped, queue_size=1)
-        rospy.Subscriber(self.topic_goal_in, PoseStamped, self.new_plan_callback)
 
         self.listener = tf.TransformListener(True, rospy.Duration(10.0))
 
