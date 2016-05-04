@@ -8,29 +8,32 @@ from std_msgs.msg import Bool
 import tf
 import math
 
-class BackupRecovery:
+class GridLocalPlanner:
     cGoal = None
     goRight = True
-    collide = 0
-
+    speed = (0.7,1.25,2)
+    theta = (0.3, 0.2, 0.1, 0.5)
     def __init__(self):
         #Class members
         self.grid = None
         self.confident = 0
-        self.topic_goal_in = "/plan_executor/goal_out"
         self.topic_recovery = "/recovery/direction";
         self.base_frame = "base_link"
         self.look_ahead = 0.75
+
+        #Cutoff regions
+        self.x_space = 0.5
+        self.y_space = 0.75
 
         self.base_frame = rospy.get_param('~base_frame', self.base_frame)
 
         #Pubs & Subs
         rospy.Subscriber("/costmap_base/costmap/costmap", OccupancyGrid, self.costmap_callback)
         rospy.Subscriber("/costmap_base/costmap/costmap_updates", OccupancyGridUpdate, self.costmap_update_callback)
-        rospy.Subscriber(self.topic_goal_in, PoseStamped, self.new_dest_callback)
-        rospy.Subscriber(self.topic_recovery, Bool, self.recover_callback)
-        self.drive_pub = rospy.Publisher("/vesc/ackermann_cmd_mux/input/nav", AckermannDriveStamped, queue_size=1)
 
+        rospy.Subscriber(self.topic_recovery, Bool, self.recover_callback)
+
+        self.drive_pub = rospy.Publisher("/vesc/ackermann_cmd_mux/input/nav2", AckermannDriveStamped, queue_size=1)
         self.listener = tf.TransformListener(True, rospy.Duration(10.0))
 
     def get_cell_range(self, pt1, pt2, meta):
@@ -46,14 +49,32 @@ class BackupRecovery:
         col_start  = int(pt1[1]*(1/meta.resolution));
         col_end = int(pt2[1]*(1/meta.resolution));
 
+        if row_start > row_end:
+            (row_start, row_end) = flip(row_start, row_end)
+        if col_start > col_end:
+            (col_start, col_end) = flip(col_start, col_end)
+
         cells = []
         for col in range(col_start, col_end):
             for row in range(row_start, row_end):
                 cells.append(self.getIndex(col,row));
         return cells
 
-    def new_dest_callback(self,data):
-        self.cGoal = data;
+    def flip(a,b):
+        return (b, a)
+
+    def get_region(x,y,meta):
+        if x == 0:
+            x1 = -self.x_space
+            x2 = slef.x_space
+        else:
+            x1 = 2* x * self.x_space
+            x2 = x * self.x_space
+
+        y1 = y * self.y_space
+        y2 = self.y_space + y*self.y_space
+
+        return self.get_cell_range((x1,y1), (x2,y2), meta)
 
     def recover_callback(self,data):
         self.goRight = data.data;
@@ -71,102 +92,91 @@ class BackupRecovery:
                 full += 1
         return (unknown, empty, full)
 
-    def check_if_stuck(self):
+    def update(self):
         if self.grid == None:
             print "Waiting for Initial OCC Grid..."
             return
-
-        #get target in base_link
-        if(self.cGoal == None):
-            rospy.loginfo("Warning: No goal")
-            return
-        try:
+        try: 
             self.cGoal.header.stamp = self.listener.getLatestCommonTime(self.base_frame,self.cGoal.header.frame_id)
             dest = self.listener.transformPose(self.base_frame, self.cGoal)
         except:
             print "TF Error!"
             return
 
-        #Generate points in direction:
-        step_dist = 0.1;
-        prev_point = (0,0)
-        deltax = dest.pose.position.x - 0
-        deltay = dest.pose.position.y - 0
-        vnorm = math.sqrt(deltax**2 + deltay**2)
-        dx = deltax / vnorm
-        dy = deltay / vnorm
-        d = 0;
-        points = [(0,0)];
-        while (d < self.look_ahead):
-            x = points[-1][0] + step_dist * dx;
-            y = points[-1][1] + step_dist * dy;
-            points.append((x,y))
-            d+= step_dist
+        #Figure out which cells are filled
+        cells = [[False] * 3] * 3
 
-        #Generate list of cells involved
-        cells = set()
-        for (x,y) in points:
-            cells.add(self.positionToIndex(x,y))
+        for i in range(0,3):
+            for j in range(0,3):
+                cells[i][j] = get_region(i-1,j,self.grid.info)
 
-        
-        #Check for collision
-        stop = False
-        #rospy.loginfo(cells)
-        for cell in cells:
-            if self.grid.data[cell] > 0:
-                stop = True
-        if stop:
-            self.collide = min(self.collide+1, 60);
+
+        #Is there a collision risk?
+        collide = False
+        collide = cells[1][0] or cells[1][1] or cells[1][2]
+        if not collide:
+            return
+
+        turnRight = self.goRight;
+
+        #Is the turn direction deterministic?
+        left_open = not (cells[0][0] or cells[0][1] or cells[0][2])
+        right_open = not (cells[2][0] or cells[2][1] or cells[2][2])
+
+        left_possible = not cells[0][0] or not cells[0][1] or not cells[0][2]
+        right_possible = not cells[0][0] or not cells[0][1] or not cells[0][2]
+        right=-1;
+        left=1;
+
+        if not left_open and right_open:
+            drive(cells,right)
+        elif left_open and not right_open:
+            drive(cells,left)
+        elif turnRight and right_possible:
+            drive(cells,right)
+        elif not turnRight and left_possible:
+            drive(cells,left)
+        elif right_possible:
+            drive(cells,right)
+        elif left_possible:
+            drive(cells,left)
         else:
-            self.collide = min(self.collide-5, 0);
+            drive(cells,right)
 
-        if self.collide > 30:
-            self.perform_backup_move();
 
-    def perform_backup_move(self):
-        rospy.loginfo("Performing Backup Recovery!")
-        stopmsg = AckermannDriveStamped()
-        stopmsg.header.stamp = rospy.Time.now()
-        stopmsg.header.frame_id = "base_link"
-        stopmsg.drive.speed = 0
-        stopmsg.drive.acceleration = 100
-        stopmsg.drive.steering_angle = 0
+    def drive(cells, direction):
+        xind = 1 - direction;
 
-        bkpmsg = AckermannDriveStamped()
-        bkpmsg.header.stamp = rospy.Time.now()
-        bkpmsg.header.frame_id = "base_link"
-        bkpmsg.drive.speed = -0.75
-        bkpmsg.drive.acceleration = 1.0
-        if(self.goRight):
-            bkpmsg.drive.steering_angle = 0.3
+        #determine velocity
+        if cells[1][0]:
+            vel = self.speed[0]
+        elif cells[1][1]:
+            vel = self.speed[1]
         else:
-            bkpmsg.drive.steering_angle = -0.3
+            vel = self.speed[2]
 
-        for i in range(1,40):
-            stopmsg.header.stamp = rospy.Time.now()
-            self.drive_pub.publish(stopmsg);
-            rospy.sleep(.01)
+        #determine angle
+        if cells[xind][0]:
+            theta = self.theta[0]
+        elif cells[xind][1]:
+            theta = self.theta[1]
+        elif cells[xind][2]:
+            theta = self.theta[2]
+        else:
+            theta = self.theta[3]
 
-        for i in range(1,90):
-            bkpmsg.header.stamp = rospy.Time.now()
-            self.drive_pub.publish(bkpmsg);
-            rospy.sleep(.01)
+        theta *= direction
 
-        for i in range(1,40):
-            stopmsg.header.stamp = rospy.Time.now()
-            self.drive_pub.publish(stopmsg);
-            rospy.sleep(.01)
-        """
-        bkpmsg.drive.speed = 0.75
-        bkpmsg.drive.steering_angle = 0
+        msg = AckermannDriveStamped()
+        msg.header.stamp = rospy.Time.now()
+        msg.header.frame_id = "base_link"
+        msg.drive.speed = vel
+        msg.drive.acceleration = 16
+        msg.drive.steering_angle = theta
 
-        for i in range(1,75):
-            stopmsg.header.stamp = rospy.Time.now()
-            self.drive_pub.publish(bkpmsg);
-            rospy.sleep(.01)
-        """
+        self.drive_pub.publish(msg);
 
-        self.collide = 0;
+
 
     def positionToIndex(self,x,y):
         x -= self.grid.info.origin.position.x
@@ -196,9 +206,9 @@ class BackupRecovery:
 
 if __name__ == "__main__":
     rospy.init_node("backup_recovery")
-    backup = BackupRecovery();
+    glp = GridLocalPlanner();
 
-    rate = rospy.Rate(60)
+    rate = rospy.Rate(100)
     while not rospy.is_shutdown():
-        backup.check_if_stuck();
+        glp.update();
         rate.sleep()

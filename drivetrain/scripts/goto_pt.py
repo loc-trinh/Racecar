@@ -28,7 +28,7 @@ class GoToPointNode:
         self.kp = 0.6
         self.ki = 0
         self.kd = 0
-        self.max_steering_angle = 0.2
+        self.max_steering_angle = 0.3
         self.max_speed =.5
         self.lastDistance = 0
         self.lastTheta = 0
@@ -60,8 +60,12 @@ class GoToPointNode:
     def doDrive(self):
         # Get point and transform base_frame
         if(self.drive):
-            self.targetPose.header.stamp = self.listener.getLatestCommonTime(self.base_frame,self.targetPose.header.frame_id)
-            dest = self.listener.transformPose(self.base_frame, self.targetPose)
+            try:
+                self.targetPose.header.stamp = self.listener.getLatestCommonTime(self.base_frame,self.targetPose.header.frame_id)
+                dest = self.listener.transformPose(self.base_frame, self.targetPose)
+            except:
+                print "TF Error!"
+                return
             
             x = dest.pose.position.x
             y = dest.pose.position.y
@@ -90,18 +94,21 @@ class GoToPointNode:
 
             # calc speed and theta
             # tested for points ahead/left, ahead/right, ahead, behind, and current loc
-            self.distanceI= self.distanceI+distance
-            dp= self.kp * distance
-            di= self.kd*(distance - self.lastDistance)
-            dd= self.ki*(self.distanceI)
-            self.lastDistance=distance
-            msg.drive.speed= max(0.1,min(self.max_speed, dp+di+dd))
+          
 
             self.thetaI=self.thetaI+theta
             tp= self.k_steer * theta
             ti= self.ki*(self.thetaI)
             td= self.kd* (theta-self.lastTheta)
             msg.drive.steering_angle= max(min(self.max_steering_angle,theta), -1*self.max_steering_angle)
+
+            self.distanceI= self.distanceI+distance
+            dp= self.kp * distance
+            di= self.kd*(distance - self.lastDistance)
+            dd= self.ki*(self.distanceI)
+            self.lastDistance=distance
+            msg.drive.speed= max(0.1,min(self.max_speed, dp+di+dd - min(abs(theta), 3)) 
+
             self.lastTheta=theta
             self.drive_pub.publish(msg)
 
