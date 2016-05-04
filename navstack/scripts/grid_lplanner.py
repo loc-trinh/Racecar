@@ -66,7 +66,7 @@ class GridLocalPlanner:
     def get_region(self, x,y,meta):
         if x == 0:
             x1 = -self.x_space
-            x2 = slef.x_space
+            x2 = self.x_space
         else:
             x1 = 2* x * self.x_space
             x2 = x * self.x_space
