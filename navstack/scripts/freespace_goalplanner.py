@@ -96,7 +96,7 @@ class FreespacePlanner:
         return (unknown, empty, full);
 
     def perform_update(self):
-        print "==============="
+        #print "==============="
         if self.grid == None:
             print "Waiting for Initial OCC Grid..."
             return

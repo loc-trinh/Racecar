@@ -132,11 +132,11 @@ class GridLocalPlanner:
         left=1;
 
         print "======"
-        print "left open: " + left_open
-        print "Right open: " + right_open
-        print "left possible: " + left_possible
-        print "right possible: " + right_possible
-        print "right Preference: " + turnRight
+        print "left open: %b" % left_open
+        print "Right open: %b" % right_open
+        print "left possible: %b" % left_possible
+        print "right possible: %b" % right_possible
+        print "right Preference: %b" % turnRight
 
         if not left_open and right_open:
             self.drive(cells,right)
