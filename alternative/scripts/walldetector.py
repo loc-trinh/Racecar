@@ -39,15 +39,15 @@ class WallDetector:
 		left_start=int((self.left_start-data.angle_min)/(data.angle_max-data.angle_min)*len(data.ranges))
 		right_end=int((self.right_end+data.angle_max)/(data.angle_max-data.angle_min)*len(data.ranges))
 		right_start=int((self.right_start+data.angle_max)/(data.angle_max-data.angle_min)*len(data.ranges))
-		right_wall=[]#data.ranges[right_start:right_end]
-		left_wall=[]#data.ranges[left_start:left_end]
+		right_wall=data.ranges[right_start:right_end]
+		left_wall=data.ranges[left_start:left_end]
 
 		#filter out infinities 
 
-		for i in range(len(data.ranges[right_start:right_end])-2):
-			#print min(data.ranges[right_start:right_end][i:i+2])
-			right_wall.append(min(data.ranges[right_start:right_end][i:i+2]))
-			left_wall.append(min(data.ranges[left_start:left_end][i:i+2]))
+		# for i in range(len(data.ranges[right_start:right_end])-2):
+		# 	#print min(data.ranges[right_start:right_end][i:i+2])
+		# 	right_wall.append(min(data.ranges[right_start:right_end][i:i+2]))
+		# 	left_wall.append(min(data.ranges[left_start:left_end][i:i+2]))
 
 
 		print "angle_min,angle_max: ",data.angle_min,data.angle_max
@@ -57,20 +57,22 @@ class WallDetector:
 		right_wallx=[]
 		right_wally=[]
 		for i in range(len(right_wall)):
-			if right_wall[i]<6.0:
+			if right_wall[i]<8.0:
 				rx,ry=self.dist_angle_to_xy_transform(i, right_wall[i], data.angle_increment, right_start, data.angle_min)
 				right_wallx.append(rx)
 				right_wally.append(ry)
 		left_wallx=[]
 		left_wally=[]
 		for i in range(len(left_wall)):
-			if left_wall[i]<6.0:
+			if left_wall[i]<8.0:
 				lx,ly=self.dist_angle_to_xy_transform(i, left_wall[i], data.angle_increment, left_start, data.angle_min)
 				left_wallx.append(lx)
 				left_wally.append(ly)
 		print "left_wallx:" ,len(left_wallx),"left_wally: ",len(left_wally), "right_wallx: ",len(right_wallx), "right_wally: ",len(right_wally)
-		left_wall_plot=np.polyfit(left_wallx,left_wally,1).tolist()
-		right_wall_plot=np.polyfit(right_wallx,right_wally,1).tolist()
+		left_wall_plot,residuals_l, rank_l, singular_values_l, rcond_l=np.polyfit(left_wallx,left_wally,1,full=True)
+		right_wall_plot,residuals_r, rank_r, singular_values_r, rcond_r=np.polyfit(right_wallx,right_wally,1,full=True)
+		residuals_l = residuals_l/len(left_wallx)
+		residuals_r = residuals_r/len(right_wallx)
 		#slopes and interepts of the two walls 
 		rSlope=right_wall_plot[0]
 		rIntercept=right_wall_plot[1]
@@ -139,7 +141,7 @@ class WallDetector:
 		# #plt.plot(xy,yx, '.')
 		# plt.plot(ycpl,xcpl,"*")
 		# #plot(my_y,d)
-		# plt.plot(x,y,'.',xo,yo, '^')
+		# plt.plot(xo,yo, '^')
 		# plt.plot(left_wallx, left_line)
 		# plt.plot(right_wallx,right_line)
 		# plt.axis([-10,10,-10,10])
