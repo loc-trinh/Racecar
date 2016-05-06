@@ -101,7 +101,7 @@ class PointEstimator:
 				#self.pubs.publish(spoint)
 			goal = PoseStamped()
 			goal.pose.position.x = spoint.point.x
-			goal.pose.position.y = spoint.point.y
+			goal.pose.position.y = -spoint.point.y
 			goal.pose.position.z = 0.0
 			goal.pose.orientation.w = 1.0#math.atan2(y,x)
 			goal.header.frame_id = 'base_link'

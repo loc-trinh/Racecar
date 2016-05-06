@@ -40,10 +40,11 @@ class CornerDetector:
 			windowr=data.ranges[end:start]
 		window=[]
 		for i in range(len(windowr)):
-			if i>=len(windowr)-2:
-				window.append(min(windowr[i-2:i]))
-			else:
-				window.append(min(windowr[i:i+2]))
+			window.append((min(10.0,windowr[i])))
+			# if i>=len(windowr)-2:
+			# 	window.append(min(windowr[i-2:i]))
+			# else:
+			# 	window.append(min(windowr[i:i+2]))
 
 		print "end: start: ", start, end
 		print len(window)
