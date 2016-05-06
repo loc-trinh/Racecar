@@ -14,14 +14,25 @@ import math
 # Output:
 #   updated 10 pt trajectory to be sent to a trajectory follower
 
-
 # Helper Functions:
-#   snag tf and stuff? from Reo's 
+#   check_trajectory - takes in globalPath and outputs new trajectory
+#   branch - one-step RRT, takes in two endpoints of a traj and returns PointStamped
+#   positionToIndex - takes two x,y coords in base_link and calls getIndex
+#   getIndex - takes two x,y coords and turns translates to OccupancyGrid index
+#   check_inbetween - takes a prev and dest Point and samples the costmap inbetween them
+
+# Callbacks:
+#   trajectory_callback - stores globalPath as a list of PoseStamped
+#   costmap_update_callback - stores OccupancyGrid in self.grid via looping 
+#   costmap_callback - stores Occupancy in self.grid as a list
 
 # https://github.mit.edu/rss2016-team9/racecar/blob/mubarik_alt_global/navstack/scripts/backup_recovery.py
 
-# eventually going to be merged with the freespace detector, remember to add pruning for max turning angle and free space evals
-# also check to see if impossible to reach point, take over for the backup recovery blah pull that code in?
+# Progress:
+#   Needs to be tested
+#   Needs to prune for max-turning/destination impossible to reach
+#   Needs to be merged with the freespace detector
+#   Needs to be merged with backup
 
 class LocalPlannerNode:
     def __init__(self):
@@ -56,63 +67,75 @@ class LocalPlannerNode:
                 # compute y (ROS's +x) distance
                 # sample random range of points at this dist
                 # order by proximity to current point
+                    # prune for max steering angle (0.25 radians)
                 # pick closest point that is free
                 # add new dest point to newPath
-                # TODO - prune for max steering angle/infeasibility of final goal
+                # TODO - infeasibility of final goal
             # else, append current dest point from globalPath to newPath
 
         for pose_ind in xrange(1,len(globalPath)):
-            branch = False
-
             prev = newPath[pose_ind-1].pose.position
 
             # lookup dest and find its value
+            branch_dest = False
             dest = globalPath[pose_ind].pose.position
             dest_grid = self.positionToIndex(dest.x, dest.y)
             if self.grid.data[dest_grid] > 0:
-                branch = True
+                branch_dest = True
 
-            # sample points between current newPath and next dest
-            # find slope and sample some points to next dest
-            inbetween = []
-            slope = float(dest.y - prev.y) / (dest.x - prev.x)
-            partition = 10
-            delta = float(sqrt(sum(dest.x-prev.x)**2,(dest.y-prev.y)**2) / partition)
-            for i in xrange(partition):
-                sample_x = prev.x + delta
-                sample_y = prev.y + ratio * delta
-                inbetween.append((sample_x, sample_y))
-                prev.x = sample_x
-                prev.y = sample_y
-            for point in inbetween:
-                grid_ind = positionToIndex(point[0], point[1])
-                if self.grid.data[grid_ind] > 0:
-                    branch = True
-                    break
+            # sample points between current newPath pose and next dest
+            branch_between = check_inbetween(prev, dest)
 
-            # if need to branch, run helper, else append current path to newPath
-            if branch:
+            # if need to branch for either dest or inbetween, run helper, 
+            # else append current path to newPath
+            if branch_dest or branch_between:
                 new_dest = self.branch(newPath[pose_ind-1].pose.position, dest)
                 newPath.append(new_dest)
             else:
                 # need to update point header or...?
                 newPath.append(globalPath[pose_ind])
 
+    def check_inbetween(self, prev, dest):
+        branch = False
+        inbetween = []
+        # find slope and sample some points to next dest
+        slope = float(dest.y - prev.y) / (dest.x - prev.x)
+        partition = 10
+        delta = float(sqrt(sum(dest.x-prev.x)**2,(dest.y-prev.y)**2) / partition)
+        # generate inbetween points and check their costs
+        for i in xrange(partition):
+            sample_x = prev.x + delta
+            sample_y = prev.y + ratio * delta
+            inbetween.append((sample_x, sample_y))
+            prev.x = sample_x
+            prev.y = sample_y
+        for point in inbetween:
+            grid_ind = positionToIndex(point[0], point[1])
+            if self.grid.data[grid_ind] > 0:
+                branch = True
+                break
+        return branch
+
     # one-step RRT branch, returns PoseStamped
     def branch(self, prev, dest):
-        # change when adding bounding box
-        # dist = dest.y-prev.y
-        # dude what's a reasonable width for this?
-        width = self.grid.info.width / 6
+        # change limits when adding bounding box
 
+        # sampling width is controlled by max steering angle (radians)
+        max_steering_angle = 0.25
+        depth = dest.y - prev.y
+        width = depth * math.tan(max_steering_angle)
+
+        # create list of new possible destinations
         rands = []
-        for i in xrange(10):
+        while len(rands) < 10:
             sample_dest = (dest.x+random.uniform(0, width), dest.y)
             cost_of_dest = self.grid.data[positionToIndex(sample_dest[0], sample_dest[1])]
-            if cost_of_dest > 0:
+            branch = check_inbetween(prev, sample_dest)
+            if (cost_of_dest > 0) and (not branch):
                 rands.append(new_dest)
         
-        new_dest = min(rands, key=lambda x: x[0])
+        # choose the point closest to initial trajectory
+        new_dest = min(rands, key=lambda x: abs(x[0]-dest.x))
 
         # create new PoseStamped
         pose = geometry_msgs.msg.PoseStamped()
@@ -159,6 +182,5 @@ if __name__ == "__main__":
     rate = rospy.Rate(60)
     while not rospy.is_shutdown():
         # update and add-in recovery behavior
-        # update with the name of the function
-        local_planner.do_something();
+        local_planner.check_trajectory();
         rate.sleep()

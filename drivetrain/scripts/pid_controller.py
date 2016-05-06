@@ -115,7 +115,7 @@ class PIDControlNode:
             lineDist = distFromLine(xS,yS,xP,yP,xT,yT)
             dx = xT - xP
             dy = yT - yP
-            rads = math.atan2(-dy,dx)
+            rads = math.atan2(dy,dx)
             theta=rads
             #rospy.loginfo("Distance: " + str(distance))
             if(xdistance < self.threshold):
@@ -144,7 +144,7 @@ class PIDControlNode:
             ti= self.ki*(self.thetaI)
             td= self.kd* (theta-self.lastTheta)
 
-            angle = theta + self.driveDamp*(dp+di+dd) * lineSign(xS,yS,xP,yP,xT,yT)
+            angle =( theta + self.driveDamp*(dp+di+dd) * lineSign(xS,yS,xP,yP,xT,yT))
 
             msg.drive.steering_angle= max(min(self.max_steering_angle,angle), -1*self.max_steering_angle)
             self.lastTheta=theta
