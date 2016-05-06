@@ -15,7 +15,7 @@ class CornerDetector:
 		self.last_means=[]#means of the left window
 		self.last_detection_state=False#wether something was detected for the last run
 		self.change_threshold=2.0#change in the reading
-		self.wind=5
+		self.wind=10
 		self.angle_offset=np.pi/30
 		self.front_wind=np.pi/144
 	def means(self,window):
