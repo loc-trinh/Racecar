@@ -106,8 +106,7 @@ class PointEstimator:
 	        goal.pose.orientation.w = 1.0#math.atan2(y,x)
 	        goal.header.frame_id = 'base_link'
 	        self.pubs.publish(goal)
-	        #set the right to sleep
-			rate.sleep()
+	        rate.sleep()
 if __name__=="__main__":
 	rospy.init_node("PointEstimator")
 	node = PointEstimator()
