@@ -67,9 +67,9 @@ class LocalPlannerNode:
                 # compute y (ROS's +x) distance
                 # sample random range of points at this dist
                 # order by proximity to current point
+                    # prune for max steering angle (0.25 radians)
                 # pick closest point that is free
                 # add new dest point to newPath
-                # TODO - prune for max steering angle (0.25 radians)
                 # TODO - infeasibility of final goal
             # else, append current dest point from globalPath to newPath
 
