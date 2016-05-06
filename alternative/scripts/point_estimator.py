@@ -99,6 +99,7 @@ class PointEstimator:
 				spoint.point=point
 				spoint.header.frame_id = 'base_link'
 				spoint.header.stamp=self.time 
+
 				#self.pubs.publis
 			goal = PoseStamped()
 		        goal.pose.position.x = spoint.point.x
@@ -107,6 +108,16 @@ class PointEstimator:
 		        goal.pose.orientation.w = 1.0#math.atan2(y,x)
 		        goal.header.frame_id = 'base_link'
 		        self.pubs.publish(goal)
+
+
+
+
+
+
+
+
+
+
 
 			rate.sleep()
 if __name__=="__main__":

@@ -57,8 +57,12 @@ class LocalPlannerNode:
         self.listener = tf.TransformListener(True, rospy.Duration(10.0))
 
     def check_trajectory(self):
+	if not self.globalPath:
+		print "Waiting on trajectory"
+		return 0
+
         # first point in trajectory is current loc, add to newPath
-        self.newPath[0] = self.globalPath[0]
+        self.newPath.append(self.globalPath[0])
 
         # for each point in the global trajectory after the first once
             # check if the current dest point is valid
