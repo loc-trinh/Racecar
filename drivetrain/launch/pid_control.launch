@@ -1,5 +1,5 @@
 <launch>
-    <node pkg="drivetrain" type="pid-control.py" name="PIDControl" output="screen" >
+    <node pkg="drivetrain" type="pid_controller.py" name="PIDControl" output="screen" >
 
         <param name="topic_plan_in" type="string" value="global_plan"/>
         <param name="topic_output" type="string" value="vesc/ackermann_cmd_mux/input/nav"/>
