@@ -115,7 +115,7 @@ class GridLocalPlanner:
                 (unknown, empty, full) = self.count(self.grid.data, cell)
                 cells[i][j] = full > 0
                 print "(%d,%d) # filled = %d, cell[%d][%d] = %d" %(i,j,full,i,j, cells[i][j])
-                print cell[i][j]
+                print cells[i][j]
 
 
         #Is there a collision risk?
