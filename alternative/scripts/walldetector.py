@@ -138,6 +138,7 @@ class WallDetector:
 
 
 
+<<<<<<< HEAD
 	#	plt.show()
 	#	left_line=[]
 	#	right_line=[]
@@ -167,6 +168,37 @@ class WallDetector:
 	#	
 	#	plt.draw()
 		# # # plt.show()
+=======
+		# plt.show()
+		# left_line=[]
+		# right_line=[]
+		# for i in range(len(left_wallx)):
+		# 	left_line.append(left_wallx[i]*left_wall_plot[0]+left_wall_plot[1])
+		# for i in range(len(right_wallx)):
+		# 	right_line.append(right_wallx[i]*right_wall_plot[0]+right_wall_plot[1])
+		# a=(left_wall_plot[0]+right_wall_plot[0])/2.0
+		# b=(left_wall_plot[1]+right_wall_plot[1])/2.0
+		# y=3.0
+		# x=(y-b)/(a+.0001)
+		# # x=3.0*np.sqrt(1/(1+(sl)**2))
+		# # y=-x*sl 
+		# # x=-x
+		# print "goalx: ",x, "goaly: ",y
+		# xo=0.0
+		# yo=0.0
+		# # plt.plot(left_wallx,left_wally,'.')
+		# # plt.plot(right_wallx,right_wally,'.')
+		# #plt.plot(xy,yx, '.')
+		# plt.plot(ycpl,xcpl,"*")
+		# #plot(my_y,d)
+		# plt.plot(xo,yo, '^')
+		# plt.plot(left_wallx, left_line)
+		# plt.plot(right_wallx,right_line)
+		# plt.axis([-10,10,-10,10])
+		
+		# plt.draw()
+		# # # # plt.show()
+>>>>>>> d1d642514f1dda763e9113fc45130c4d895cda9a
 
 if __name__ == "__main__":
 	rospy.init_node("WallDetector")
