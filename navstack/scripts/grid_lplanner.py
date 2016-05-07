@@ -10,7 +10,7 @@ import math
 
 class GridLocalPlanner:
     goRight = True
-    speed = (0.7,1.25,2)
+    speed = (0.6,1.0,1.25)
     theta = (0.3, 0.2, 0.1, 0.5)
     def __init__(self):
         #Class members
@@ -185,7 +185,7 @@ class GridLocalPlanner:
         msg.header.stamp = rospy.Time.now()
         msg.header.frame_id = "base_link"
         msg.drive.speed = vel
-        msg.drive.acceleration = 16
+        msg.drive.acceleration = 4
         msg.drive.steering_angle = theta
 
         self.drive_pub.publish(msg);
