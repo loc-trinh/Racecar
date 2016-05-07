@@ -21,8 +21,8 @@ class GridLocalPlanner:
         self.look_ahead = 0.75
 
         #Cutoff regions
-        self.x_space = 0.5
-        self.y_space = 0.75
+        self.x_space = 0.25
+        self.y_space = 0.5
 
         self.base_frame = rospy.get_param('~base_frame', self.base_frame)
 
