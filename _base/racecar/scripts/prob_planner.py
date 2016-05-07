@@ -8,16 +8,16 @@ from geometry_msgs.msg import Point32
 from std_msgs.msg import Bool
 class ProbNav:
 	def __init__(self):
-		self.subs=rospy.Subscriber("/scan",LaserScan, self.goalcallback, queue_size=1)
+		self.subs=rospy.Subscriber("/racecar/laser/scan",LaserScan, self.goalcallback)
 		self.goal=rospy.Publisher("escape_point",Point32,queue_size=1)
 		self.obs_detected=rospy.Publisher("obs_detected", Bool,queue_size=1)
-		self.front_wind=np.pi/72
+		self.front_wind=np.pi/36
 		self.window=np.pi/2.0
 		self.mean_k=10
 		self.memory=10
 		self.obsticle_width=5
-		self.front_thresh=3.5
-		self.escape_thresh=4.5
+		self.front_thresh=1.5
+		self.escape_thresh=2.5
 	def dist_angle_to_xy_transform(self, index, dist, incr_angle, start_point, angle_min):
 		position=start_point+index
 
@@ -37,7 +37,7 @@ class ProbNav:
 		mydata=[]
 		means=[]
 		point =Point32()
-		print "start: ", front_start, "end: ",front_end
+		print "start: ", start, "end: ",end
 		for i in range(start,end):
 			neighbors_mean=np.mean(data.ranges[i-self.mean_k:i+self.mean_k])
 			means.append(neighbors_mean)

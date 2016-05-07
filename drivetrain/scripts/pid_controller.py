@@ -9,6 +9,23 @@ from ackermann_msgs.msg import AckermannDriveStamped
 from geometry_msgs.msg import PoseArray, Pose, PoseStamped
 from std_msgs.msg import Bool
 
+from nav_msgs.msg import Path
+
+
+def distFromLine(x,y,x1,y1,x2,y2):
+    numerator= abs(x*(y2-y1) - (y*(x2-x1)) +x2*y1 -y2*x1)
+    denom = float(math.sqrt((y2-y1)**2 + (x2-x1)**2))
+    return (numerator/denom)
+
+def lineSign(x,y,x1,y1,x2,y2):
+    slope = (y2-y1)/(x2-x1)
+    b = y2-slope*x2
+    yParallel= slope*x+b
+    if yParallel > y:
+        return 1
+    else:
+        return -1
+
 class PIDControlNode:    
     targetPose = None
     drive = False
@@ -53,8 +70,6 @@ class PIDControlNode:
         # Param Settings
         self.k_steer = rospy.get_param('~k_steer', self.k_steer)
         self.kp = rospy.get_param('~k_dist', self.kp)
-        self.topic_goal_in = rospy.get_param('~topic_goal_in', self.topic_goal_in)
-        self.topic_plan_req = rospy.get_param('~topic_plan_req', self.topic_plan_req)
         self.topic_drive_out = rospy.get_param('~topic_drive_out', self.topic_drive_out)
         self.base_frame = rospy.get_param('~base_frame', self.base_frame)
         self.map_frame = rospy.get_param('~map_frame', self.map_frame)
@@ -65,7 +80,6 @@ class PIDControlNode:
 
         # Pubs and Subs
         self.drive_pub = rospy.Publisher(self.topic_drive_out, AckermannDriveStamped, queue_size=1)
-        rospy.Subscriber(self.topic_goal_in, PoseStamped, self.new_plan_callback)
 
         self.listener = tf.TransformListener(True, rospy.Duration(10.0))
 
@@ -73,8 +87,13 @@ class PIDControlNode:
         # Get point and transform base_frame
 
         if self.step>=2:
-            self.targetPose = self.cPlan.poses[self.step].pose;
-            self.prevPose= self.cPlan.poses[self.step-1].pose;
+            self.targetPose = PoseStamped();
+            self.targetPose.header = self.cPlan.header;
+            self.targetPose.pose =  self.cPlan.poses[self.step].pose;
+
+            self.prevPose = PoseStamped();
+            self.prevPose.header = self.cPlan.header;
+            self.prevPose.pose =self.cPlan.poses[self.step-1].pose;
 
             self.targetPose.header.stamp = self.listener.getLatestCommonTime(self.base_frame,self.targetPose.header.frame_id)
             target = self.listener.transformPose(self.base_frame, self.targetPose)
@@ -96,7 +115,7 @@ class PIDControlNode:
             lineDist = distFromLine(xS,yS,xP,yP,xT,yT)
             dx = xT - xP
             dy = yT - yP
-            rads = math.atan2(-dy,dx)
+            rads = math.atan2(dy,dx)
             theta=rads
             #rospy.loginfo("Distance: " + str(distance))
             if(xdistance < self.threshold):
@@ -125,35 +144,21 @@ class PIDControlNode:
             ti= self.ki*(self.thetaI)
             td= self.kd* (theta-self.lastTheta)
 
-            angle = theta + self.driveDamp*(dp+di+dd) * lineSign(xS,yS,xP,yP,xT,yT)
+            angle =( theta + self.driveDamp*(dp+di+dd) * lineSign(xS,yS,xP,yP,xT,yT))
 
-            msg.drive.steering_angle= max(min(self.max_steering_angle,theta), -1*self.max_steering_angle)
+            msg.drive.steering_angle= max(min(self.max_steering_angle,angle), -1*self.max_steering_angle)
             self.lastTheta=theta
             self.drive_pub.publish(msg)
 
 
-
-    def distFromLine(x,y,x1,y1,x2,y2):
-        numerator= abs(x*(y2-y1) - (y*(x2-x1)) +x2*y1 -y2*x1)
-        denom = float(math.sqrt((y2-y1)**2 + (x2-x1)**2))
-        return (numerator/denominator)
-
-    def lineSign(x,y,x1,y1,x2,y2):
-        slope = (y2-y1)/(x2-x1)
-        b = y2-slope*x2
-        yParallel= slope*x+b
-        if yParallel > y:
-            return 1
-        else:
-            return -1
 
     
 
     def new_plan_callback(self,data):
         #rospy.loginfo("New Plan Received")
         self.cPlan = data;
+        self.planHeader=data.header
         self.step = 2;
-        self.pubPlan();
 
 if __name__=="__main__":
     rospy.init_node("pid_node")
@@ -161,5 +166,5 @@ if __name__=="__main__":
     pid = PIDControlNode()
     rate = rospy.Rate(pid.rate)
     while not rospy.is_shutdown():
-        GotoPt.doDrive();
+        pid.doDrive();
         rate.sleep();
