@@ -139,14 +139,22 @@ class FreespacePlanner:
 
         x = max(0.75, 4*center_far)
 
-        if right_free > 0.45:
-            y = -2
+        if right_free > 0.5:
+            y = -3
         else:
             y=(left_free-right_free)*1.5
+
         if right_free > left_free:
             self.recover_pub.publish(True)
         else:
             self.recover_pub.publish(False)
+
+        v=x/2
+
+        print "-------"
+        print "x = %f" % x
+        print "y = %f" % y
+        print "v = %f" % v
 
         #if(x < 0.1):
         #    y = y*5;
@@ -156,7 +164,7 @@ class FreespacePlanner:
         goal = PoseStamped()
         goal.pose.position.x = x
         goal.pose.position.y = y
-        goal.pose.position.z = 0.0
+        goal.pose.position.z = v
         goal.pose.orientation.w = 1.0#math.atan2(y,x)
         goal.header.frame_id = 'base_link'
 
@@ -199,7 +207,7 @@ if __name__ == "__main__":
     
     # enter the ROS main loop
     
-    rate = rospy.Rate(40)
+    rate = rospy.Rate(60)
     while not rospy.is_shutdown():
         Planner.perform_update();
         rate.sleep()
