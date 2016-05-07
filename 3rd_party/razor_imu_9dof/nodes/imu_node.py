@@ -227,7 +227,6 @@ for x in range(0, 200):
         yaw_offset += float(words[8])
         i+=1
     print "IMU Calibrating..."
-    
 yaw_offset/=i;
 rospy.loginfo("Publishing IMU data...")
 #f = open("raw_imu_data.log", 'w')
