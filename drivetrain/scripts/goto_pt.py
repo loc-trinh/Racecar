@@ -107,7 +107,7 @@ class GoToPointNode:
             di= self.kd*(distance - self.lastDistance)
             dd= self.ki*(self.distanceI)
             self.lastDistance=distance
-            msg.drive.speed= max(0.5,min(self.max_speed, dp+di+dd - 10*min(abs(theta), 0.3))) 
+            msg.drive.speed= max(0.5,min(self.max_speed, dp+di+dd - 5*min(abs(theta), 0.3))) 
 
             self.lastTheta=theta
             self.drive_pub.publish(msg)
