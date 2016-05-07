@@ -14,9 +14,9 @@ class CornerDetector:
 		self.turn=-1#indicates which side to watch
 		self.last_means=[]#means of the left window
 		self.last_detection_state=False#wether something was detected for the last run
-		self.change_threshold=2.0#change in the reading
-		self.wind=5
-		self.angle_offset=np.pi/30
+		self.change_threshold=4.0#change in the reading
+		self.wind=20
+		self.angle_offset=np.pi/180.0
 		self.front_wind=np.pi/144
 	def means(self,window):
 		"""
@@ -40,10 +40,11 @@ class CornerDetector:
 			windowr=data.ranges[end:start]
 		window=[]
 		for i in range(len(windowr)):
-			if i>=len(windowr)-2:
-				window.append(min(windowr[i-2:i]))
-			else:
-				window.append(min(windowr[i:i+2]))
+			window.append((min(10.0,windowr[i])))
+			# if i>=len(windowr)-2:
+			# 	window.append(min(windowr[i-2:i]))
+			# else:
+			# 	window.append(min(windowr[i:i+2]))
 
 		print "end: start: ", start, end
 		print len(window)
