@@ -223,9 +223,10 @@ for x in range(0, 200):
     line = ser.readline()
     line = line.replace("#YPRAG=","")
     words = string.split(line,",")    # Fields split
-        if len(words) > 2:
-            yaw_offset += float(words[8])
-            i+=1
+    if len(words) > 2:
+        yaw_offset += float(words[8])
+        i+=1
+    print "IMU Calibrating..."
 yaw_offset/=i;
 rospy.loginfo("Publishing IMU data...")
 #f = open("raw_imu_data.log", 'w')
