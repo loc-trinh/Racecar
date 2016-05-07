@@ -79,7 +79,7 @@ class BackupRecovery:
 
         #get target in base_link
         if(self.cGoal == None):
-            rospy.loginfo("Warning: No goal")
+            #rospy.loginfo("Warning: No goal")
             return
         try:
             self.cGoal.header.stamp = self.listener.getLatestCommonTime(self.base_frame,self.cGoal.header.frame_id)
