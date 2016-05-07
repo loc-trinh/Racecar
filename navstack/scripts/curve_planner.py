@@ -18,8 +18,12 @@ class GlobalPlanner:
 		self.plan.header.frame_id = "odom";
 
 	def planCallback(self, goal):
-		transform_ob = self.tfBuffer.lookup_transform('base_link', goal.header.frame_id, rospy.Time(0), rospy.Duration(1))
-		transform_bo = self.tfBuffer.lookup_transform('odom', 'base_link', rospy.Time(0), rospy.Duration(1))
+		try:
+			transform_ob = self.tfBuffer.lookup_transform('base_link', goal.header.frame_id, rospy.Time(0), rospy.Duration(1))
+			transform_bo = self.tfBuffer.lookup_transform('odom', 'base_link', rospy.Time(0), rospy.Duration(1))
+		except:
+			print "TF ERROR!"
+			return
 
 		start = geometry_msgs.msg.PoseStamped()
 		start.header.stamp = rospy.Time.now()
