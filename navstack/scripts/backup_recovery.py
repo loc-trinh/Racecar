@@ -119,7 +119,7 @@ class BackupRecovery:
         if stop:
             self.collide = min(self.collide+1, 60);
         else:
-            self.collide = min(self.collide-5, 0);
+            self.collide = max(self.collide-5, 0);
         print self.collide;
         if self.collide > 30:
             self.perform_backup_move();
