@@ -102,7 +102,15 @@ class CornerDetector:
 			front_end=int((self.front_wind+data.angle_max)/(data.angle_max-data.angle_min)*len(data.ranges))
 			print np.mean(data.ranges[front_start:front_end]), "After No corner"
 			#if the front wall is fairly close then try -self.turn detection
-			if np.mean(data.ranges[front_start:front_end])<5.5:
+			front_window=[]
+			front_dist=10.0
+			for i in data.ranges[front_start:front_end]:
+				if i<5.5:
+					front_window.append(i)
+				if len(front_window)>10:
+					front_dist=sum(front_window)/float(len(front_window))
+
+			if front_dist<5.5:
 				print "checking right"
 				angle,boool=self.corner_finder(start,end,data)
 
