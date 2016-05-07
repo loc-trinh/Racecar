@@ -19,7 +19,7 @@
   <node pkg="racecar" name="scan_processor" type="scan_processor2.py" />
 
   <include file="$(find navstack)/launch/freespace_navstack.launch" />
-  <include file="$(find drivetrain)/launch/plan_exec.launch" />
+  <!-- <include file="$(find drivetrain)/launch/plan_exec.launch" /> -->
 
 
 </launch>
