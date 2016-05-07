@@ -10,7 +10,7 @@ import math
 
 class GridLocalPlanner:
     goRight = True
-    speed = (0.7,1.25,2)
+    speed = (0.6,1.0,1.25)
     theta = (0.3, 0.2, 0.1, 0.5)
     def __init__(self):
         #Class members
@@ -21,8 +21,8 @@ class GridLocalPlanner:
         self.look_ahead = 0.75
 
         #Cutoff regions
-        self.x_space = 0.5
-        self.y_space = 0.75
+        self.x_space = 0.25
+        self.y_space = 0.5
 
         self.base_frame = rospy.get_param('~base_frame', self.base_frame)
 
@@ -107,19 +107,20 @@ class GridLocalPlanner:
 
 
         #Figure out which cells are filled
-        cells = [[False] * 3] * 3 #True = full
+        cells = [[False]*3,[False]*3,[False]*3]
+
 
         for i in range(0,3):
             for j in range(0,3):
                 cell = self.get_region(i-1,j,self.grid.info)
                 (unknown, empty, full) = self.count(self.grid.data, cell)
-                print "(%d,%d) # filled = %d" %(i,j,full)
-                cells[i][j] = full > 0
-
+                cells[2-i][j] = full > 3
+                #print "(%d,%d) # filled = %d, cell[%d][%d] = %d" %(i,j,full,i,j, cells[i][j])
 
         #Is there a collision risk?
         collide = False
         collide = cells[1][0] or cells[1][1] or cells[1][2]
+        #print collide
         if not collide:
             return
 
@@ -184,7 +185,7 @@ class GridLocalPlanner:
         msg.header.stamp = rospy.Time.now()
         msg.header.frame_id = "base_link"
         msg.drive.speed = vel
-        msg.drive.acceleration = 16
+        msg.drive.acceleration = 4
         msg.drive.steering_angle = theta
 
         self.drive_pub.publish(msg);
@@ -218,7 +219,7 @@ class GridLocalPlanner:
         self.grid.data = list(self.grid.data)
 
 if __name__ == "__main__":
-    rospy.init_node("backup_recovery")
+    rospy.init_node("grid_planner")
     glp = GridLocalPlanner();
 
     rate = rospy.Rate(100)

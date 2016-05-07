@@ -79,7 +79,7 @@ class BackupRecovery:
 
         #get target in base_link
         if(self.cGoal == None):
-            rospy.loginfo("Warning: No goal")
+            #rospy.loginfo("Warning: No goal")
             return
         try:
             self.cGoal.header.stamp = self.listener.getLatestCommonTime(self.base_frame,self.cGoal.header.frame_id)
@@ -120,7 +120,7 @@ class BackupRecovery:
             self.collide = min(self.collide+1, 60);
         else:
             self.collide = max(self.collide-5, 0);
-        #print self.collide;
+        print self.collide;
         if self.collide > 30:
             self.perform_backup_move();
 
