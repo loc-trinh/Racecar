@@ -140,9 +140,9 @@ class FreespacePlanner:
         x = max(0.75, 4*center_far)
 
         if right_free > 0.45:
-            y = -3
+            y = -2
         else:
-            y=(left_free-right_free)*2
+            y=(left_free-right_free)*1.5
         if right_free > left_free:
             self.recover_pub.publish(True)
         else:
@@ -199,7 +199,7 @@ if __name__ == "__main__":
     
     # enter the ROS main loop
     
-    rate = rospy.Rate(50)
+    rate = rospy.Rate(40)
     while not rospy.is_shutdown():
         Planner.perform_update();
         rate.sleep()
