@@ -121,6 +121,7 @@ class GridLocalPlanner:
         #Is there a collision risk?
         collide = False
         collide = cells[1][0] or cells[1][1] or cells[1][2]
+        print collide
         if not collide:
             return
 
