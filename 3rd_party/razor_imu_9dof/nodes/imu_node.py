@@ -212,9 +212,21 @@ ser.write('#o1' + chr(13))
 #automatic flush - NOT WORKING
 #ser.flushInput()  #discard old input, still in invalid format
 #flush manually, as above command is not working - it breaks the serial connection
-rospy.loginfo("Flushing first 200 IMU entries...")
+
+rospy.loginfo("Flushing first 20 results...")
+for x in range(0, 20):
+    line = ser.readline()
+rospy.loginfo("Calibrating IMU With 200 Results...")
+i = 0
+yaw_offset = 0
 for x in range(0, 200):
     line = ser.readline()
+    line = line.replace("#YPRAG=","")
+    words = string.split(line,",")    # Fields split
+        if len(words) > 2:
+            yaw_offset += float(words[8])
+            i+=1
+yaw_offset/=i;
 rospy.loginfo("Publishing IMU data...")
 #f = open("raw_imu_data.log", 'w')
 
@@ -247,7 +259,7 @@ while not rospy.is_shutdown():
         #in AHRS firmware y axis points right, in ROS y axis points left (see REP 103)
         imuMsg.angular_velocity.y = -float(words[7])
         #in AHRS firmware z axis points down, in ROS z axis points up (see REP 103) 
-        imuMsg.angular_velocity.z = -float(words[8]) + 0.01
+        imuMsg.angular_velocity.z = -(float(words[8]) - yaw_offset)
 
     q = quaternion_from_euler(roll,pitch,yaw)
     imuMsg.orientation.x = q[0]
