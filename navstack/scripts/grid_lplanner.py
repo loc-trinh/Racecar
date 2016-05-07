@@ -107,7 +107,8 @@ class GridLocalPlanner:
 
 
         #Figure out which cells are filled
-        cells = [[0] * 3] * 3 #True = full
+        cells = [[False]*3,[False]*3,[False]*3]
+
 
         for i in range(0,3):
             for j in range(0,3):
