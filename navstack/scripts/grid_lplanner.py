@@ -116,6 +116,7 @@ class GridLocalPlanner:
                 cells[i][j] = full > 0
                 print "(%d,%d) # filled = %d, cell[%d][%d] = %d" %(i,j,full,i,j, cells[i][j])
                 print cells[i][j]
+                print cells
 
         #Is there a collision risk?
         collide = False
