@@ -115,12 +115,12 @@ class GridLocalPlanner:
                 cell = self.get_region(i-1,j,self.grid.info)
                 (unknown, empty, full) = self.count(self.grid.data, cell)
                 cells[2-i][j] = full > 3
-                print "(%d,%d) # filled = %d, cell[%d][%d] = %d" %(i,j,full,i,j, cells[i][j])
+                #print "(%d,%d) # filled = %d, cell[%d][%d] = %d" %(i,j,full,i,j, cells[i][j])
 
         #Is there a collision risk?
         collide = False
         collide = cells[1][0] or cells[1][1] or cells[1][2]
-        print collide
+        #print collide
         if not collide:
             return
 
