@@ -219,7 +219,7 @@ class GridLocalPlanner:
         self.grid.data = list(self.grid.data)
 
 if __name__ == "__main__":
-    rospy.init_node("backup_recovery")
+    rospy.init_node("grid_planner")
     glp = GridLocalPlanner();
 
     rate = rospy.Rate(100)
