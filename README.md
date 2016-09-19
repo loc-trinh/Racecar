@@ -19,3 +19,6 @@ rosrun navstack freespace_goalplanner.py
 =======
 # racecar
 Autonomous racecar project at MIT.
+
+![Alt Text](https://github.com/loc-trinh/racecar/tree/master/img/vision.gif)
+
