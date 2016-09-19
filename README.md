@@ -16,3 +16,6 @@ roslaunch launcher racecar_teleop.launch
 roslaunch navstack navstack.launch
 rosrun navstack freespace_goalplanner.py
 ```
+=======
+# racecar
+Autonomous racecar project at MIT.
