@@ -3,6 +3,7 @@ Autonomous racecar project at MIT. The RACECAR platform runs on Robot Operating 
 
 Nvidia Jetson TX 1 embedded super-computer with Hokuyo UST-10LX laser range finder, Stereolabs ZED stereo camera, Structure.io depth camera, Sparkfun IMU.
 
+Implemented both full-scale SLAM approach and reactive approach.
 
 SETUP
 -------
